@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+/* ── Zmienne motywu Professional (domyślny) ── */
+:root {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-alt: #f1f5f9;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --accent: #16a34a;
+  --accent-hover: #15803d;
+  --accent-soft: #dcfce7;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --radius: 0.75rem;
+  --font: 'Inter', system-ui, sans-serif;
+}
+
+/* ── Motyw Cozy ── */
+[data-theme="cozy"] {
+  --bg: #fff7ed;
+  --surface: #fffbf5;
+  --surface-alt: #fef3c7;
+  --border: #fed7aa;
+  --text: #431407;
+  --text-muted: #9a3412;
+  --accent: #ea580c;
+  --accent-hover: #c2410c;
+  --accent-soft: #ffedd5;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --radius: 1.25rem;
+  --font: 'Nunito', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  margin: 0;
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
+}

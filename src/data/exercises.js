@@ -1,0 +1,83 @@
+export const exercises = [
+  {
+    id: 'neck',
+    icon: '🔄',
+    name: 'Neck Rolls',
+    namepl: 'Rotacje szyi',
+    time: '2 min',
+    steps: [
+      'Usiądź prosto, rozluźnij ramiona.',
+      'Powoli przechyl głowę, przybliżając ucho do ramienia.',
+      'Utrzymaj pozycję przez 5 sekund po każdej stronie.',
+      'Przesuń brodę ku klatce piersiowej.',
+      'Powtórz 3–4 razy łagodnie.',
+    ],
+  },
+  {
+    id: 'shoulders',
+    icon: '💆',
+    name: 'Shoulder Release',
+    namepl: 'Rozluźnienie ramion',
+    time: '2 min',
+    steps: [
+      'Unieś oba ramiona ku uszom.',
+      'Utrzymaj 3 sekundy, a następnie opuść.',
+      'Wykonaj 5 okrążeń ramionami do tyłu, a potem do przodu.',
+      'Spleć dłonie za plecami i zaciśnij.',
+      'Powtórz 3 serie.',
+    ],
+  },
+  {
+    id: 'wrists',
+    icon: '🤲',
+    name: 'Wrist Stretch',
+    namepl: 'Rozciąganie nadgarstków',
+    time: '1 min',
+    steps: [
+      'Wyciągnij jedno ramię do przodu, dłonią skierowaną ku górze.',
+      'Drugą ręką delikatnie cofnij palce w dół.',
+      'Utrzymaj 10–15 sekund przy każdym nadgarstku.',
+      'Wykonaj powolne okrążenia pięścią w obu kierunkach.',
+      'Powtórz dwa razy przy każdej dłoni.',
+    ],
+  },
+  {
+    id: 'back',
+    icon: '🦴',
+    name: 'Back Extension',
+    namepl: 'Wyprost pleców',
+    time: '2 min',
+    steps: [
+      'Usiądź na przedniej krawędzi krzesła.',
+      'Połóż dłonie na dolnej części pleców dla podparcia.',
+      'Delikatnie wygnij się do tyłu, lekko unosząc brodę.',
+      'Utrzymaj 3–5 sekund, wróć do pozycji centralnej.',
+      'Powtórz 5 razy powoli.',
+    ],
+  },
+  {
+    id: 'eyes',
+    icon: '👁️',
+    name: 'Eye Relaxation',
+    namepl: 'Relaksacja oczu',
+    time: '1 min',
+    steps: [
+      'Odwróć wzrok całkowicie od ekranu.',
+      'Skup się na obiekcie oddalonym o co najmniej 6 metrów.',
+      'Mrugnij powoli 10 razy, aby nawilżyć oczy.',
+      'Delikatnie przyłóż ciepłe dłonie do zamkniętych oczu.',
+      'Odpoczywaj przez 30 sekund w ciemności.',
+    ],
+  },
+]
+
+export const healthFacts = [
+  'Długotrwałe siedzenie znacząco zwiększa napięcie szyi i pleców.',
+  'Większość pracowników biurowych doświadcza problemów z postawą w ciągu 2 lat pracy przy biurku.',
+  'Krążki kręgosłupa są o 40% bardziej obciążone w pozycji siedzącej niż stojącej.',
+  'Krótkie 2-minutowe przerwy ruchowe co godzinę zmniejszają zmęczenie nawet o 30%.',
+  'Zmęczenie oczu to dolegliwość nr 1 wśród osób pracujących 8+ godzin przy ekranie.',
+  'Regularne rozciąganie nadgarstków może znacznie zmniejszyć ryzyko urazów przeciążeniowych.',
+  'Stanie przez zaledwie 5 minut co godzinę istotnie redukuje ból dolnej części pleców.',
+  'Napięcie ramion od pracy przy ekranie może powodować bóle głowy u 60% przypadków.',
+]
