@@ -80,11 +80,17 @@ export default function WelcomeModal() {
                       <path d="M10 3C10 3 5 6.5 5 11.5C5 14.538 7.462 17 10.5 17C13.538 17 16 14.538 16 11.5C16 6.5 10 3 10 3Z" fill="var(--accent)" opacity="0.85"/>
                     </svg>
                   </div>
+                  <span
+                    className="inline-block text-xs font-medium px-2.5 py-1 rounded-full mb-1"
+                    style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}
+                  >
+                    Twój system zdrowia przy pracy
+                  </span>
                   <h1 className="text-xl font-semibold" style={{ color: 'var(--text)' }}>
                     Cześć, dobrze że tu jesteś
                   </h1>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-                    Pomagam zadbać o zdrowie podczas długiej pracy przy komputerze — przypominam o regularnych przerwach.
+                    Pomagam zadbać o zdrowie podczas długich godzin przy komputerze — przerwy, ćwiczenia, przypomnienia.
                   </p>
                 </div>
                 <div className="space-y-2">

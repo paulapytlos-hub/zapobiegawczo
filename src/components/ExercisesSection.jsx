@@ -1,14 +1,27 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { exercises } from '../data/exercises'
+import useAppStore from '../store/useAppStore'
 
 export default function ExercisesSection() {
   const [openId, setOpenId] = useState(null)
+  const sectionRef = useRef(null)
+  const quickHelpId = useAppStore(s => s.quickHelpId)
+  const setQuickHelp = useAppStore(s => s.setQuickHelp)
+
+  useEffect(() => {
+    if (!quickHelpId) return
+    setOpenId(quickHelpId)
+    setTimeout(() => {
+      sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
+    setQuickHelp(null)
+  }, [quickHelpId, setQuickHelp])
 
   const toggle = (id) => setOpenId(prev => prev === id ? null : id)
 
   return (
-    <div className="mx-4 mt-6">
+    <div className="mx-4 mt-6" ref={sectionRef}>
       <div className="flex items-baseline justify-between mb-3">
         <h2
           style={{

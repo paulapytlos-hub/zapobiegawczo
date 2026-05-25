@@ -8,6 +8,7 @@ import SettingsPanel from './components/SettingsPanel'
 import FactBanner from './components/FactBanner'
 import SessionLog from './components/SessionLog'
 import ExercisesSection from './components/ExercisesSection'
+import QuickHelp from './components/QuickHelp'
 
 export default function App() {
   const { sessionActive, sessionPaused, tickSecond, cuteMode, showBreakModal } = useAppStore()
@@ -59,6 +60,7 @@ export default function App() {
         <FactBanner />
         <SessionTimer />
         <SettingsPanel />
+        <QuickHelp />
         <ExercisesSection />
         <SessionLog />
       </main>

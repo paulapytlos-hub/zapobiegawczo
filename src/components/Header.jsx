@@ -53,8 +53,8 @@ export default function Header() {
             Hello, {userName}
           </p>
         ) : (
-          <p className="text-xs tracking-widest uppercase" style={{ color: 'var(--text-muted)', letterSpacing: '0.12em' }}>
-            zadbaj o siebie
+          <p className="text-xs" style={{ color: 'var(--text-muted)', letterSpacing: '0.04em' }}>
+            Twój system zdrowia przy pracy
           </p>
         )}
       </div>

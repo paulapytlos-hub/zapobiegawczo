@@ -38,6 +38,10 @@ const useAppStore = create((set, get) => ({
   cuteMode: false,
   showWelcome: (() => { try { return !localStorage.getItem('zapobiegawczo_welcomed') } catch { return false } })(),
 
+  // ── Szybka pomoc ──
+  quickHelpId: null,
+  setQuickHelp: (id) => set({ quickHelpId: id }),
+
   // ── Profil ──
   userName: (() => { try { return localStorage.getItem('zapobiegawczo_name') || '' } catch { return '' } })(),
   setUserName: (name) => {
