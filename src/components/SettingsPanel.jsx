@@ -51,6 +51,7 @@ export default function SettingsPanel() {
     notifPermission,
     popupEnabled, togglePopup,
     showSettings,
+    openBreakPreview,
   } = useAppStore()
 
   const [customValue, setCustomValue] = useState('')
@@ -82,9 +83,6 @@ export default function SettingsPanel() {
     }
   }
 
-  const previewBreak = () => {
-    useAppStore.setState({ showBreakModal: true })
-  }
 
   const isPreset = PRESETS.includes(intervalMinutes)
 
@@ -222,10 +220,10 @@ export default function SettingsPanel() {
       <div>
         <p className="text-sm font-medium mb-0.5" style={{ color: 'var(--text)' }}>Podgląd przerwy</p>
         <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>
-          Kliknij, żeby zobaczyć, jak wygląda okienko, które pojawi się przy każdym przypomnieniu.
+          Kliknij, żeby zobaczyć, jak wygląda okienko, które pojawi się przy każdym przypomnieniu
         </p>
         <button
-          onClick={previewBreak}
+          onClick={openBreakPreview}
           className="w-full py-2.5 text-sm font-medium transition-all"
           style={{
             background: 'var(--surface-alt)',

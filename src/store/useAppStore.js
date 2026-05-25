@@ -33,6 +33,7 @@ const useAppStore = create((set, get) => ({
 
   // ── UI ──
   showBreakModal: false,
+  breakIsPreview: false,
   showSettings: false,
   cuteMode: false,
   showWelcome: (() => { try { return !localStorage.getItem('zapobiegawczo_welcomed') } catch { return false } })(),
@@ -112,7 +113,7 @@ const useAppStore = create((set, get) => ({
   // ── Akcje przerwy ──
   completeBreak: async () => {
     const { sessionId, currentExerciseId } = get()
-    set(state => ({ showBreakModal: false, breaksDone: state.breaksDone + 1 }))
+    set(state => ({ showBreakModal: false, breakIsPreview: false, breaksDone: state.breaksDone + 1 }))
     get().addLog('Przerwa wykonana')
     if (sessionId && currentExerciseId) {
       try { await api.logBreak(sessionId, currentExerciseId, false) } catch { /* ignoruj */ }
@@ -123,6 +124,7 @@ const useAppStore = create((set, get) => ({
     const { sessionId, currentExerciseId } = get()
     set(state => ({
       showBreakModal: false,
+      breakIsPreview: false,
       remindersIgnored: state.remindersIgnored + 1,
       elapsed: state.elapsed - 5 * 60,
     }))
@@ -133,7 +135,7 @@ const useAppStore = create((set, get) => ({
   },
 
   dismissBreak: () => {
-    set(state => ({ showBreakModal: false, remindersIgnored: state.remindersIgnored + 1 }))
+    set(state => ({ showBreakModal: false, breakIsPreview: false, remindersIgnored: state.remindersIgnored + 1 }))
     get().addLog('Przypomnienie pominięte')
   },
 
@@ -157,6 +159,8 @@ const useAppStore = create((set, get) => ({
   },
 
   togglePopup: () => set(state => ({ popupEnabled: !state.popupEnabled })),
+
+  openBreakPreview: () => set({ showBreakModal: true, breakIsPreview: true }),
 
   openWelcome: () => set({ showWelcome: true }),
   closeWelcome: () => {

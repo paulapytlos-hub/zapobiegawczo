@@ -4,7 +4,8 @@ import { exercises } from '../data/exercises'
 import useAppStore from '../store/useAppStore'
 
 export default function BreakModal() {
-  const { showBreakModal, completeBreak, snoozeBreak } = useAppStore()
+  const { showBreakModal, breakIsPreview, completeBreak, snoozeBreak } = useAppStore()
+  const closePreview = () => useAppStore.setState({ showBreakModal: false, breakIsPreview: false })
 
   const exercise = useMemo(
     () => exercises[Math.floor(Math.random() * exercises.length)],
@@ -73,25 +74,42 @@ export default function BreakModal() {
 
             {/* Przyciski */}
             <div className="space-y-2 pt-1">
-              <button
-                onClick={completeBreak}
-                className="w-full py-3 font-medium text-white transition-all"
-                style={{ background: 'var(--accent)', borderRadius: 'var(--radius-sm)' }}
-              >
-                Gotowe
-              </button>
-              <button
-                onClick={snoozeBreak}
-                className="w-full py-2.5 text-sm transition-all"
-                style={{
-                  background: 'transparent',
-                  color: 'var(--text-muted)',
-                  border: '1px solid var(--border)',
-                  borderRadius: 'var(--radius-sm)',
-                }}
-              >
-                Przypomnij za 5 minut
-              </button>
+              {breakIsPreview ? (
+                <>
+                  <p className="text-xs text-center pb-1" style={{ color: 'var(--text-muted)' }}>
+                    Podgląd — tak wygląda okienko przy każdej przerwie
+                  </p>
+                  <button
+                    onClick={closePreview}
+                    className="w-full py-3 font-medium text-white transition-all"
+                    style={{ background: 'var(--accent)', borderRadius: 'var(--radius-sm)' }}
+                  >
+                    Zamknij podgląd
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={completeBreak}
+                    className="w-full py-3 font-medium text-white transition-all"
+                    style={{ background: 'var(--accent)', borderRadius: 'var(--radius-sm)' }}
+                  >
+                    Gotowe
+                  </button>
+                  <button
+                    onClick={snoozeBreak}
+                    className="w-full py-2.5 text-sm transition-all"
+                    style={{
+                      background: 'transparent',
+                      color: 'var(--text-muted)',
+                      border: '1px solid var(--border)',
+                      borderRadius: 'var(--radius-sm)',
+                    }}
+                  >
+                    Przypomnij za 5 minut
+                  </button>
+                </>
+              )}
             </div>
           </motion.div>
         </motion.div>

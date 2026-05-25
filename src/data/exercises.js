@@ -36,7 +36,7 @@ export const exercises = [
     area: 'Plecy',
     areaColor: '#9e7a6a',
     name: 'Upper Back Stretch',
-    namepl: 'Rozciąganie górnych pleców',
+    namepl: 'Rozciąganie górnej części pleców',
     time: '1 min',
     steps: [
       'Usiądź prosto i spleć palce obu rąk przed sobą.',
