@@ -2,23 +2,22 @@ import { create } from 'zustand'
 import * as api from '../api/client'
 
 async function sendNotification(title, body) {
-  let sent = false
+  // Direct API — pewniejsze gdy zakładka jest otwarta w tle
+  if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+    try {
+      new Notification(title, { body, icon: '/favicon.svg', tag: 'zapobiegawczo-break' })
+    } catch { /* ignoruj */ }
+  }
+  // SW — dla notyfikacji gdy strona jest całkowicie zamknięta (dodatkowe)
   try {
     const reg = await Promise.race([
       navigator.serviceWorker?.ready,
-      new Promise((_, reject) => setTimeout(() => reject('timeout'), 2000)),
+      new Promise((_, reject) => setTimeout(() => reject('timeout'), 1500)),
     ])
     if (reg?.active) {
       reg.active.postMessage({ type: 'SHOW_NOTIFICATION', title, body })
-      sent = true
     }
-  } catch { /* SW niedostępny */ }
-
-  if (!sent && Notification.permission === 'granted') {
-    try {
-      new Notification(title, { body, icon: '/favicon.svg', silent: true, tag: 'zapobiegawczo-break' })
-    } catch { /* ignoruj */ }
-  }
+  } catch { /* ignoruj */ }
 }
 
 const useAppStore = create((set, get) => ({
