@@ -186,14 +186,14 @@ export default function SessionTimer() {
 
           <button
             onClick={() => useAppStore.setState(s => ({ showSettings: !s.showSettings }))}
-            title="Ustawienia"
-            className="px-4 py-3 transition-all"
+            className="px-4 py-3 flex items-center gap-2 transition-all"
             style={{
               background: 'var(--surface-alt)', color: 'var(--text-muted)',
               border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)',
             }}
           >
             <SettingsIcon />
+            <span className="text-sm">Ustawienia</span>
           </button>
         </div>
 

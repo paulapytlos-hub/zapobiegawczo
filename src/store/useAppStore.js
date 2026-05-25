@@ -35,6 +35,7 @@ const useAppStore = create((set, get) => ({
   showBreakModal: false,
   showSettings: false,
   cuteMode: false,
+  showWelcome: (() => { try { return !localStorage.getItem('zapobiegawczo_welcomed') } catch { return false } })(),
 
   // ── Powiadomienia ──
   notifEnabled: false,
@@ -156,6 +157,12 @@ const useAppStore = create((set, get) => ({
   },
 
   togglePopup: () => set(state => ({ popupEnabled: !state.popupEnabled })),
+
+  openWelcome: () => set({ showWelcome: true }),
+  closeWelcome: () => {
+    try { localStorage.setItem('zapobiegawczo_welcomed', '1') } catch { /* ignoruj */ }
+    set({ showWelcome: false })
+  },
 
   toggleMode: () => {
     const next = !get().cuteMode
