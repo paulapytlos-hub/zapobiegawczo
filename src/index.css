@@ -63,19 +63,80 @@
   color-scheme: light;
 }
 
-/* ── Tryb dostępności (senior) ── */
-html[data-senior="true"] {
-  font-size: 18px;
+/* ── Rozmiar tekstu ── */
+html[data-fontsize="small"]  { font-size: 13px; }
+html[data-fontsize="large"]  { font-size: 19px; }
+html[data-fontsize="xlarge"] { font-size: 22px; }
+
+html[data-fontsize="large"] body,
+html[data-fontsize="xlarge"] body { line-height: 1.65; }
+
+html[data-fontsize="large"] button,
+html[data-fontsize="large"] input,
+html[data-fontsize="xlarge"] button,
+html[data-fontsize="xlarge"] input { min-height: 52px; }
+
+/* ── Wysoki kontrast ── */
+html[data-contrast="high"] {
+  --text: #ffffff;
+  --text-muted: #cccccc;
+  --surface: #000000;
+  --surface-alt: #111111;
+  --border: #666666;
+  --shadow: 0 0 0 2px #666;
+  --shadow-md: 0 0 0 2px #666;
+}
+html[data-contrast="high"][data-theme="light"] {
+  --text: #000000;
+  --text-muted: #222222;
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #eeeeee;
+  --border: #000000;
+}
+/* Wyraźne obramowanie fokusa (WCAG 2.4.7) */
+html[data-contrast="high"] :focus-visible {
+  outline: 3px solid var(--accent) !important;
+  outline-offset: 3px !important;
 }
 
-html[data-senior="true"] body {
-  line-height: 1.65;
+/* ── Daltonizm — paleta Wonga ── */
+html[data-colorblind="true"] {
+  --accent: #0077bb;
+  --accent-hover: #005999;
+  --accent-soft: rgba(0, 119, 187, 0.12);
+}
+/* Nadpisanie kolorów obszarów ciała */
+html[data-colorblind="true"] [data-area="neck"]       { --area-color: #0077bb !important; }
+html[data-colorblind="true"] [data-area="shoulders"]  { --area-color: #33bbee !important; }
+html[data-colorblind="true"] [data-area="upper-back"] { --area-color: #ee7733 !important; }
+html[data-colorblind="true"] [data-area="spine"]      { --area-color: #ee3377 !important; }
+html[data-colorblind="true"] [data-area="wrists"]     { --area-color: #009988 !important; }
+html[data-colorblind="true"] [data-area="eyes"]       { --area-color: #bbbbbb !important; }
+html[data-colorblind="true"] [data-area="legs"]       { --area-color: #cc3311 !important; }
+
+/* ── Zredukowane animacje (WCAG 2.3.3) ── */
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] *::before,
+html[data-motion="reduced"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
 }
 
-html[data-senior="true"] button,
-html[data-senior="true"] input,
-html[data-senior="true"] select {
-  min-height: 48px;
+/* Automatyczne: respektuj ustawienia systemu operacyjnego */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Wyraźny fokus dla klawiatury (WCAG 2.4.7) ── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 * {

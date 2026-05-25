@@ -2,12 +2,14 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { exercises } from '../data/exercises'
 import useAppStore from '../store/useAppStore'
+import { areaColor } from '../utils/areaColor'
 
 export default function ExercisesSection() {
   const [openId, setOpenId] = useState(null)
   const sectionRef = useRef(null)
   const quickHelpId = useAppStore(s => s.quickHelpId)
   const setQuickHelp = useAppStore(s => s.setQuickHelp)
+  const colorblindMode = useAppStore(s => s.colorblindMode)
 
   useEffect(() => {
     if (!quickHelpId) return
@@ -57,7 +59,7 @@ export default function ExercisesSection() {
               {/* Kolorowy znacznik obszaru */}
               <span
                 className="w-2 h-2 rounded-full shrink-0"
-                style={{ background: ex.areaColor }}
+                style={{ background: areaColor(ex.areaColor, colorblindMode) }}
               />
 
               <div className="flex-1 min-w-0">
@@ -101,7 +103,7 @@ export default function ExercisesSection() {
                         <li key={i} className="flex items-start gap-3 text-sm">
                           <span
                             className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 mt-0.5 text-white"
-                            style={{ background: ex.areaColor }}
+                            style={{ background: areaColor(ex.areaColor, colorblindMode) }}
                           >
                             {i + 1}
                           </span>

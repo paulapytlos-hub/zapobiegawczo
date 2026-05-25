@@ -10,9 +10,10 @@ import SessionLog from './components/SessionLog'
 import ExercisesSection from './components/ExercisesSection'
 import QuickHelp from './components/QuickHelp'
 import QuickHelpModal from './components/QuickHelpModal'
+import AccessibilityWidget from './components/AccessibilityWidget'
 
 export default function App() {
-  const { sessionActive, sessionPaused, tickSecond, theme, seniorMode, showBreakModal } = useAppStore()
+  const { sessionActive, sessionPaused, tickSecond, theme, fontSize, highContrast, colorblindMode, reduceMotion, showBreakModal } = useAppStore()
   const titleFlashRef = useRef(null)
 
   // Główna pętla timera
@@ -22,15 +23,30 @@ export default function App() {
     return () => clearInterval(id)
   }, [sessionActive, sessionPaused, tickSecond])
 
-  // Synchronizuj motyw i tryb dostępności
+  // Synchronizuj motyw i wszystkie tryby dostępności
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme === 'dark' ? '' : theme)
   }, [theme])
 
   useEffect(() => {
-    if (seniorMode) document.documentElement.setAttribute('data-senior', 'true')
-    else document.documentElement.removeAttribute('data-senior')
-  }, [seniorMode])
+    if (fontSize === 'normal') document.documentElement.removeAttribute('data-fontsize')
+    else document.documentElement.setAttribute('data-fontsize', fontSize)
+  }, [fontSize])
+
+  useEffect(() => {
+    if (highContrast) document.documentElement.setAttribute('data-contrast', 'high')
+    else document.documentElement.removeAttribute('data-contrast')
+  }, [highContrast])
+
+  useEffect(() => {
+    if (colorblindMode) document.documentElement.setAttribute('data-colorblind', 'true')
+    else document.documentElement.removeAttribute('data-colorblind')
+  }, [colorblindMode])
+
+  useEffect(() => {
+    if (reduceMotion) document.documentElement.setAttribute('data-motion', 'reduced')
+    else document.documentElement.removeAttribute('data-motion')
+  }, [reduceMotion])
 
   // Rejestruj Service Worker
   useEffect(() => {
@@ -73,6 +89,7 @@ export default function App() {
       <BreakModal />
       <WelcomeModal />
       <QuickHelpModal />
+      <AccessibilityWidget />
     </div>
   )
 }

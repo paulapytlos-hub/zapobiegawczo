@@ -35,8 +35,11 @@ const useAppStore = create((set, get) => ({
   showBreakModal: false,
   breakIsPreview: false,
   showSettings: false,
-  theme: 'dark',   // 'dark' | 'night' | 'light'
-  seniorMode: false,
+  theme: 'dark',       // 'dark' | 'night' | 'light'
+  fontSize: 'normal',  // 'small' | 'normal' | 'large' | 'xlarge'
+  highContrast: false,
+  colorblindMode: false,
+  reduceMotion: false,
   showWelcome: (() => { try { return !localStorage.getItem('zapobiegawczo_welcomed') } catch { return false } })(),
 
   // ── Szybka pomoc ──
@@ -188,11 +191,28 @@ const useAppStore = create((set, get) => ({
     document.documentElement.setAttribute('data-theme', t === 'dark' ? '' : t)
   },
 
-  toggleSenior: () => {
-    const next = !get().seniorMode
-    set({ seniorMode: next })
-    if (next) document.documentElement.setAttribute('data-senior', 'true')
-    else document.documentElement.removeAttribute('data-senior')
+  setFontSize: (size) => {
+    set({ fontSize: size })
+    if (size === 'normal') document.documentElement.removeAttribute('data-fontsize')
+    else document.documentElement.setAttribute('data-fontsize', size)
+  },
+
+  setHighContrast: (val) => {
+    set({ highContrast: val })
+    if (val) document.documentElement.setAttribute('data-contrast', 'high')
+    else document.documentElement.removeAttribute('data-contrast')
+  },
+
+  setColorblind: (val) => {
+    set({ colorblindMode: val })
+    if (val) document.documentElement.setAttribute('data-colorblind', 'true')
+    else document.documentElement.removeAttribute('data-colorblind')
+  },
+
+  setReduceMotion: (val) => {
+    set({ reduceMotion: val })
+    if (val) document.documentElement.setAttribute('data-motion', 'reduced')
+    else document.documentElement.removeAttribute('data-motion')
   },
 
   addLog: (message) => {

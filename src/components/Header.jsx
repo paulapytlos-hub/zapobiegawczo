@@ -1,7 +1,7 @@
 import useAppStore from '../store/useAppStore'
 
 export default function Header() {
-  const { openWelcome, userName, seniorMode, toggleSenior } = useAppStore()
+  const { openWelcome, userName } = useAppStore()
 
   return (
     <header
@@ -56,20 +56,6 @@ export default function Header() {
         )}
       </div>
 
-      {/* Tryb dostępności A+ — prawy róg */}
-      <button
-        onClick={toggleSenior}
-        title="Tryb dostępności — większa czcionka i przyciski"
-        className="absolute right-5 flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold transition-all"
-        style={{
-          background: seniorMode ? 'var(--accent)' : 'var(--surface-alt)',
-          color: seniorMode ? '#fff' : 'var(--text-muted)',
-          border: `1px solid ${seniorMode ? 'var(--accent)' : 'var(--border)'}`,
-          borderRadius: 'var(--radius-sm)',
-        }}
-      >
-        A+
-      </button>
     </header>
   )
 }

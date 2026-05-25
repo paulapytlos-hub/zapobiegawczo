@@ -2,9 +2,11 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import useAppStore from '../store/useAppStore'
 import { quickHelpData } from '../data/quickHelpData'
+import { areaColor } from '../utils/areaColor'
 
 export default function QuickHelpModal() {
-  const { quickHelpModalArea, closeQuickHelpModal } = useAppStore()
+  const { quickHelpModalArea, closeQuickHelpModal, colorblindMode } = useAppStore()
+  const color = data ? areaColor(data.areaColor, colorblindMode) : null
   const [fasciaOpen, setFasciaOpen] = useState(false)
 
   const data = quickHelpData.find(d => d.id === quickHelpModalArea)
@@ -41,7 +43,7 @@ export default function QuickHelpModal() {
               <div className="flex items-center gap-2.5">
                 <span
                   className="w-3 h-3 rounded-full"
-                  style={{ background: data.areaColor }}
+                  style={{ background: color }}
                 />
                 <span className="font-semibold" style={{ color: 'var(--text)' }}>
                   {data.area}

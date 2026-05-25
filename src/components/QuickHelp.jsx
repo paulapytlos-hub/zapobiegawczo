@@ -1,8 +1,10 @@
 import useAppStore from '../store/useAppStore'
 import { quickHelpData } from '../data/quickHelpData'
+import { areaColor } from '../utils/areaColor'
 
 export default function QuickHelp() {
   const openQuickHelpModal = useAppStore(s => s.openQuickHelpModal)
+  const colorblindMode = useAppStore(s => s.colorblindMode)
 
   return (
     <div className="mx-4 mt-4">
@@ -33,8 +35,9 @@ export default function QuickHelp() {
               border: '1px solid var(--border)',
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.borderColor = item.areaColor
-              e.currentTarget.style.background = `${item.areaColor}18`
+              const c = areaColor(item.areaColor, colorblindMode)
+              e.currentTarget.style.borderColor = c
+              e.currentTarget.style.background = `${c}18`
             }}
             onMouseLeave={e => {
               e.currentTarget.style.borderColor = 'var(--border)'
@@ -43,7 +46,7 @@ export default function QuickHelp() {
           >
             <span
               className="w-2.5 h-2.5 rounded-full"
-              style={{ background: item.areaColor }}
+              style={{ background: areaColor(item.areaColor, colorblindMode) }}
             />
             <span className="text-xs leading-tight" style={{ color: 'var(--text-muted)' }}>
               {item.area}

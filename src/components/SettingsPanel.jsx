@@ -53,7 +53,6 @@ export default function SettingsPanel() {
     showSettings,
     openBreakPreview,
     theme, setTheme,
-    seniorMode, toggleSenior,
   } = useAppStore()
 
   const [customValue, setCustomValue] = useState('')
@@ -120,13 +119,6 @@ export default function SettingsPanel() {
           ))}
         </div>
       </div>
-
-      <Toggle
-        label="Tryb dostępności (A+)"
-        description="Większa czcionka i przyciski — WCAG AA, łatwiejsze korzystanie"
-        checked={seniorMode}
-        onChange={toggleSenior}
-      />
 
       <Divider />
 
