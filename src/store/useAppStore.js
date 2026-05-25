@@ -71,9 +71,8 @@ const useAppStore = create((set, get) => ({
 
   addWaterGlass: () => {
     const glasses = get().waterGlasses
-    if (glasses >= 8) return
     set({ waterGlasses: glasses + 1, lastWaterAt: Date.now() })
-    get().addLog(`Szklanka wody (${glasses + 1}/8)`)
+    get().addLog(`Szklanka wody (${glasses + 1})`)
   },
 
   resetWater: () => {

@@ -1,78 +1,95 @@
 import useAppStore from '../store/useAppStore'
 
-const GOAL = 8
+const MAX_DISPLAY = 12   // max kwiatków widocznych w ogródku
+const GOAL = 8           // cel dzienny (można pić więcej)
 
 const WATER_FACTS = [
   'Wypij pierwszą szklankę — nawodniony mózg działa o 14% szybciej.',
   '1–2% odwodnienia obniża koncentrację jak nieprzespana noc.',
-  'Mózg składa się w 75% z wody. Dbasz o niego każdą szklanką.',
+  'Mózg składa się w 75% z wody. Każda szklanka ma znaczenie.',
   'Woda wspomaga produkcję mazi stawowej — chroni kręgosłup.',
-  'Odwodnienie zwiększa kortyzol — woda redukuje stres.',
-  'Połowa normy! Regularne nawodnienie redukuje bóle głowy o 40%.',
-  'Jeszcze dwie szklanki do celu — Twoje stawy Ci dziękują.',
-  'Ostatnia prosta — krążenie i energia na najwyższym poziomie!',
-  'Cel osiągnięty! Twoje ciało i umysł są w pełni nawodnione. 🌸',
+  'Odwodnienie zwiększa kortyzol — woda obniża stres.',
+  'Połowa celu! Regularne nawodnienie redukuje bóle głowy o 40%.',
+  'Prawie! Jeszcze trochę — krążenie i energia na najwyższym poziomie.',
+  'Ostatnia szklanka do dziennego celu — cel tuż tuż!',
+  'Cel osiągnięty! 🌸 Możesz pić dalej — ogródek rośnie!',
+  'Bonusowa szklanka — Twoje stawy i nerki Ci dziękują.',
+  'Wyjątkowo nawodniony dzień. Skóra i umysł widocznie korzystają.',
+  'Mistrzyni nawodnienia! Rzadko ktoś pije tyle wody przy pracy.',
 ]
+
+// Wiek kwiatu = ile szklanek wypito PO nim → im starszy tym bardziej rozwinięty
+function flowerStage(index, total) {
+  if (index >= total) return 0
+  const age = total - index
+  if (age >= 6) return 4  // pełny rozkwit
+  if (age >= 4) return 3  // otwarty kwiat
+  if (age >= 2) return 2  // pąk
+  return 1                // kiełek
+}
 
 export default function WaterTracker() {
   const waterGlasses = useAppStore(s => s.waterGlasses)
-  const lastWaterAt = useAppStore(s => s.lastWaterAt)
   const addWaterGlass = useAppStore(s => s.addWaterGlass)
   const resetWater = useAppStore(s => s.resetWater)
 
-  const nudge = lastWaterAt && (Date.now() - lastWaterAt) > 60 * 60 * 1000
-  const done = waterGlasses >= GOAL
+  const displayCount = Math.max(waterGlasses, 1)
+  const showSlots = Math.min(Math.ceil(displayCount / 3) * 3, MAX_DISPLAY)
 
   return (
     <div
-      className="rounded-xl p-3 flex flex-col items-center gap-2"
-      style={{
-        background: 'var(--surface)',
-        border: `1px solid ${nudge ? 'var(--accent)' : 'var(--border)'}`,
-        transition: 'border-color 0.3s',
-      }}
+      className="rounded-xl p-3 flex flex-col items-center gap-3"
+      style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
     >
       {/* Tytuł */}
-      <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--accent)' }}>
-        Woda
+      <p className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
+        Nawodnienie
       </p>
-
-      {/* Kwiatek */}
-      <FlowerSVG stage={waterGlasses} />
 
       {/* Licznik */}
-      <p className="text-sm font-bold" style={{ color: done ? 'var(--accent)' : 'var(--text)' }}>
-        {waterGlasses}<span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>/{GOAL}</span>
-      </p>
+      <div className="text-center">
+        <span className="text-2xl font-bold" style={{ color: 'var(--text)' }}>{waterGlasses}</span>
+        <span className="text-xs ml-1" style={{ color: 'var(--text-muted)' }}>
+          {waterGlasses === 1 ? 'szklanka' : waterGlasses < 5 ? 'szklanki' : 'szklanek'}
+        </span>
+        {waterGlasses >= GOAL && (
+          <p className="text-xs mt-0.5 font-medium" style={{ color: 'var(--accent)' }}>
+            cel {GOAL} ✓
+          </p>
+        )}
+      </div>
 
-      {/* Kropki postępu */}
-      <div className="flex flex-wrap gap-1 justify-center">
-        {Array.from({ length: GOAL }).map((_, i) => (
-          <div
-            key={i}
-            style={{
-              width: '7px', height: '7px', borderRadius: '50%',
-              background: i < waterGlasses ? 'var(--accent)' : 'var(--border)',
-              transition: 'background 0.3s',
-            }}
-          />
+      {/* Ogródek kwiatków — 3 kolumny */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '4px',
+          width: '100%',
+        }}
+      >
+        {Array.from({ length: showSlots }).map((_, i) => (
+          <div key={i} className="flex justify-center">
+            <MiniFlower stage={flowerStage(i, waterGlasses)} />
+          </div>
         ))}
       </div>
 
-      {/* Nudge badge */}
-      {nudge && !done && (
-        <span
-          className="text-xs px-2 py-0.5 rounded-full font-medium text-center"
-          style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}
-        >
-          Czas na szklankę!
-        </span>
+      {waterGlasses > MAX_DISPLAY && (
+        <p className="text-xs" style={{ color: 'var(--accent)' }}>
+          +{waterGlasses - MAX_DISPLAY} więcej 🌸
+        </p>
       )}
 
       {/* Fakt */}
       <p
         className="text-center leading-snug"
-        style={{ fontSize: '0.65rem', color: 'var(--text-muted)', lineHeight: 1.45 }}
+        style={{
+          fontSize: '0.65rem',
+          color: 'var(--text-muted)',
+          lineHeight: 1.45,
+          fontStyle: 'italic',
+        }}
       >
         {WATER_FACTS[Math.min(waterGlasses, WATER_FACTS.length - 1)]}
       </p>
@@ -80,15 +97,10 @@ export default function WaterTracker() {
       {/* Przycisk */}
       <button
         onClick={addWaterGlass}
-        disabled={done}
-        className="w-full py-2 rounded-lg text-xs font-semibold transition-all"
-        style={{
-          background: done ? 'var(--border)' : 'var(--accent)',
-          color: done ? 'var(--text-muted)' : '#fff',
-          opacity: done ? 0.7 : 1,
-        }}
+        className="w-full py-2.5 rounded-lg text-sm font-bold transition-all"
+        style={{ background: 'var(--accent)', color: '#fff' }}
       >
-        {done ? '🌸 Cel!' : '💧 +1'}
+        💧 +1 szklanka
       </button>
 
       {waterGlasses > 0 && (
@@ -104,75 +116,76 @@ export default function WaterTracker() {
   )
 }
 
-function FlowerSVG({ stage }) {
-  const stemH = stage === 0 ? 0 : 18 + (stage / GOAL) * 52
-  const flowerY = 108 - stemH
-  const showLeaves = stage >= 2
-  const showBud = stage >= 4
-  const petalCount = stage <= 5 ? Math.max(0, stage - 4) * 2 : stage <= 7 ? 4 : 6
-  const petalR = stage >= 8 ? 11 : 8
-  const budR = stage >= 8 ? 9 : stage >= 6 ? 7 : 5
-  const leafY = 108 - stemH * 0.58
+// Miniaturowy kwiatek SVG — 4 etapy wzrostu
+function MiniFlower({ stage }) {
+  const w = 42
+  const h = 58
 
   return (
-    <svg viewBox="0 0 70 120" width="72" height="112">
+    <svg viewBox={`0 0 ${w} ${h}`} width={w} height={h}>
       {/* Ziemia */}
-      <ellipse cx="35" cy="114" rx="25" ry="6" fill="#b08060" opacity="0.35" />
+      <ellipse cx="21" cy={h - 3} rx="13" ry="4" fill="#b08060" opacity="0.3" />
 
-      {/* Nasionko (etap 0) */}
       {stage === 0 && (
-        <ellipse cx="35" cy="110" rx="6" ry="4" fill="#8B6B47" opacity="0.7" />
+        /* Puste miejsce — nasionko */
+        <ellipse cx="21" cy={h - 6} rx="4" ry="2.5" fill="#8B6B47" opacity="0.35" />
       )}
 
-      {/* Łodyga */}
-      {stage > 0 && (
+      {stage >= 1 && (
+        /* Łodyga */
         <line
-          x1="35" y1="112" x2="35" y2={112 - stemH}
-          stroke="#4a8a3a" strokeWidth="2.5" strokeLinecap="round"
-          style={{ transition: 'all 0.5s ease' }}
+          x1="21" y1={h - 5}
+          x2="21" y2={stage === 1 ? h - 22 : stage === 2 ? h - 32 : h - 38}
+          stroke="#4a8a3a" strokeWidth="2" strokeLinecap="round"
         />
       )}
 
-      {/* Liście */}
-      {showLeaves && (
+      {stage === 1 && (
+        /* Kiełek */
+        <circle cx="21" cy={h - 24} r="3.5" fill="#6ab85a" />
+      )}
+
+      {stage >= 2 && (
+        /* Liście */
         <>
           <path
-            d={`M35 ${leafY} C20 ${leafY - 12} 16 ${leafY + 6} 28 ${leafY + 10}`}
-            fill="#5aaa4a" opacity="0.9"
+            d={`M21 ${h - 26} C12 ${h - 32} 10 ${h - 22} 17 ${h - 20}`}
+            fill="#5aaa4a" opacity="0.85"
           />
           <path
-            d={`M35 ${leafY} C50 ${leafY - 12} 54 ${leafY + 6} 42 ${leafY + 10}`}
-            fill="#5aaa4a" opacity="0.9"
+            d={`M21 ${h - 26} C30 ${h - 32} 32 ${h - 22} 25 ${h - 20}`}
+            fill="#5aaa4a" opacity="0.85"
           />
         </>
       )}
 
-      {/* Płatki */}
-      {petalCount > 0 && Array.from({ length: petalCount }).map((_, i) => {
-        const angle = (i * (360 / petalCount) - 90) * (Math.PI / 180)
-        const dist = budR + petalR * 0.6
-        const px = 35 + Math.cos(angle) * dist
-        const py = flowerY + Math.sin(angle) * dist
-        return (
-          <ellipse
-            key={i}
-            cx={px} cy={py}
-            rx={petalR * 0.55} ry={petalR}
-            transform={`rotate(${i * (360 / petalCount)}, ${px}, ${py})`}
-            fill="var(--accent)"
-            opacity={stage >= 8 ? 0.9 : 0.75}
-            style={{ transition: 'all 0.4s ease' }}
-          />
-        )
-      })}
+      {stage === 2 && (
+        /* Pąk */
+        <ellipse cx="21" cy={h - 38} rx="4" ry="6" fill="#6ab85a" />
+      )}
 
-      {/* Środek kwiatu */}
-      {showBud && (
-        <circle
-          cx="35" cy={flowerY} r={budR}
-          fill={stage >= 6 ? '#f5c842' : '#6ac06a'}
-          style={{ transition: 'all 0.4s ease' }}
-        />
+      {stage >= 3 && (
+        /* Płatki */
+        <>
+          {[0, 60, 120, 180, 240, 300].slice(0, stage === 3 ? 4 : 6).map((deg, i) => {
+            const rad = (deg - 90) * Math.PI / 180
+            const r = stage >= 4 ? 9 : 7
+            const px = 21 + Math.cos(rad) * r
+            const py = (h - 40) + Math.sin(rad) * r
+            return (
+              <ellipse
+                key={i}
+                cx={px} cy={py}
+                rx={stage >= 4 ? 5 : 4} ry={stage >= 4 ? 7 : 5}
+                transform={`rotate(${deg}, ${px}, ${py})`}
+                fill="var(--accent)"
+                opacity={stage >= 4 ? 0.9 : 0.75}
+              />
+            )
+          })}
+          {/* Środek */}
+          <circle cx="21" cy={h - 40} r={stage >= 4 ? 5.5 : 4} fill="#f5c842" />
+        </>
       )}
     </svg>
   )

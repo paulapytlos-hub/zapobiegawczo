@@ -83,7 +83,7 @@ export default function App() {
         <FactBanner />
         <div className="flex items-start gap-3 px-2">
           {/* Kwiatek — lewa kolumna */}
-          <div className="w-24 shrink-0 sticky top-4 pt-5">
+          <div className="w-36 shrink-0 sticky top-4 pt-5">
             <WaterTracker />
           </div>
           {/* Główna zawartość — prawa kolumna */}
