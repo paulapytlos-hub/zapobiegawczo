@@ -65,6 +65,15 @@ const useAppStore = create((set, get) => ({
   notifPermission: typeof Notification !== 'undefined' ? Notification.permission : 'default',
   popupEnabled: true,
 
+  // ── Poziom zdrowia (persystuje) ──
+  xp: (() => { try { return parseInt(localStorage.getItem('zapobiegawczo_xp') || '0') } catch { return 0 } })(),
+
+  earnXP: (amount) => {
+    const next = get().xp + amount
+    try { localStorage.setItem('zapobiegawczo_xp', String(next)) } catch { /* ignoruj */ }
+    set({ xp: next })
+  },
+
   // ── Nawodnienie ──
   waterGlasses: 0,
   lastWaterAt: null,
@@ -72,7 +81,8 @@ const useAppStore = create((set, get) => ({
   addWaterGlass: () => {
     const glasses = get().waterGlasses
     set({ waterGlasses: glasses + 1, lastWaterAt: Date.now() })
-    get().addLog(`Szklanka wody (${glasses + 1})`)
+    get().earnXP(3)
+    get().addLog(`Szklanka wody (${glasses + 1}) (+3 XP)`)
   },
 
   resetWater: () => {
@@ -157,7 +167,8 @@ const useAppStore = create((set, get) => ({
   completeBreak: async () => {
     const { sessionId, currentExerciseId } = get()
     set(state => ({ showBreakModal: false, breakIsPreview: false, breaksDone: state.breaksDone + 1 }))
-    get().addLog('Przerwa wykonana')
+    get().earnXP(15)
+    get().addLog('Przerwa wykonana (+15 XP)')
     if (sessionId && currentExerciseId) {
       try { await api.logBreak(sessionId, currentExerciseId, false) } catch { /* ignoruj */ }
     }

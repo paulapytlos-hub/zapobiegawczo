@@ -12,6 +12,7 @@ import QuickHelp from './components/QuickHelp'
 import QuickHelpModal from './components/QuickHelpModal'
 import AccessibilityWidget from './components/AccessibilityWidget'
 import WaterTracker from './components/WaterTracker'
+import HealthLevel from './components/HealthLevel'
 
 export default function App() {
   const { sessionActive, sessionPaused, tickSecond, theme, fontSize, highContrast, colorblindMode, reduceMotion, showBreakModal, breakIsPreview } = useAppStore()
@@ -89,6 +90,7 @@ export default function App() {
           {/* Główna zawartość — prawa kolumna */}
           <main className="flex-1 min-w-0">
             <SessionTimer />
+            <HealthLevel />
             <SettingsPanel />
             <QuickHelp />
             <ExercisesSection />

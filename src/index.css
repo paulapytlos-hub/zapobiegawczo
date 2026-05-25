@@ -163,6 +163,12 @@ input[type=number]::-webkit-outer-spin-button {
   50% { opacity: 0.75; }
 }
 
+@keyframes xpFloat {
+  0%   { opacity: 1; transform: translateY(0px); }
+  80%  { opacity: 1; transform: translateY(-18px); }
+  100% { opacity: 0; transform: translateY(-24px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   @keyframes timerPulse { 0%, 100% { opacity: 1; } }
 }
