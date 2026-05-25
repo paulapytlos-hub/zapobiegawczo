@@ -87,18 +87,49 @@ export default function SessionTimer() {
         <div className="flex justify-center mb-5">
           <div className="relative w-40 h-40">
             <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
+              <defs>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="2.5" result="blur" />
+                  <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+                </filter>
+              </defs>
+              {/* Tło pierścienia */}
               <circle cx="60" cy="60" r="54" fill="none" stroke="var(--surface-alt)" strokeWidth="6" />
+              {/* Blask (subttelny, za głównym) */}
+              {sessionActive && !sessionPaused && !awayMode && (
+                <circle
+                  cx="60" cy="60" r="54" fill="none"
+                  stroke={progress > 0.8 ? '#e06040' : 'var(--accent)'}
+                  strokeWidth="10" strokeLinecap="round"
+                  strokeDasharray={circumference}
+                  strokeDashoffset={circumference * (1 - progress)}
+                  opacity="0.18"
+                  filter="url(#glow)"
+                  style={{ transition: 'stroke-dashoffset 1s linear, stroke 1s ease' }}
+                />
+              )}
+              {/* Główny pasek */}
               <circle
                 cx="60" cy="60" r="54" fill="none"
-                stroke={awayMode ? 'var(--border)' : 'var(--accent)'} strokeWidth="6"
-                strokeLinecap="round"
+                stroke={awayMode ? 'var(--border)' : progress > 0.8 && sessionActive ? '#e06040' : 'var(--accent)'}
+                strokeWidth="6" strokeLinecap="round"
                 strokeDasharray={circumference}
                 strokeDashoffset={circumference * (1 - progress)}
-                style={{ transition: 'stroke-dashoffset 1s linear' }}
+                style={{
+                  transition: 'stroke-dashoffset 1s linear, stroke 1.5s ease',
+                  animation: sessionActive && !sessionPaused && !awayMode
+                    ? 'timerPulse 3s ease-in-out infinite' : 'none',
+                }}
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-3xl font-light font-mono tracking-tight" style={{ color: 'var(--text)' }}>
+              <span
+                className="text-3xl font-light font-mono tracking-tight"
+                style={{
+                  color: progress > 0.8 && sessionActive ? '#e06040' : 'var(--text)',
+                  transition: 'color 1.5s ease',
+                }}
+              >
                 {formatTime(elapsed)}
               </span>
             </div>
