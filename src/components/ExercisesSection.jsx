@@ -8,41 +8,68 @@ export default function ExercisesSection() {
   const toggle = (id) => setOpenId(prev => prev === id ? null : id)
 
   return (
-    <div className="mx-4 mt-4">
-      <h2 className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>
-        Ćwiczenia
-      </h2>
+    <div className="mx-4 mt-6">
+      <div className="flex items-baseline justify-between mb-3">
+        <h2
+          style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontWeight: 500,
+            fontSize: '1.1rem',
+            color: 'var(--text)',
+          }}
+        >
+          Ćwiczenia
+        </h2>
+        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
+          {exercises.length} ćwiczeń
+        </span>
+      </div>
+
       <div className="space-y-2">
         {exercises.map(ex => (
           <div
             key={ex.id}
-            className="rounded-xl overflow-hidden"
-            style={{ border: '1px solid var(--border)', background: 'var(--surface)' }}
+            className="overflow-hidden"
+            style={{
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius)',
+              background: 'var(--surface)',
+            }}
           >
-            {/* Nagłówek karty — klikalny */}
             <button
               onClick={() => toggle(ex.id)}
-              className="w-full flex items-center gap-3 p-4 text-left transition-all"
-              style={{ background: openId === ex.id ? 'var(--surface-alt)' : 'var(--surface)' }}
+              className="w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors"
+              style={{ background: openId === ex.id ? 'var(--surface-alt)' : 'transparent' }}
             >
-              <span className="text-2xl">{ex.icon}</span>
-              <div className="flex-1">
-                <p className="font-semibold" style={{ color: 'var(--text)' }}>{ex.namepl}</p>
-                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{ex.time}</p>
-              </div>
+              {/* Kolorowy znacznik obszaru */}
               <span
-                className="text-lg transition-transform duration-200"
+                className="w-2 h-2 rounded-full shrink-0"
+                style={{ background: ex.areaColor }}
+              />
+
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-sm" style={{ color: 'var(--text)' }}>
+                  {ex.namepl}
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                  {ex.area} · {ex.time}
+                </p>
+              </div>
+
+              {/* Strzałka */}
+              <svg
+                width="14" height="14" viewBox="0 0 14 14"
+                fill="none" stroke="var(--text-muted)" strokeWidth="1.5" strokeLinecap="round"
                 style={{
-                  color: 'var(--text-muted)',
-                  transform: openId === ex.id ? 'rotate(180deg)' : 'rotate(0deg)',
-                  display: 'inline-block',
+                  transform: openId === ex.id ? 'rotate(90deg)' : 'rotate(0deg)',
+                  transition: 'transform 0.2s',
+                  shrink: 0,
                 }}
               >
-                ›
-              </span>
+                <path d="M5 3l4 4-4 4" />
+              </svg>
             </button>
 
-            {/* Kroki — rozwijane */}
             <AnimatePresence initial={false}>
               {openId === ex.id && (
                 <motion.div
@@ -52,23 +79,33 @@ export default function ExercisesSection() {
                   transition={{ duration: 0.2 }}
                   style={{ overflow: 'hidden' }}
                 >
-                  <ol
-                    className="px-4 pb-4 space-y-2"
+                  <div
+                    className="px-4 pb-4 pt-3 space-y-4"
                     style={{ borderTop: '1px solid var(--border)' }}
                   >
-                    <div className="pt-3" />
-                    {ex.steps.map((step, i) => (
-                      <li key={i} className="flex gap-3 text-sm">
-                        <span
-                          className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 text-white"
-                          style={{ background: 'var(--accent)' }}
-                        >
-                          {i + 1}
-                        </span>
-                        <span style={{ color: 'var(--text)' }}>{step}</span>
-                      </li>
-                    ))}
-                  </ol>
+                    <ol className="space-y-2.5">
+                      {ex.steps.map((step, i) => (
+                        <li key={i} className="flex items-start gap-3 text-sm">
+                          <span
+                            className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 mt-0.5 text-white"
+                            style={{ background: ex.areaColor }}
+                          >
+                            {i + 1}
+                          </span>
+                          <span style={{ color: 'var(--text)', lineHeight: 1.5 }}>{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+
+                    {ex.note && (
+                      <p
+                        className="text-xs px-3 py-2 rounded-lg italic"
+                        style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)' }}
+                      >
+                        {ex.note}
+                      </p>
+                    )}
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
