@@ -1,6 +1,22 @@
 import { useState } from 'react'
 import useAppStore from '../store/useAppStore'
 
+async function testNotification() {
+  if (Notification.permission !== 'granted') return
+  try {
+    const reg = await navigator.serviceWorker?.ready
+    if (reg) {
+      reg.active?.postMessage({
+        type: 'SHOW_NOTIFICATION',
+        title: 'Działa!',
+        body: 'Powiadomienia na pulpicie są aktywne.',
+      })
+      return
+    }
+  } catch { /* ignoruj */ }
+  new Notification('Działa!', { body: 'Powiadomienia na pulpicie są aktywne.', silent: true })
+}
+
 const PRESETS = [30, 45, 60, 90]
 
 export default function SettingsPanel() {
@@ -113,16 +129,33 @@ export default function SettingsPanel() {
         )}
       </div>
 
-      {/* Powiadomienia przeglądarki */}
-      <Toggle
-        label="Powiadomienia przeglądarki"
-        checked={notifEnabled}
-        onChange={toggleNotif}
-      />
+      {/* Powiadomienia na pulpicie */}
+      <div className="space-y-2">
+        <Toggle
+          label="Powiadomienia na pulpicie"
+          description="Ciche — nie przeszkadzają w biurze"
+          checked={notifEnabled}
+          onChange={toggleNotif}
+        />
+        {notifEnabled && (
+          <button
+            onClick={testNotification}
+            className="w-full py-2 text-xs rounded-lg transition-all"
+            style={{
+              background: 'var(--surface-alt)',
+              color: 'var(--text-muted)',
+              border: '1px solid var(--border)',
+            }}
+          >
+            Wyślij testowe powiadomienie
+          </button>
+        )}
+      </div>
 
       {/* Popup w aplikacji */}
       <Toggle
         label="Popup w aplikacji"
+        description="Modal z ćwiczeniem przy każdej przerwie"
         checked={popupEnabled}
         onChange={togglePopup}
       />
@@ -130,10 +163,13 @@ export default function SettingsPanel() {
   )
 }
 
-function Toggle({ label, checked, onChange }) {
+function Toggle({ label, description, checked, onChange }) {
   return (
-    <div className="flex items-center justify-between">
-      <span className="text-sm" style={{ color: 'var(--text)' }}>{label}</span>
+    <div className="flex items-center justify-between gap-3">
+      <div>
+        <span className="text-sm" style={{ color: 'var(--text)' }}>{label}</span>
+        {description && <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{description}</p>}
+      </div>
       <button
         onClick={onChange}
         className="relative w-10 h-6 rounded-full transition-all"

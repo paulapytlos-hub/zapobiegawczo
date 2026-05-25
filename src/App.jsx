@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import useAppStore from './store/useAppStore'
 import Header from './components/Header'
 import SessionTimer from './components/SessionTimer'
@@ -10,17 +10,43 @@ import SessionLog from './components/SessionLog'
 import ExercisesSection from './components/ExercisesSection'
 
 export default function App() {
-  const { sessionActive, sessionPaused, tickSecond, cuteMode } = useAppStore()
+  const { sessionActive, sessionPaused, tickSecond, cuteMode, showBreakModal } = useAppStore()
+  const titleFlashRef = useRef(null)
 
+  // Główna pętla timera
   useEffect(() => {
     if (!sessionActive || sessionPaused) return
     const id = setInterval(() => tickSecond(), 1000)
     return () => clearInterval(id)
   }, [sessionActive, sessionPaused, tickSecond])
 
+  // Synchronizuj motyw
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', cuteMode ? 'cozy' : '')
   }, [cuteMode])
+
+  // Rejestruj Service Worker
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => { /* ignoruj błędy SW */ })
+    }
+  }, [])
+
+  // Migający tytuł zakładki gdy break modal jest aktywny
+  // Działa nawet gdy przeglądarka jest zminimalizowana lub karta nieaktywna
+  useEffect(() => {
+    if (showBreakModal) {
+      let blink = false
+      titleFlashRef.current = setInterval(() => {
+        document.title = blink ? 'Zapobiegawczo' : '⏸ Czas na przerwę!'
+        blink = !blink
+      }, 1000)
+    } else {
+      clearInterval(titleFlashRef.current)
+      document.title = 'Zapobiegawczo — zadbaj o siebie'
+    }
+    return () => clearInterval(titleFlashRef.current)
+  }, [showBreakModal])
 
   return (
     <div className="min-h-screen pb-8" style={{ background: 'var(--bg)' }}>

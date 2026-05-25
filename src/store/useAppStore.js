@@ -1,6 +1,22 @@
 import { create } from 'zustand'
 import * as api from '../api/client'
 
+// Wysyła powiadomienie przez Service Worker (działa gdy karta jest w tle)
+// lub fallback do zwykłego Notification API
+async function sendNotification(title, body) {
+  try {
+    const reg = await navigator.serviceWorker?.ready
+    if (reg) {
+      reg.active?.postMessage({ type: 'SHOW_NOTIFICATION', title, body })
+      return
+    }
+  } catch { /* ignoruj */ }
+  // fallback
+  if (Notification.permission === 'granted') {
+    new Notification(title, { body, icon: '/favicon.svg', silent: true, tag: 'zapobiegawczo-break' })
+  }
+}
+
 const useAppStore = create((set, get) => ({
   // ── Stan sesji ──
   sessionActive: false,
@@ -84,12 +100,7 @@ const useAppStore = create((set, get) => ({
     if (newElapsed > 0 && newElapsed % intervalSeconds === 0) {
       if (popupEnabled) set({ showBreakModal: true })
       if (notifEnabled && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-        new Notification('Czas na przerwę', {
-          body: 'Wstań i rozciągnij się — Twoje ciało Ci podziękuje.',
-          icon: '/favicon.svg',
-          silent: true,  // bez dźwięku — żeby nie przeszkadzać w biurze
-          tag: 'zapobiegawczo-break',  // zastępuje poprzednie powiadomienie zamiast je dublować
-        })
+        sendNotification('Czas na przerwę', 'Wstań i rozciągnij się — Twoje ciało Ci podziękuje.')
       }
       get().addLog('Przypomnienie o przerwie')
     }
