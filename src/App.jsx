@@ -12,7 +12,7 @@ import QuickHelp from './components/QuickHelp'
 import QuickHelpModal from './components/QuickHelpModal'
 
 export default function App() {
-  const { sessionActive, sessionPaused, tickSecond, cuteMode, showBreakModal } = useAppStore()
+  const { sessionActive, sessionPaused, tickSecond, theme, seniorMode, showBreakModal } = useAppStore()
   const titleFlashRef = useRef(null)
 
   // Główna pętla timera
@@ -22,10 +22,15 @@ export default function App() {
     return () => clearInterval(id)
   }, [sessionActive, sessionPaused, tickSecond])
 
-  // Synchronizuj motyw
+  // Synchronizuj motyw i tryb dostępności
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', cuteMode ? 'light' : '')
-  }, [cuteMode])
+    document.documentElement.setAttribute('data-theme', theme === 'dark' ? '' : theme)
+  }, [theme])
+
+  useEffect(() => {
+    if (seniorMode) document.documentElement.setAttribute('data-senior', 'true')
+    else document.documentElement.removeAttribute('data-senior')
+  }, [seniorMode])
 
   // Rejestruj Service Worker
   useEffect(() => {
@@ -50,7 +55,7 @@ export default function App() {
     return () => clearInterval(titleFlashRef.current)
   }, [showBreakModal])
 
-  const bgGradient = cuteMode ? {} : {
+  const bgGradient = theme === 'light' ? {} : {
     backgroundImage: 'radial-gradient(ellipse 90% 50% at 15% -5%, rgba(45, 184, 112, 0.05) 0%, transparent 55%), radial-gradient(ellipse 60% 40% at 85% 90%, rgba(0, 100, 50, 0.04) 0%, transparent 50%)',
   }
 

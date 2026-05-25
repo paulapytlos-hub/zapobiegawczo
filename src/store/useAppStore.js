@@ -35,7 +35,8 @@ const useAppStore = create((set, get) => ({
   showBreakModal: false,
   breakIsPreview: false,
   showSettings: false,
-  cuteMode: false,
+  theme: 'dark',   // 'dark' | 'night' | 'light'
+  seniorMode: false,
   showWelcome: (() => { try { return !localStorage.getItem('zapobiegawczo_welcomed') } catch { return false } })(),
 
   // ── Szybka pomoc ──
@@ -182,10 +183,16 @@ const useAppStore = create((set, get) => ({
     set({ showWelcome: false })
   },
 
-  toggleMode: () => {
-    const next = !get().cuteMode
-    set({ cuteMode: next })
-    document.documentElement.setAttribute('data-theme', next ? 'light' : '')
+  setTheme: (t) => {
+    set({ theme: t })
+    document.documentElement.setAttribute('data-theme', t === 'dark' ? '' : t)
+  },
+
+  toggleSenior: () => {
+    const next = !get().seniorMode
+    set({ seniorMode: next })
+    if (next) document.documentElement.setAttribute('data-senior', 'true')
+    else document.documentElement.removeAttribute('data-senior')
   },
 
   addLog: (message) => {

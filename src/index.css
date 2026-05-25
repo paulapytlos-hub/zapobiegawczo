@@ -21,6 +21,27 @@
   color-scheme: dark;
 }
 
+/* ── Tryb nocny (bez niebieskiego światła) ── */
+[data-theme="night"] {
+  --bg: #0c0905;
+  --surface: #141008;
+  --surface-alt: #1e160c;
+  --border: #2e2015;
+  --text: #f0e4cc;
+  --text-muted: #907560;
+  --accent: #c87840;
+  --accent-hover: #a86030;
+  --accent-soft: rgba(200, 120, 64, 0.12);
+  --warning: #d49040;
+  --danger: #c06050;
+  --radius: 1rem;
+  --radius-sm: 0.6rem;
+  --font: 'DM Sans', system-ui, sans-serif;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 8px 40px rgba(0, 0, 0, 0.8);
+  color-scheme: dark;
+}
+
 /* ── Motyw Wellness Light ── */
 [data-theme="light"] {
   --bg: #f0f4ef;
@@ -40,6 +61,21 @@
   --shadow: 0 1px 4px rgba(30, 50, 30, 0.07);
   --shadow-md: 0 4px 16px rgba(30, 50, 30, 0.1);
   color-scheme: light;
+}
+
+/* ── Tryb dostępności (senior) ── */
+html[data-senior="true"] {
+  font-size: 18px;
+}
+
+html[data-senior="true"] body {
+  line-height: 1.65;
+}
+
+html[data-senior="true"] button,
+html[data-senior="true"] input,
+html[data-senior="true"] select {
+  min-height: 48px;
 }
 
 * {

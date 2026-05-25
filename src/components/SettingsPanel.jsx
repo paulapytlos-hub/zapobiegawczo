@@ -52,6 +52,8 @@ export default function SettingsPanel() {
     popupEnabled, togglePopup,
     showSettings,
     openBreakPreview,
+    theme, setTheme,
+    seniorMode, toggleSenior,
   } = useAppStore()
 
   const [customValue, setCustomValue] = useState('')
@@ -92,6 +94,41 @@ export default function SettingsPanel() {
       style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
     >
       <h3 className="font-semibold text-base" style={{ color: 'var(--text)' }}>Ustawienia</h3>
+
+      {/* Wygląd */}
+      <div>
+        <p className="text-sm font-medium mb-0.5" style={{ color: 'var(--text)' }}>Motyw kolorystyczny</p>
+        <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>Nocny eliminuje niebieskie światło — dobry na wieczorne godziny pracy</p>
+        <div className="grid grid-cols-3 gap-2">
+          {[
+            { value: 'dark', label: 'Ciemny', desc: 'Domyślny' },
+            { value: 'night', label: 'Nocny', desc: 'Bez niebieskiego' },
+            { value: 'light', label: 'Jasny', desc: 'Wellness' },
+          ].map(({ value, label, desc }) => (
+            <button
+              key={value}
+              onClick={() => setTheme(value)}
+              className="p-3 rounded-xl text-left transition-all"
+              style={{
+                background: theme === value ? 'var(--accent-soft)' : 'var(--surface-alt)',
+                border: `1px solid ${theme === value ? 'var(--accent)' : 'var(--border)'}`,
+              }}
+            >
+              <span className="block text-sm font-medium" style={{ color: 'var(--text)' }}>{label}</span>
+              <span className="block text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{desc}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <Toggle
+        label="Tryb dostępności (A+)"
+        description="Większa czcionka i przyciski — WCAG AA, łatwiejsze korzystanie"
+        checked={seniorMode}
+        onChange={toggleSenior}
+      />
+
+      <Divider />
 
       {/* Interwał */}
       <div>

@@ -1,7 +1,7 @@
 import useAppStore from '../store/useAppStore'
 
 export default function Header() {
-  const { cuteMode, toggleMode, openWelcome, userName } = useAppStore()
+  const { openWelcome, userName, seniorMode, toggleSenior } = useAppStore()
 
   return (
     <header
@@ -11,7 +11,7 @@ export default function Header() {
         borderBottom: '1px solid var(--border)',
       }}
     >
-      {/* Przycisk pomocy — lewy róg */}
+      {/* Pomoc — lewy róg */}
       <button
         onClick={openWelcome}
         title="Jak korzystać z aplikacji?"
@@ -46,10 +46,7 @@ export default function Header() {
           Zapobiegawczo
         </h1>
         {userName ? (
-          <p
-            className="text-sm"
-            style={{ color: 'var(--accent)', letterSpacing: '0.01em', opacity: 0.9 }}
-          >
+          <p className="text-sm" style={{ color: 'var(--accent)', letterSpacing: '0.01em', opacity: 0.9 }}>
             Hello, {userName}
           </p>
         ) : (
@@ -59,24 +56,19 @@ export default function Header() {
         )}
       </div>
 
-      {/* Przełącznik motywu — prawy róg */}
+      {/* Tryb dostępności A+ — prawy róg */}
       <button
-        onClick={toggleMode}
-        className="absolute right-5 flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all"
+        onClick={toggleSenior}
+        title="Tryb dostępności — większa czcionka i przyciski"
+        className="absolute right-5 flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold transition-all"
         style={{
-          background: 'var(--surface-alt)',
-          color: 'var(--text-muted)',
-          border: '1px solid var(--border)',
+          background: seniorMode ? 'var(--accent)' : 'var(--surface-alt)',
+          color: seniorMode ? '#fff' : 'var(--text-muted)',
+          border: `1px solid ${seniorMode ? 'var(--accent)' : 'var(--border)'}`,
           borderRadius: 'var(--radius-sm)',
         }}
       >
-        <span
-          style={{
-            width: 7, height: 7, borderRadius: '50%',
-            background: 'var(--accent)', display: 'inline-block',
-          }}
-        />
-        {cuteMode ? 'Ciemny' : 'Jasny'}
+        A+
       </button>
     </header>
   )
