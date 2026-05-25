@@ -5,10 +5,11 @@ const useAppStore = create((set, get) => ({
   // ── Stan sesji ──
   sessionActive: false,
   sessionPaused: false,
-  elapsed: 0,           // sekundy od startu sesji
-  intervalMinutes: 60,  // co ile minut przypomnienie
-  sessionId: null,      // ID sesji z bazy danych
-  currentExerciseId: null, // ćwiczenie pokazywane w aktualnym modalu
+  awayMode: false,        // "Wychodzę z biura"
+  elapsed: 0,
+  intervalMinutes: 60,
+  sessionId: null,
+  currentExerciseId: null,
 
   // ── Statystyki ──
   breaksDone: 0,
@@ -17,10 +18,11 @@ const useAppStore = create((set, get) => ({
   // ── UI ──
   showBreakModal: false,
   showSettings: false,
-  cuteMode: false,      // false = Professional, true = Cozy
+  cuteMode: false,
 
   // ── Powiadomienia ──
   notifEnabled: false,
+  notifPermission: typeof Notification !== 'undefined' ? Notification.permission : 'default',
   popupEnabled: true,
 
   // ── Log zdarzeń ──
@@ -28,14 +30,18 @@ const useAppStore = create((set, get) => ({
 
   // ── Akcje sesji ──
   startSession: async () => {
-    set({ sessionActive: true, sessionPaused: false, elapsed: 0, sessionId: null })
+    set({ sessionActive: true, sessionPaused: false, awayMode: false, elapsed: 0, sessionId: null })
     get().addLog('Sesja rozpoczęta')
+    // Zapytaj o powiadomienia przy pierwszym starcie
+    if (typeof Notification !== 'undefined' && Notification.permission === 'default') {
+      Notification.requestPermission().then(perm => {
+        set({ notifPermission: perm, notifEnabled: perm === 'granted' })
+      })
+    }
     try {
       const res = await api.startSession(get().intervalMinutes)
       set({ sessionId: res.data.id })
-    } catch {
-      // brak backendu nie blokuje działania aplikacji
-    }
+    } catch { /* brak backendu nie blokuje */ }
   },
 
   pauseSession: () => {
@@ -44,40 +50,45 @@ const useAppStore = create((set, get) => ({
   },
 
   resumeSession: () => {
-    set({ sessionPaused: false })
+    set({ sessionPaused: false, awayMode: false })
     get().addLog('Sesja wznowiona')
+  },
+
+  goAway: () => {
+    set({ sessionPaused: true, awayMode: true })
+    get().addLog('Wyszłam z biura')
+  },
+
+  comeBack: () => {
+    set({ sessionPaused: false, awayMode: false })
+    get().addLog('Wróciłam do biura')
   },
 
   resetSession: async () => {
     const { sessionId, elapsed } = get()
     if (sessionId) {
-      try {
-        await api.endSession(sessionId, elapsed)
-      } catch {
-        // cicho ignoruj
-      }
+      try { await api.endSession(sessionId, elapsed) } catch { /* ignoruj */ }
     }
     set({
-      sessionActive: false,
-      sessionPaused: false,
-      elapsed: 0,
-      sessionId: null,
-      showBreakModal: false,
+      sessionActive: false, sessionPaused: false, awayMode: false,
+      elapsed: 0, sessionId: null, showBreakModal: false,
     })
-    get().addLog('Sesja zresetowana')
+    get().addLog('Sesja zakończona')
   },
 
   tickSecond: () => {
-    const { elapsed, intervalMinutes, popupEnabled, notifEnabled, remindersIgnored } = get()
+    const { elapsed, intervalMinutes, popupEnabled, notifEnabled } = get()
     const newElapsed = elapsed + 1
     const intervalSeconds = intervalMinutes * 60
 
     if (newElapsed > 0 && newElapsed % intervalSeconds === 0) {
       if (popupEnabled) set({ showBreakModal: true })
-      if (notifEnabled) {
-        new Notification('Czas na przerwę! 🧘', {
-          body: 'Wstań, rozciągnij się — Twoje ciało Ci podziękuje.',
+      if (notifEnabled && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+        new Notification('Czas na przerwę', {
+          body: 'Wstań i rozciągnij się — Twoje ciało Ci podziękuje.',
           icon: '/favicon.svg',
+          silent: true,  // bez dźwięku — żeby nie przeszkadzać w biurze
+          tag: 'zapobiegawczo-break',  // zastępuje poprzednie powiadomienie zamiast je dublować
         })
       }
       get().addLog('Przypomnienie o przerwie')
@@ -89,17 +100,10 @@ const useAppStore = create((set, get) => ({
   // ── Akcje przerwy ──
   completeBreak: async () => {
     const { sessionId, currentExerciseId } = get()
-    set(state => ({
-      showBreakModal: false,
-      breaksDone: state.breaksDone + 1,
-    }))
-    get().addLog('Przerwa wykonana ✓')
+    set(state => ({ showBreakModal: false, breaksDone: state.breaksDone + 1 }))
+    get().addLog('Przerwa wykonana')
     if (sessionId && currentExerciseId) {
-      try {
-        await api.logBreak(sessionId, currentExerciseId, false)
-      } catch {
-        // cicho ignoruj
-      }
+      try { await api.logBreak(sessionId, currentExerciseId, false) } catch { /* ignoruj */ }
     }
   },
 
@@ -112,31 +116,29 @@ const useAppStore = create((set, get) => ({
     }))
     get().addLog('Przerwa odłożona o 5 min')
     if (sessionId && currentExerciseId) {
-      try {
-        await api.logBreak(sessionId, currentExerciseId, true)
-      } catch {
-        // cicho ignoruj
-      }
+      try { await api.logBreak(sessionId, currentExerciseId, true) } catch { /* ignoruj */ }
     }
   },
 
   dismissBreak: () => {
-    set(state => ({
-      showBreakModal: false,
-      remindersIgnored: state.remindersIgnored + 1,
-    }))
+    set(state => ({ showBreakModal: false, remindersIgnored: state.remindersIgnored + 1 }))
     get().addLog('Przypomnienie pominięte')
   },
 
   // ── Ustawienia ──
   updateInterval: (minutes) => set({ intervalMinutes: minutes }),
 
+  requestNotifPermission: () => {
+    if (typeof Notification === 'undefined') return
+    Notification.requestPermission().then(perm => {
+      set({ notifPermission: perm, notifEnabled: perm === 'granted' })
+    })
+  },
+
   toggleNotif: () => {
-    const { notifEnabled } = get()
-    if (!notifEnabled && Notification.permission !== 'granted') {
-      Notification.requestPermission().then(perm => {
-        if (perm === 'granted') set({ notifEnabled: true })
-      })
+    const { notifEnabled, notifPermission } = get()
+    if (!notifEnabled && notifPermission !== 'granted') {
+      get().requestNotifPermission()
     } else {
       set(state => ({ notifEnabled: !state.notifEnabled }))
     }
@@ -145,12 +147,11 @@ const useAppStore = create((set, get) => ({
   togglePopup: () => set(state => ({ popupEnabled: !state.popupEnabled })),
 
   toggleMode: () => {
-    set(state => ({ cuteMode: !state.cuteMode }))
     const next = !get().cuteMode
+    set({ cuteMode: next })
     document.documentElement.setAttribute('data-theme', next ? 'cozy' : '')
   },
 
-  // ── Log ──
   addLog: (message) => {
     const now = new Date()
     const time = now.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' })
