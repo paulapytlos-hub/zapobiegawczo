@@ -3,14 +3,15 @@ import useAppStore from '../store/useAppStore'
 const GOAL = 8
 
 const WATER_FACTS = [
-  'Już 1–2% odwodnienia obniża koncentrację i czas reakcji — jak po nieprzespanej nocy.',
-  'Mózg składa się w 75% z wody. Odwodnienie dosłownie zmniejsza jego objętość.',
-  'Regularne picie wody redukuje bóle głowy z napięcia o ponad 40% u pracowników biurowych.',
-  'Woda wspomaga produkcję mazi stawowej — chroni kręgosłup i stawy przy długim siedzeniu.',
-  'Odwodnienie zwiększa poziom kortyzolu (hormonu stresu) — pijesz wodę, redukujesz stres.',
-  'Szklanka wody przed posiłkiem poprawia trawienie i daje uczucie sytości.',
-  'Nawodniony mózg przetwarza informacje o 14% szybciej. Woda = lepsze decyzje.',
-  'Cel osiągnięty! Twoje ciało i umysł Ci dziękują. Jutro zacznij od nowa 💧',
+  'Wypij pierwszą szklankę — nawodniony mózg działa o 14% szybciej.',
+  '1–2% odwodnienia obniża koncentrację jak nieprzespana noc.',
+  'Mózg składa się w 75% z wody. Dbasz o niego każdą szklanką.',
+  'Woda wspomaga produkcję mazi stawowej — chroni kręgosłup.',
+  'Odwodnienie zwiększa kortyzol — woda redukuje stres.',
+  'Połowa normy! Regularne nawodnienie redukuje bóle głowy o 40%.',
+  'Jeszcze dwie szklanki do celu — Twoje stawy Ci dziękują.',
+  'Ostatnia prosta — krążenie i energia na najwyższym poziomie!',
+  'Cel osiągnięty! Twoje ciało i umysł są w pełni nawodnione. 🌸',
 ]
 
 export default function WaterTracker() {
@@ -19,117 +20,160 @@ export default function WaterTracker() {
   const addWaterGlass = useAppStore(s => s.addWaterGlass)
   const resetWater = useAppStore(s => s.resetWater)
 
-  const sinceLastGlass = lastWaterAt
-    ? timeSince(lastWaterAt)
-    : null
-
-  const pct = Math.min(waterGlasses / GOAL, 1)
   const nudge = lastWaterAt && (Date.now() - lastWaterAt) > 60 * 60 * 1000
+  const done = waterGlasses >= GOAL
 
   return (
     <div
-      className="mx-4 mt-4 rounded-xl p-5 space-y-4"
-      style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+      className="rounded-xl p-3 flex flex-col items-center gap-2"
+      style={{
+        background: 'var(--surface)',
+        border: `1px solid ${nudge ? 'var(--accent)' : 'var(--border)'}`,
+        transition: 'border-color 0.3s',
+      }}
     >
-      {/* Nagłówek */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span style={{ fontSize: '1.1rem' }}>💧</span>
-          <h3 className="font-semibold text-sm" style={{ color: 'var(--text)' }}>Nawodnienie</h3>
-          {nudge && (
-            <span
-              className="text-xs px-2 py-0.5 rounded-full font-medium"
-              style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}
-            >
-              Czas na szklankę!
-            </span>
-          )}
-        </div>
-        <span className="text-xs font-semibold" style={{ color: waterGlasses >= GOAL ? 'var(--accent)' : 'var(--text-muted)' }}>
-          {waterGlasses} / {GOAL} szklanek
-        </span>
-      </div>
+      {/* Tytuł */}
+      <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--accent)' }}>
+        Woda
+      </p>
 
-      {/* Kubeczki */}
-      <div className="flex gap-1.5">
+      {/* Kwiatek */}
+      <FlowerSVG stage={waterGlasses} />
+
+      {/* Licznik */}
+      <p className="text-sm font-bold" style={{ color: done ? 'var(--accent)' : 'var(--text)' }}>
+        {waterGlasses}<span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>/{GOAL}</span>
+      </p>
+
+      {/* Kropki postępu */}
+      <div className="flex flex-wrap gap-1 justify-center">
         {Array.from({ length: GOAL }).map((_, i) => (
           <div
             key={i}
-            className="flex-1 h-7 rounded-md transition-all"
             style={{
-              background: i < waterGlasses ? 'var(--accent)' : 'var(--surface-alt)',
-              border: '1px solid var(--border)',
-              opacity: i < waterGlasses ? 1 : 0.5,
+              width: '7px', height: '7px', borderRadius: '50%',
+              background: i < waterGlasses ? 'var(--accent)' : 'var(--border)',
+              transition: 'background 0.3s',
             }}
           />
         ))}
       </div>
 
-      {/* Pasek procentowy */}
-      <div style={{ height: '3px', background: 'var(--border)', borderRadius: '2px' }}>
-        <div
-          style={{
-            height: '100%',
-            width: `${pct * 100}%`,
-            background: pct >= 1 ? 'var(--accent)' : 'var(--accent)',
-            borderRadius: '2px',
-            transition: 'width 0.4s ease',
-          }}
-        />
-      </div>
+      {/* Nudge badge */}
+      {nudge && !done && (
+        <span
+          className="text-xs px-2 py-0.5 rounded-full font-medium text-center"
+          style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}
+        >
+          Czas na szklankę!
+        </span>
+      )}
 
-      {/* Fakt o nawodnieniu */}
+      {/* Fakt */}
       <p
-        className="text-xs px-3 py-2.5 rounded-lg leading-relaxed italic"
-        style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)', border: '1px solid var(--border)' }}
+        className="text-center leading-snug"
+        style={{ fontSize: '0.65rem', color: 'var(--text-muted)', lineHeight: 1.45 }}
       >
         {WATER_FACTS[Math.min(waterGlasses, WATER_FACTS.length - 1)]}
       </p>
 
-      {/* Czas od ostatniej szklanki */}
-      {sinceLastGlass && (
-        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-          Ostatnia szklanka {sinceLastGlass} temu
-          {nudge && <span style={{ color: 'var(--accent)' }}> — czas na kolejną!</span>}
-        </p>
-      )}
+      {/* Przycisk */}
+      <button
+        onClick={addWaterGlass}
+        disabled={done}
+        className="w-full py-2 rounded-lg text-xs font-semibold transition-all"
+        style={{
+          background: done ? 'var(--border)' : 'var(--accent)',
+          color: done ? 'var(--text-muted)' : '#fff',
+          opacity: done ? 0.7 : 1,
+        }}
+      >
+        {done ? '🌸 Cel!' : '💧 +1'}
+      </button>
 
-      {/* Przyciski */}
-      <div className="flex gap-2">
+      {waterGlasses > 0 && (
         <button
-          onClick={addWaterGlass}
-          disabled={waterGlasses >= GOAL}
-          className="flex-1 py-2.5 text-sm font-semibold text-white rounded-lg transition-all"
-          style={{
-            background: waterGlasses >= GOAL ? 'var(--border)' : 'var(--accent)',
-            opacity: waterGlasses >= GOAL ? 0.6 : 1,
-          }}
+          onClick={resetWater}
+          className="text-xs"
+          style={{ color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}
         >
-          {waterGlasses >= GOAL ? '🎉 Cel osiągnięty!' : '+ Wypiłem/am szklankę'}
+          reset
         </button>
-        {waterGlasses > 0 && (
-          <button
-            onClick={resetWater}
-            className="px-3 py-2.5 text-xs rounded-lg transition-all"
-            style={{
-              background: 'var(--surface-alt)',
-              color: 'var(--text-muted)',
-              border: '1px solid var(--border)',
-            }}
-          >
-            Reset
-          </button>
-        )}
-      </div>
+      )}
     </div>
   )
 }
 
-function timeSince(ts) {
-  const mins = Math.floor((Date.now() - ts) / 60000)
-  if (mins < 1) return 'mniej niż minutę'
-  if (mins === 1) return '1 minutę'
-  if (mins < 60) return `${mins} min`
-  const h = Math.floor(mins / 60)
-  return h === 1 ? '1 godz.' : `${h} godz.`
+function FlowerSVG({ stage }) {
+  const stemH = stage === 0 ? 0 : 18 + (stage / GOAL) * 52
+  const flowerY = 108 - stemH
+  const showLeaves = stage >= 2
+  const showBud = stage >= 4
+  const petalCount = stage <= 5 ? Math.max(0, stage - 4) * 2 : stage <= 7 ? 4 : 6
+  const petalR = stage >= 8 ? 11 : 8
+  const budR = stage >= 8 ? 9 : stage >= 6 ? 7 : 5
+  const leafY = 108 - stemH * 0.58
+
+  return (
+    <svg viewBox="0 0 70 120" width="72" height="112">
+      {/* Ziemia */}
+      <ellipse cx="35" cy="114" rx="25" ry="6" fill="#b08060" opacity="0.35" />
+
+      {/* Nasionko (etap 0) */}
+      {stage === 0 && (
+        <ellipse cx="35" cy="110" rx="6" ry="4" fill="#8B6B47" opacity="0.7" />
+      )}
+
+      {/* Łodyga */}
+      {stage > 0 && (
+        <line
+          x1="35" y1="112" x2="35" y2={112 - stemH}
+          stroke="#4a8a3a" strokeWidth="2.5" strokeLinecap="round"
+          style={{ transition: 'all 0.5s ease' }}
+        />
+      )}
+
+      {/* Liście */}
+      {showLeaves && (
+        <>
+          <path
+            d={`M35 ${leafY} C20 ${leafY - 12} 16 ${leafY + 6} 28 ${leafY + 10}`}
+            fill="#5aaa4a" opacity="0.9"
+          />
+          <path
+            d={`M35 ${leafY} C50 ${leafY - 12} 54 ${leafY + 6} 42 ${leafY + 10}`}
+            fill="#5aaa4a" opacity="0.9"
+          />
+        </>
+      )}
+
+      {/* Płatki */}
+      {petalCount > 0 && Array.from({ length: petalCount }).map((_, i) => {
+        const angle = (i * (360 / petalCount) - 90) * (Math.PI / 180)
+        const dist = budR + petalR * 0.6
+        const px = 35 + Math.cos(angle) * dist
+        const py = flowerY + Math.sin(angle) * dist
+        return (
+          <ellipse
+            key={i}
+            cx={px} cy={py}
+            rx={petalR * 0.55} ry={petalR}
+            transform={`rotate(${i * (360 / petalCount)}, ${px}, ${py})`}
+            fill="var(--accent)"
+            opacity={stage >= 8 ? 0.9 : 0.75}
+            style={{ transition: 'all 0.4s ease' }}
+          />
+        )
+      })}
+
+      {/* Środek kwiatu */}
+      {showBud && (
+        <circle
+          cx="35" cy={flowerY} r={budR}
+          fill={stage >= 6 ? '#f5c842' : '#6ac06a'}
+          style={{ transition: 'all 0.4s ease' }}
+        />
+      )}
+    </svg>
+  )
 }

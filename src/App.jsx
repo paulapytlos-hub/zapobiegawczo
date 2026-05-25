@@ -79,15 +79,23 @@ export default function App() {
   return (
     <div className="min-h-screen pb-8" style={{ background: 'var(--bg)', ...bgGradient }}>
       <Header />
-      <main className="max-w-md mx-auto">
+      <div className="max-w-xl mx-auto">
         <FactBanner />
-        <SessionTimer />
-        <SettingsPanel />
-        <QuickHelp />
-        <WaterTracker />
-        <ExercisesSection />
-        <SessionLog />
-      </main>
+        <div className="flex items-start gap-3 px-2">
+          {/* Kwiatek — lewa kolumna */}
+          <div className="w-24 shrink-0 sticky top-4 pt-5">
+            <WaterTracker />
+          </div>
+          {/* Główna zawartość — prawa kolumna */}
+          <main className="flex-1 min-w-0">
+            <SessionTimer />
+            <SettingsPanel />
+            <QuickHelp />
+            <ExercisesSection />
+            <SessionLog />
+          </main>
+        </div>
+      </div>
       <BreakModal />
       <WelcomeModal />
       <QuickHelpModal />
