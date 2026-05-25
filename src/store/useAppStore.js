@@ -24,8 +24,9 @@ const useAppStore = create((set, get) => ({
   // ── Stan sesji ──
   sessionActive: false,
   sessionPaused: false,
-  awayMode: false,        // "Wychodzę z biura"
+  awayMode: false,
   elapsed: 0,
+  lastTickAt: null,       // timestamp ostatniego ticka — kompensuje throttling
   intervalMinutes: 60,
   sessionId: null,
   currentExerciseId: null,
@@ -69,7 +70,7 @@ const useAppStore = create((set, get) => ({
 
   // ── Akcje sesji ──
   startSession: async () => {
-    set({ sessionActive: true, sessionPaused: false, awayMode: false, elapsed: 0, sessionId: null })
+    set({ sessionActive: true, sessionPaused: false, awayMode: false, elapsed: 0, lastTickAt: null, sessionId: null })
     get().addLog('Sesja rozpoczęta')
     // Zapytaj o powiadomienia przy pierwszym starcie
     if (typeof Notification !== 'undefined' && Notification.permission === 'default') {
@@ -89,7 +90,7 @@ const useAppStore = create((set, get) => ({
   },
 
   resumeSession: () => {
-    set({ sessionPaused: false, awayMode: false })
+    set({ sessionPaused: false, awayMode: false, lastTickAt: null })
     get().addLog('Sesja wznowiona')
   },
 
@@ -99,7 +100,7 @@ const useAppStore = create((set, get) => ({
   },
 
   comeBack: () => {
-    set({ sessionPaused: false, awayMode: false })
+    set({ sessionPaused: false, awayMode: false, lastTickAt: null })
     get().addLog('Powrót do biura')
   },
 
@@ -116,11 +117,18 @@ const useAppStore = create((set, get) => ({
   },
 
   tickSecond: () => {
-    const { elapsed, intervalMinutes, popupEnabled, notifEnabled } = get()
-    const newElapsed = elapsed + 1
+    const { elapsed, lastTickAt, intervalMinutes, popupEnabled, notifEnabled } = get()
+    const now = Date.now()
+    // Kompensuj throttling Chrome w tle — jeśli minęło więcej niż 1s, dodaj realne sekundy
+    const secondsPassed = lastTickAt ? Math.min(Math.round((now - lastTickAt) / 1000), 60) : 1
     const intervalSeconds = intervalMinutes * 60
+    const prevElapsed = elapsed
+    const newElapsed = elapsed + secondsPassed
 
-    if (newElapsed > 0 && newElapsed % intervalSeconds === 0) {
+    // Sprawdź czy przekroczyliśmy granicę interwału
+    const prevBucket = Math.floor(prevElapsed / intervalSeconds)
+    const newBucket = Math.floor(newElapsed / intervalSeconds)
+    if (newElapsed > 0 && newBucket > prevBucket) {
       if (popupEnabled) set({ showBreakModal: true })
       if (notifEnabled && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
         sendNotification('Czas na przerwę', 'Wstań i rozciągnij się — Twoje ciało Ci podziękuje.')
@@ -128,7 +136,7 @@ const useAppStore = create((set, get) => ({
       get().addLog('Przypomnienie o przerwie')
     }
 
-    set({ elapsed: newElapsed })
+    set({ elapsed: newElapsed, lastTickAt: now })
   },
 
   // ── Akcje przerwy ──
