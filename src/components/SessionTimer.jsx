@@ -117,7 +117,7 @@ export default function SessionTimer() {
 
         {awayMode && (
           <p className="text-center text-sm mb-5" style={{ color: 'var(--text-muted)' }}>
-            Timer wstrzymany — wróć, gdy będziesz gotowa
+            Timer wstrzymany — wróć, gdy będziesz gotowy/a
           </p>
         )}
 
@@ -139,7 +139,7 @@ export default function SessionTimer() {
               className="flex-1 py-3 font-medium text-white transition-all"
               style={{ background: 'var(--accent)', borderRadius: 'var(--radius-sm)' }}
             >
-              Wróciłam do biura
+              Jestem z powrotem
             </button>
           ) : !sessionActive ? (
             <button

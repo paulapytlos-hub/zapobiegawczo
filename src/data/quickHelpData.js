@@ -10,7 +10,7 @@ export const quickHelpData = [
         time: '1 min',
         steps: [
           'Usiądź prosto, wzrok skierowany do przodu.',
-          'Powoli cofnij podbródek do tyłu, jakbyś robiła "podwójny podbródek".',
+          'Powoli cofnij podbródek do tyłu, tworząc "podwójny podbródek".',
           'Utrzymaj 5 sekund — poczujesz rozciąganie z tyłu szyi.',
           'Rozluźnij i powtórz 10 razy.',
         ],

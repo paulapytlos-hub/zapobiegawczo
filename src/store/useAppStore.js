@@ -92,12 +92,12 @@ const useAppStore = create((set, get) => ({
 
   goAway: () => {
     set({ sessionPaused: true, awayMode: true })
-    get().addLog('Wyszłam z biura')
+    get().addLog('Wyjście z biura')
   },
 
   comeBack: () => {
     set({ sessionPaused: false, awayMode: false })
-    get().addLog('Wróciłam do biura')
+    get().addLog('Powrót do biura')
   },
 
   resetSession: async () => {

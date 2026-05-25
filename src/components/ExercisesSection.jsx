@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { exercises } from '../data/exercises'
 import useAppStore from '../store/useAppStore'
 import { areaColor } from '../utils/areaColor'
+import ExerciseCircuit from './ExerciseCircuit'
 
 export default function ExercisesSection() {
   const [openId, setOpenId] = useState(null)
+  const [circuitOpen, setCircuitOpen] = useState(false)
   const sectionRef = useRef(null)
   const quickHelpId = useAppStore(s => s.quickHelpId)
   const setQuickHelp = useAppStore(s => s.setQuickHelp)
@@ -39,6 +41,34 @@ export default function ExercisesSection() {
           {exercises.length} ćwiczeń
         </span>
       </div>
+
+      {/* Przycisk serii */}
+      <button
+        onClick={() => setCircuitOpen(true)}
+        className="w-full flex items-center justify-between px-4 py-3 mb-3 rounded-xl transition-all"
+        style={{
+          background: 'var(--accent-soft)',
+          border: '1.5px solid var(--accent)',
+        }}
+      >
+        <div className="text-left">
+          <p className="text-sm font-semibold" style={{ color: 'var(--accent)' }}>
+            Zrób serię wszystkich ćwiczeń
+          </p>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+            Wszystkie 7 ćwiczeń po kolei · ~7 minut
+          </p>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round">
+          <path d="M3 8h10M9 4l4 4-4 4" />
+        </svg>
+      </button>
+
+      {circuitOpen && (
+        <AnimatePresence>
+          <ExerciseCircuit onClose={() => setCircuitOpen(false)} />
+        </AnimatePresence>
+      )}
 
       <div className="space-y-2">
         {exercises.map(ex => (
