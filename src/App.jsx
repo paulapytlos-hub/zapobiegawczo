@@ -11,6 +11,7 @@ import ExercisesSection from './components/ExercisesSection'
 import QuickHelp from './components/QuickHelp'
 import QuickHelpModal from './components/QuickHelpModal'
 import AccessibilityWidget from './components/AccessibilityWidget'
+import WaterTracker from './components/WaterTracker'
 
 export default function App() {
   const { sessionActive, sessionPaused, tickSecond, theme, fontSize, highContrast, colorblindMode, reduceMotion, showBreakModal, breakIsPreview } = useAppStore()
@@ -83,6 +84,7 @@ export default function App() {
         <SessionTimer />
         <SettingsPanel />
         <QuickHelp />
+        <WaterTracker />
         <ExercisesSection />
         <SessionLog />
       </main>

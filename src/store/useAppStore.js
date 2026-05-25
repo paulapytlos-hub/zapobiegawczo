@@ -65,6 +65,21 @@ const useAppStore = create((set, get) => ({
   notifPermission: typeof Notification !== 'undefined' ? Notification.permission : 'default',
   popupEnabled: true,
 
+  // ── Nawodnienie ──
+  waterGlasses: 0,
+  lastWaterAt: null,
+
+  addWaterGlass: () => {
+    const glasses = get().waterGlasses
+    if (glasses >= 8) return
+    set({ waterGlasses: glasses + 1, lastWaterAt: Date.now() })
+    get().addLog(`Szklanka wody (${glasses + 1}/8)`)
+  },
+
+  resetWater: () => {
+    set({ waterGlasses: 0, lastWaterAt: null })
+  },
+
   // ── Log zdarzeń ──
   logItems: [],
 
