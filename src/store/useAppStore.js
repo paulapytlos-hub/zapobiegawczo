@@ -1,19 +1,23 @@
 import { create } from 'zustand'
 import * as api from '../api/client'
 
-// Wysyła powiadomienie przez Service Worker (działa gdy karta jest w tle)
-// lub fallback do zwykłego Notification API
 async function sendNotification(title, body) {
+  let sent = false
   try {
-    const reg = await navigator.serviceWorker?.ready
-    if (reg) {
-      reg.active?.postMessage({ type: 'SHOW_NOTIFICATION', title, body })
-      return
+    const reg = await Promise.race([
+      navigator.serviceWorker?.ready,
+      new Promise((_, reject) => setTimeout(() => reject('timeout'), 2000)),
+    ])
+    if (reg?.active) {
+      reg.active.postMessage({ type: 'SHOW_NOTIFICATION', title, body })
+      sent = true
     }
-  } catch { /* ignoruj */ }
-  // fallback
-  if (Notification.permission === 'granted') {
-    new Notification(title, { body, icon: '/favicon.svg', silent: true, tag: 'zapobiegawczo-break' })
+  } catch { /* SW niedostępny */ }
+
+  if (!sent && Notification.permission === 'granted') {
+    try {
+      new Notification(title, { body, icon: '/favicon.svg', silent: true, tag: 'zapobiegawczo-break' })
+    } catch { /* ignoruj */ }
   }
 }
 
