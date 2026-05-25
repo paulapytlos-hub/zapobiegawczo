@@ -13,7 +13,6 @@ export default function SessionTimer() {
     sessionActive, sessionPaused, elapsed,
     intervalMinutes, breaksDone, remindersIgnored,
     startSession, pauseSession, resumeSession, resetSession,
-    showSettings, toggleSettings = () => useAppStore.setState(s => ({ showSettings: !s.showSettings })),
   } = useAppStore()
 
   const intervalSeconds = intervalMinutes * 60
@@ -21,19 +20,39 @@ export default function SessionTimer() {
   const timeToBreak = intervalSeconds - (elapsed % intervalSeconds)
   const circumference = 2 * Math.PI * 54
 
+  const statusLabel = sessionActive && !sessionPaused ? 'aktywna' : sessionPaused ? 'wstrzymana' : 'nieaktywna'
+
   return (
     <div
-      className="mx-4 mt-4 rounded-2xl p-6"
-      style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+      className="mx-4 mt-5 p-6"
+      style={{
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
+        borderRadius: 'var(--radius)',
+        boxShadow: 'var(--shadow)',
+      }}
     >
+      {/* Status pill */}
+      <div className="flex justify-center mb-5">
+        <span
+          className="text-xs font-medium px-3 py-1 rounded-full"
+          style={{
+            background: sessionActive && !sessionPaused ? 'var(--accent-soft)' : 'var(--surface-alt)',
+            color: sessionActive && !sessionPaused ? 'var(--accent)' : 'var(--text-muted)',
+          }}
+        >
+          {statusLabel}
+        </span>
+      </div>
+
       {/* Okrągły timer */}
-      <div className="flex justify-center mb-4">
-        <div className="relative w-36 h-36">
+      <div className="flex justify-center mb-5">
+        <div className="relative w-40 h-40">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
-            <circle cx="60" cy="60" r="54" fill="none" stroke="var(--surface-alt)" strokeWidth="8" />
+            <circle cx="60" cy="60" r="54" fill="none" stroke="var(--surface-alt)" strokeWidth="6" />
             <circle
               cx="60" cy="60" r="54" fill="none"
-              stroke="var(--accent)" strokeWidth="8"
+              stroke="var(--accent)" strokeWidth="6"
               strokeLinecap="round"
               strokeDasharray={circumference}
               strokeDashoffset={circumference * (1 - progress)}
@@ -41,11 +60,8 @@ export default function SessionTimer() {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-2xl font-bold font-mono" style={{ color: 'var(--text)' }}>
+            <span className="text-3xl font-light font-mono tracking-tight" style={{ color: 'var(--text)' }}>
               {formatTime(elapsed)}
-            </span>
-            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
-              {sessionActive && !sessionPaused ? 'aktywna' : sessionPaused ? 'pauza' : 'nieaktywna'}
             </span>
           </div>
         </div>
@@ -53,16 +69,22 @@ export default function SessionTimer() {
 
       {/* Info do przerwy */}
       {sessionActive && (
-        <p className="text-center text-sm mb-4" style={{ color: 'var(--text-muted)' }}>
-          Przerwa za <strong style={{ color: 'var(--accent)' }}>{formatTime(timeToBreak)}</strong>
+        <p className="text-center text-sm mb-5" style={{ color: 'var(--text-muted)' }}>
+          Następna przerwa za{' '}
+          <span className="font-semibold" style={{ color: 'var(--accent)' }}>
+            {formatTime(timeToBreak)}
+          </span>
         </p>
       )}
 
       {/* Statystyki */}
-      <div className="flex justify-center gap-8 mb-5">
+      <div
+        className="flex justify-center gap-0 mb-5 rounded-xl overflow-hidden"
+        style={{ border: '1px solid var(--border)' }}
+      >
         <Stat label="Przerwy" value={breaksDone} />
-        <Stat label="Pominięte" value={remindersIgnored} />
-        <Stat label="Interwał" value={`${intervalMinutes}m`} />
+        <Stat label="Pominięte" value={remindersIgnored} border />
+        <Stat label="Interwał" value={`${intervalMinutes}m`} border />
       </div>
 
       {/* Przyciski */}
@@ -70,24 +92,29 @@ export default function SessionTimer() {
         {!sessionActive ? (
           <button
             onClick={startSession}
-            className="flex-1 py-3 rounded-xl font-semibold text-white transition-all"
-            style={{ background: 'var(--accent)' }}
+            className="flex-1 py-3 font-medium text-white transition-all"
+            style={{ background: 'var(--accent)', borderRadius: 'var(--radius-sm)', letterSpacing: '0.01em' }}
           >
-            Start sesji
+            Rozpocznij sesję
           </button>
         ) : sessionPaused ? (
           <button
             onClick={resumeSession}
-            className="flex-1 py-3 rounded-xl font-semibold text-white transition-all"
-            style={{ background: 'var(--accent)' }}
+            className="flex-1 py-3 font-medium text-white transition-all"
+            style={{ background: 'var(--accent)', borderRadius: 'var(--radius-sm)' }}
           >
             Wznów
           </button>
         ) : (
           <button
             onClick={pauseSession}
-            className="flex-1 py-3 rounded-xl font-semibold transition-all"
-            style={{ background: 'var(--surface-alt)', color: 'var(--text)', border: '1px solid var(--border)' }}
+            className="flex-1 py-3 font-medium transition-all"
+            style={{
+              background: 'var(--surface-alt)',
+              color: 'var(--text)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius-sm)',
+            }}
           >
             Pauza
           </button>
@@ -95,29 +122,62 @@ export default function SessionTimer() {
         {sessionActive && (
           <button
             onClick={resetSession}
-            className="px-4 py-3 rounded-xl transition-all"
-            style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)', border: '1px solid var(--border)' }}
+            className="px-4 py-3 transition-all"
+            title="Resetuj sesję"
+            style={{
+              background: 'var(--surface-alt)',
+              color: 'var(--text-muted)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius-sm)',
+            }}
           >
-            ↺
+            <ResetIcon />
           </button>
         )}
         <button
           onClick={() => useAppStore.setState(s => ({ showSettings: !s.showSettings }))}
-          className="px-4 py-3 rounded-xl transition-all"
-          style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)', border: '1px solid var(--border)' }}
+          className="px-4 py-3 transition-all"
+          title="Ustawienia"
+          style={{
+            background: 'var(--surface-alt)',
+            color: 'var(--text-muted)',
+            border: '1px solid var(--border)',
+            borderRadius: 'var(--radius-sm)',
+          }}
         >
-          ⚙️
+          <SettingsIcon />
         </button>
       </div>
     </div>
   )
 }
 
-function Stat({ label, value }) {
+function Stat({ label, value, border }) {
   return (
-    <div className="text-center">
-      <p className="text-xl font-bold" style={{ color: 'var(--text)' }}>{value}</p>
+    <div
+      className="flex-1 py-3 text-center"
+      style={{ borderLeft: border ? '1px solid var(--border)' : 'none' }}
+    >
+      <p className="text-lg font-semibold" style={{ color: 'var(--text)' }}>{value}</p>
       <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{label}</p>
     </div>
+  )
+}
+
+function ResetIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+      <path d="M2 8a6 6 0 1 0 1.5-4" />
+      <polyline points="2,4 2,8 6,8" />
+    </svg>
+  )
+}
+
+function SettingsIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+      <circle cx="8" cy="8" r="2" />
+      <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.2 3.2l1.4 1.4M11.4 11.4l1.4 1.4M3.2 12.8l1.4-1.4M11.4 4.6l1.4-1.4" />
+    </svg>
   )
 }

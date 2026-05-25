@@ -1,37 +1,43 @@
 @import "tailwindcss";
 
-/* ── Zmienne motywu Professional (domyślny) ── */
+/* ── Motyw Wellness (domyślny) ── */
 :root {
-  --bg: #f8fafc;
-  --surface: #ffffff;
-  --surface-alt: #f1f5f9;
-  --border: #e2e8f0;
-  --text: #0f172a;
-  --text-muted: #64748b;
-  --accent: #16a34a;
-  --accent-hover: #15803d;
-  --accent-soft: #dcfce7;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --radius: 0.75rem;
-  --font: 'Inter', system-ui, sans-serif;
+  --bg: #f0f4ef;
+  --surface: #fafcf9;
+  --surface-alt: #e6ede4;
+  --border: #cddaca;
+  --text: #1c2b1e;
+  --text-muted: #607a5e;
+  --accent: #4a7c52;
+  --accent-hover: #3a6241;
+  --accent-soft: #ddeedd;
+  --warning: #b87c3a;
+  --danger: #b85555;
+  --radius: 1rem;
+  --radius-sm: 0.6rem;
+  --font: 'DM Sans', system-ui, sans-serif;
+  --shadow: 0 1px 4px rgba(30, 50, 30, 0.07);
+  --shadow-md: 0 4px 16px rgba(30, 50, 30, 0.1);
 }
 
-/* ── Motyw Cozy ── */
+/* ── Motyw Cozy (ciepły) ── */
 [data-theme="cozy"] {
-  --bg: #fff7ed;
-  --surface: #fffbf5;
-  --surface-alt: #fef3c7;
-  --border: #fed7aa;
-  --text: #431407;
-  --text-muted: #9a3412;
-  --accent: #ea580c;
-  --accent-hover: #c2410c;
-  --accent-soft: #ffedd5;
-  --warning: #d97706;
-  --danger: #dc2626;
+  --bg: #faf5ee;
+  --surface: #fffcf7;
+  --surface-alt: #f2e8d8;
+  --border: #e0ceb4;
+  --text: #2e1f0e;
+  --text-muted: #8a6a48;
+  --accent: #8a5c2e;
+  --accent-hover: #6e4820;
+  --accent-soft: #f5e6d0;
+  --warning: #b87c3a;
+  --danger: #b85555;
   --radius: 1.25rem;
-  --font: 'Nunito', system-ui, sans-serif;
+  --radius-sm: 0.75rem;
+  --font: 'DM Sans', system-ui, sans-serif;
+  --shadow: 0 1px 4px rgba(50, 30, 10, 0.07);
+  --shadow-md: 0 4px 16px rgba(50, 30, 10, 0.1);
 }
 
 * {
@@ -45,4 +51,10 @@ body {
   margin: 0;
   min-height: 100vh;
   transition: background-color 0.3s, color 0.3s;
+  -webkit-font-smoothing: antialiased;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  opacity: 1;
 }
