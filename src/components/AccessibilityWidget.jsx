@@ -33,13 +33,13 @@ export default function AccessibilityWidget() {
         aria-label="Otwórz opcje dostępności"
         className="fixed bottom-6 right-6 z-40 flex flex-col items-center justify-center gap-1 transition-all"
         style={{
-          width: '64px',
-          height: '64px',
+          width: '68px',
+          height: '68px',
           borderRadius: '50%',
           background: 'var(--accent)',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.35), 0 0 0 3px var(--accent-soft)',
           color: '#fff',
-          border: '2px solid rgba(255,255,255,0.2)',
+          border: '2.5px solid rgba(255,255,255,0.35)',
         }}
       >
         <AccessIcon />

@@ -15,11 +15,11 @@ export default function Header() {
       <button
         onClick={openWelcome}
         title="Jak korzystać z aplikacji?"
-        className="absolute left-5 flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all"
+        className="absolute left-5 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-all"
         style={{
-          background: 'var(--surface-alt)',
-          color: 'var(--text-muted)',
-          border: '1px solid var(--border)',
+          background: 'var(--accent-soft)',
+          color: 'var(--accent)',
+          border: '1.5px solid var(--accent)',
           borderRadius: 'var(--radius-sm)',
         }}
       >
