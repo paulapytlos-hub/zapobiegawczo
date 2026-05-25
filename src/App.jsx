@@ -51,7 +51,7 @@ export default function App() {
   }, [showBreakModal])
 
   const bgGradient = cuteMode ? {} : {
-    backgroundImage: 'radial-gradient(ellipse 90% 50% at 15% -5%, rgba(61, 220, 132, 0.07) 0%, transparent 55%), radial-gradient(ellipse 60% 40% at 85% 90%, rgba(0, 120, 60, 0.05) 0%, transparent 50%)',
+    backgroundImage: 'radial-gradient(ellipse 90% 50% at 15% -5%, rgba(45, 184, 112, 0.05) 0%, transparent 55%), radial-gradient(ellipse 60% 40% at 85% 90%, rgba(0, 100, 50, 0.04) 0%, transparent 50%)',
   }
 
   return (
