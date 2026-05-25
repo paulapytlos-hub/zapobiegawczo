@@ -57,7 +57,7 @@ const useAppStore = create((set, get) => ({
   },
 
   // ── Powiadomienia ──
-  notifEnabled: false,
+  notifEnabled: typeof Notification !== 'undefined' && Notification.permission === 'granted',
   notifPermission: typeof Notification !== 'undefined' ? Notification.permission : 'default',
   popupEnabled: true,
 

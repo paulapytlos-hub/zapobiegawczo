@@ -13,15 +13,15 @@ import QuickHelpModal from './components/QuickHelpModal'
 import AccessibilityWidget from './components/AccessibilityWidget'
 
 export default function App() {
-  const { sessionActive, sessionPaused, tickSecond, theme, fontSize, highContrast, colorblindMode, reduceMotion, showBreakModal } = useAppStore()
+  const { sessionActive, sessionPaused, tickSecond, theme, fontSize, highContrast, colorblindMode, reduceMotion, showBreakModal, breakIsPreview } = useAppStore()
   const titleFlashRef = useRef(null)
 
-  // Główna pętla timera
+  // Główna pętla timera — pauzuje gdy modal przerwy jest otwarty (nie w trybie podglądu)
   useEffect(() => {
-    if (!sessionActive || sessionPaused) return
+    if (!sessionActive || sessionPaused || (showBreakModal && !breakIsPreview)) return
     const id = setInterval(() => tickSecond(), 1000)
     return () => clearInterval(id)
-  }, [sessionActive, sessionPaused, tickSecond])
+  }, [sessionActive, sessionPaused, showBreakModal, breakIsPreview, tickSecond])
 
   // Synchronizuj motyw i wszystkie tryby dostępności
   useEffect(() => {
