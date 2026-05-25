@@ -1,7 +1,7 @@
 import useAppStore from '../store/useAppStore'
 
 export default function Header() {
-  const { cuteMode, toggleMode, openWelcome } = useAppStore()
+  const { cuteMode, toggleMode, openWelcome, userName } = useAppStore()
 
   return (
     <header
@@ -45,9 +45,18 @@ export default function Header() {
         >
           Zapobiegawczo
         </h1>
-        <p className="text-xs tracking-widest uppercase" style={{ color: 'var(--text-muted)', letterSpacing: '0.12em' }}>
-          zadbaj o siebie
-        </p>
+        {userName ? (
+          <p
+            className="text-sm"
+            style={{ color: 'var(--accent)', letterSpacing: '0.01em', opacity: 0.9 }}
+          >
+            Hello, {userName}
+          </p>
+        ) : (
+          <p className="text-xs tracking-widest uppercase" style={{ color: 'var(--text-muted)', letterSpacing: '0.12em' }}>
+            zadbaj o siebie
+          </p>
+        )}
       </div>
 
       {/* Przełącznik motywu — prawy róg */}
@@ -67,7 +76,7 @@ export default function Header() {
             background: 'var(--accent)', display: 'inline-block',
           }}
         />
-        {cuteMode ? 'Cozy' : 'Wellness'}
+        {cuteMode ? 'Ciemny' : 'Jasny'}
       </button>
     </header>
   )

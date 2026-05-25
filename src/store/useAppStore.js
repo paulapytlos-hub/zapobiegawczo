@@ -38,6 +38,13 @@ const useAppStore = create((set, get) => ({
   cuteMode: false,
   showWelcome: (() => { try { return !localStorage.getItem('zapobiegawczo_welcomed') } catch { return false } })(),
 
+  // ── Profil ──
+  userName: (() => { try { return localStorage.getItem('zapobiegawczo_name') || '' } catch { return '' } })(),
+  setUserName: (name) => {
+    try { localStorage.setItem('zapobiegawczo_name', name) } catch { /* ignoruj */ }
+    set({ userName: name })
+  },
+
   // ── Powiadomienia ──
   notifEnabled: false,
   notifPermission: typeof Notification !== 'undefined' ? Notification.permission : 'default',
@@ -171,7 +178,7 @@ const useAppStore = create((set, get) => ({
   toggleMode: () => {
     const next = !get().cuteMode
     set({ cuteMode: next })
-    document.documentElement.setAttribute('data-theme', next ? 'cozy' : '')
+    document.documentElement.setAttribute('data-theme', next ? 'light' : '')
   },
 
   addLog: (message) => {

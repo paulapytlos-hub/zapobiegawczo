@@ -1,16 +1,37 @@
 @import "tailwindcss";
 
-/* ── Motyw Wellness (domyślny) ── */
+/* ── Motyw Futuristic Dark (domyślny) ── */
 :root {
+  --bg: #060f09;
+  --surface: #0c1810;
+  --surface-alt: #112014;
+  --border: #1c3020;
+  --text: #dfeee3;
+  --text-muted: #52705e;
+  --accent: #3ddc84;
+  --accent-hover: #2db86e;
+  --accent-soft: rgba(61, 220, 132, 0.1);
+  --warning: #f0a030;
+  --danger: #e05555;
+  --radius: 1rem;
+  --radius-sm: 0.6rem;
+  --font: 'DM Sans', system-ui, sans-serif;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 40px rgba(0, 0, 0, 0.7);
+  color-scheme: dark;
+}
+
+/* ── Motyw Wellness Light ── */
+[data-theme="light"] {
   --bg: #f0f4ef;
-  --surface: #fafcf9;
-  --surface-alt: #e6ede4;
-  --border: #cddaca;
-  --text: #1c2b1e;
-  --text-muted: #607a5e;
+  --surface: #ffffff;
+  --surface-alt: #e8ede7;
+  --border: #d0dace;
+  --text: #1a2e1e;
+  --text-muted: #6a8a6e;
   --accent: #4a7c52;
   --accent-hover: #3a6241;
-  --accent-soft: #ddeedd;
+  --accent-soft: rgba(74, 124, 82, 0.1);
   --warning: #b87c3a;
   --danger: #b85555;
   --radius: 1rem;
@@ -18,26 +39,7 @@
   --font: 'DM Sans', system-ui, sans-serif;
   --shadow: 0 1px 4px rgba(30, 50, 30, 0.07);
   --shadow-md: 0 4px 16px rgba(30, 50, 30, 0.1);
-}
-
-/* ── Motyw Cozy (ciepły) ── */
-[data-theme="cozy"] {
-  --bg: #faf5ee;
-  --surface: #fffcf7;
-  --surface-alt: #f2e8d8;
-  --border: #e0ceb4;
-  --text: #2e1f0e;
-  --text-muted: #8a6a48;
-  --accent: #8a5c2e;
-  --accent-hover: #6e4820;
-  --accent-soft: #f5e6d0;
-  --warning: #b87c3a;
-  --danger: #b85555;
-  --radius: 1.25rem;
-  --radius-sm: 0.75rem;
-  --font: 'DM Sans', system-ui, sans-serif;
-  --shadow: 0 1px 4px rgba(50, 30, 10, 0.07);
-  --shadow-md: 0 4px 16px rgba(50, 30, 10, 0.1);
+  color-scheme: light;
 }
 
 * {

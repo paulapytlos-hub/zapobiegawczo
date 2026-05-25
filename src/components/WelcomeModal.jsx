@@ -15,12 +15,20 @@ const HOW_TO_USE = [
 ]
 
 export default function WelcomeModal() {
-  const { showWelcome, closeWelcome, requestNotifPermission, notifPermission } = useAppStore()
+  const { showWelcome, closeWelcome, requestNotifPermission, notifPermission, setUserName, userName } = useAppStore()
   const [step, setStep] = useState(0)
+  const [nameInput, setNameInput] = useState(userName || '')
 
   const handleEnableNotif = () => {
     requestNotifPermission()
     setTimeout(closeWelcome, 700)
+  }
+
+  const handleNext = () => {
+    if (step === 0 && nameInput.trim()) {
+      setUserName(nameInput.trim())
+    }
+    setStep(s => s + 1)
   }
 
   return (
@@ -95,6 +103,25 @@ export default function WelcomeModal() {
                       <p style={{ color: 'var(--text)' }}>{fact.text}</p>
                     </div>
                   ))}
+                </div>
+                <div>
+                  <label className="text-xs block mb-1.5" style={{ color: 'var(--text-muted)' }}>
+                    Jak masz na imię? <span style={{ opacity: 0.6 }}>(opcjonalnie)</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Twoje imię..."
+                    value={nameInput}
+                    onChange={e => setNameInput(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleNext()}
+                    maxLength={30}
+                    className="w-full px-3 py-2 rounded-lg text-sm outline-none"
+                    style={{
+                      background: 'var(--surface-alt)',
+                      border: '1px solid var(--border)',
+                      color: 'var(--text)',
+                    }}
+                  />
                 </div>
               </div>
             )}
@@ -171,7 +198,7 @@ export default function WelcomeModal() {
             <div className="space-y-2 pt-1">
               {step < 2 ? (
                 <button
-                  onClick={() => setStep(s => s + 1)}
+                  onClick={handleNext}
                   className="w-full py-3 font-medium text-white transition-all"
                   style={{ background: 'var(--accent)', borderRadius: 'var(--radius-sm)' }}
                 >

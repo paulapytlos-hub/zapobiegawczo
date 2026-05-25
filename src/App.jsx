@@ -22,7 +22,7 @@ export default function App() {
 
   // Synchronizuj motyw
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', cuteMode ? 'cozy' : '')
+    document.documentElement.setAttribute('data-theme', cuteMode ? 'light' : '')
   }, [cuteMode])
 
   // Rejestruj Service Worker
@@ -48,8 +48,12 @@ export default function App() {
     return () => clearInterval(titleFlashRef.current)
   }, [showBreakModal])
 
+  const bgGradient = cuteMode ? {} : {
+    backgroundImage: 'radial-gradient(ellipse 90% 50% at 15% -5%, rgba(61, 220, 132, 0.07) 0%, transparent 55%), radial-gradient(ellipse 60% 40% at 85% 90%, rgba(0, 120, 60, 0.05) 0%, transparent 50%)',
+  }
+
   return (
-    <div className="min-h-screen pb-8" style={{ background: 'var(--bg)' }}>
+    <div className="min-h-screen pb-8" style={{ background: 'var(--bg)', ...bgGradient }}>
       <Header />
       <main className="max-w-md mx-auto">
         <FactBanner />
