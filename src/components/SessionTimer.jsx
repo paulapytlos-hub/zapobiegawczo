@@ -38,7 +38,7 @@ export default function SessionTimer() {
               Włącz powiadomienia na pulpicie
             </p>
             <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-              Dostaniesz cichą notyfikację nawet gdy jesteś na innej karcie
+              Dostaniesz cichą notyfikację nawet, gdy jesteś na innej karcie
             </p>
           </div>
           <button
@@ -117,7 +117,7 @@ export default function SessionTimer() {
 
         {awayMode && (
           <p className="text-center text-sm mb-5" style={{ color: 'var(--text-muted)' }}>
-            Timer wstrzymany — wróć gdy będziesz gotowa
+            Timer wstrzymany — wróć, gdy będziesz gotowa
           </p>
         )}
 

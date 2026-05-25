@@ -168,7 +168,7 @@ export default function SettingsPanel() {
         <div>
           <Toggle
             label="Powiadomienia na pulpicie"
-            description="Ciche — pojawią się nawet gdy pracujesz w innej aplikacji lub zakładce"
+            description="Ciche — pojawią się nawet, gdy pracujesz w innej aplikacji lub zakładce"
             checked={notifEnabled}
             onChange={toggleNotif}
           />
@@ -191,7 +191,7 @@ export default function SettingsPanel() {
               border: '1px solid var(--border)',
             }}
           >
-            Wyślij testowe powiadomienie — sprawdź czy działa
+            Wyślij testowe powiadomienie — sprawdź, czy działa
           </button>
         )}
       </div>
@@ -222,7 +222,7 @@ export default function SettingsPanel() {
       <div>
         <p className="text-sm font-medium mb-0.5" style={{ color: 'var(--text)' }}>Podgląd przerwy</p>
         <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>
-          Kliknij, żeby zobaczyć jak wygląda okienko, które pojawi się przy każdym przypomnieniu.
+          Kliknij, żeby zobaczyć, jak wygląda okienko, które pojawi się przy każdym przypomnieniu.
         </p>
         <button
           onClick={previewBreak}

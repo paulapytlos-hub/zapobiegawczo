@@ -129,8 +129,8 @@ export default function WelcomeModal() {
                   <h2 className="text-xl font-semibold" style={{ color: 'var(--text)' }}>Powiadomienia na pulpicie</h2>
                   <p className="text-sm mt-1 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
                     {notifPermission === 'granted'
-                      ? 'Świetnie — powiadomienia są już włączone. Dostaniesz cichą notyfikację przy każdej przerwie, nawet gdy pracujesz w innej aplikacji.'
-                      : 'Żebyś dostała przypomnienie nawet gdy ta karta jest w tle — włącz powiadomienia. Są ciche, nie przeszkadzają w pracy.'}
+                      ? 'Świetnie — powiadomienia są już włączone. Dostaniesz cichą notyfikację przy każdej przerwie, nawet, gdy pracujesz w innej aplikacji.'
+                      : 'Żebyś dostała przypomnienie nawet, gdy ta karta jest w tle — włącz powiadomienia. Są ciche, nie przeszkadzają w pracy.'}
                   </p>
                 </div>
                 {notifPermission !== 'granted' && (
