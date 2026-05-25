@@ -35,7 +35,7 @@ const useAppStore = create((set, get) => ({
   showBreakModal: false,
   breakIsPreview: false,
   showSettings: false,
-  theme: 'dark',       // 'dark' | 'night' | 'light'
+  theme: 'light',      // 'dark' | 'night' | 'light'
   fontSize: 'normal',  // 'small' | 'normal' | 'large' | 'xlarge'
   highContrast: false,
   colorblindMode: false,
