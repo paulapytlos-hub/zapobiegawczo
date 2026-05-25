@@ -1,8 +1,8 @@
 import useAppStore from '../store/useAppStore'
-import { exercises } from '../data/exercises'
+import { quickHelpData } from '../data/quickHelpData'
 
 export default function QuickHelp() {
-  const setQuickHelp = useAppStore(s => s.setQuickHelp)
+  const openQuickHelpModal = useAppStore(s => s.openQuickHelpModal)
 
   return (
     <div className="mx-4 mt-4">
@@ -23,18 +23,18 @@ export default function QuickHelp() {
       </div>
 
       <div className="grid grid-cols-4 gap-2">
-        {exercises.map(ex => (
+        {quickHelpData.map(item => (
           <button
-            key={ex.id}
-            onClick={() => setQuickHelp(ex.id)}
+            key={item.id}
+            onClick={() => openQuickHelpModal(item.id)}
             className="flex flex-col items-center gap-1.5 py-3 px-2 rounded-xl transition-all text-center"
             style={{
               background: 'var(--surface)',
               border: '1px solid var(--border)',
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.borderColor = ex.areaColor
-              e.currentTarget.style.background = `${ex.areaColor}18`
+              e.currentTarget.style.borderColor = item.areaColor
+              e.currentTarget.style.background = `${item.areaColor}18`
             }}
             onMouseLeave={e => {
               e.currentTarget.style.borderColor = 'var(--border)'
@@ -43,10 +43,10 @@ export default function QuickHelp() {
           >
             <span
               className="w-2.5 h-2.5 rounded-full"
-              style={{ background: ex.areaColor }}
+              style={{ background: item.areaColor }}
             />
             <span className="text-xs leading-tight" style={{ color: 'var(--text-muted)' }}>
-              {ex.area}
+              {item.area}
             </span>
           </button>
         ))}

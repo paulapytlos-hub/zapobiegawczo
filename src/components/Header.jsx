@@ -54,7 +54,7 @@ export default function Header() {
           </p>
         ) : (
           <p className="text-xs" style={{ color: 'var(--text-muted)', letterSpacing: '0.04em' }}>
-            Twój system zdrowia przy pracy
+            Twój asystent zdrowia przy pracy
           </p>
         )}
       </div>

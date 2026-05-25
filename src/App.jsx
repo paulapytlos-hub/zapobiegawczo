@@ -9,6 +9,7 @@ import FactBanner from './components/FactBanner'
 import SessionLog from './components/SessionLog'
 import ExercisesSection from './components/ExercisesSection'
 import QuickHelp from './components/QuickHelp'
+import QuickHelpModal from './components/QuickHelpModal'
 
 export default function App() {
   const { sessionActive, sessionPaused, tickSecond, cuteMode, showBreakModal } = useAppStore()
@@ -66,6 +67,7 @@ export default function App() {
       </main>
       <BreakModal />
       <WelcomeModal />
+      <QuickHelpModal />
     </div>
   )
 }

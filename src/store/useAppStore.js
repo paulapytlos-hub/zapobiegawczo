@@ -41,6 +41,9 @@ const useAppStore = create((set, get) => ({
   // ── Szybka pomoc ──
   quickHelpId: null,
   setQuickHelp: (id) => set({ quickHelpId: id }),
+  quickHelpModalArea: null,
+  openQuickHelpModal: (areaId) => set({ quickHelpModalArea: areaId }),
+  closeQuickHelpModal: () => set({ quickHelpModalArea: null }),
 
   // ── Profil ──
   userName: (() => { try { return localStorage.getItem('zapobiegawczo_name') || '' } catch { return '' } })(),

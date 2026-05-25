@@ -84,7 +84,7 @@ export default function WelcomeModal() {
                     className="inline-block text-xs font-medium px-2.5 py-1 rounded-full mb-1"
                     style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}
                   >
-                    Twój system zdrowia przy pracy
+                    Twój asystent zdrowia przy pracy
                   </span>
                   <h1 className="text-xl font-semibold" style={{ color: 'var(--text)' }}>
                     Cześć, dobrze że tu jesteś
