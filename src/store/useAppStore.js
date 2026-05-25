@@ -158,12 +158,16 @@ const useAppStore = create((set, get) => ({
   },
 
   // ── Ustawienia ──
-  updateInterval: (minutes) => set({ intervalMinutes: minutes }),
+  updateInterval: (minutes) => {
+    set({ intervalMinutes: minutes })
+    get().addLog(`Interwał zmieniony na ${minutes} min`)
+  },
 
   requestNotifPermission: () => {
     if (typeof Notification === 'undefined') return
     Notification.requestPermission().then(perm => {
       set({ notifPermission: perm, notifEnabled: perm === 'granted' })
+      if (perm === 'granted') get().addLog('Powiadomienia na pulpicie włączone')
     })
   },
 
@@ -172,11 +176,17 @@ const useAppStore = create((set, get) => ({
     if (!notifEnabled && notifPermission !== 'granted') {
       get().requestNotifPermission()
     } else {
-      set(state => ({ notifEnabled: !state.notifEnabled }))
+      const next = !notifEnabled
+      set({ notifEnabled: next })
+      get().addLog(next ? 'Powiadomienia na pulpicie włączone' : 'Powiadomienia na pulpicie wyłączone')
     }
   },
 
-  togglePopup: () => set(state => ({ popupEnabled: !state.popupEnabled })),
+  togglePopup: () => {
+    const next = !get().popupEnabled
+    set({ popupEnabled: next })
+    get().addLog(next ? 'Okienko z ćwiczeniem włączone' : 'Okienko z ćwiczeniem wyłączone')
+  },
 
   openBreakPreview: () => set({ showBreakModal: true, breakIsPreview: true }),
 

@@ -6,10 +6,10 @@ import { areaColor } from '../utils/areaColor'
 
 export default function QuickHelpModal() {
   const { quickHelpModalArea, closeQuickHelpModal, colorblindMode } = useAppStore()
-  const color = data ? areaColor(data.areaColor, colorblindMode) : null
   const [fasciaOpen, setFasciaOpen] = useState(false)
 
   const data = quickHelpData.find(d => d.id === quickHelpModalArea)
+  const color = data ? areaColor(data.areaColor, colorblindMode) : null
 
   return (
     <AnimatePresence>

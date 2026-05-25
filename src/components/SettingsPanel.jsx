@@ -44,6 +44,15 @@ async function testNotification(setToast) {
 
 const PRESETS = [30, 45, 60, 90]
 
+function minuty(n) {
+  if (n === 1) return 'minutę'
+  const t = n % 100
+  const u = n % 10
+  if (t >= 12 && t <= 14) return 'minut'
+  if (u >= 2 && u <= 4) return 'minuty'
+  return 'minut'
+}
+
 export default function SettingsPanel() {
   const {
     intervalMinutes, updateInterval,
@@ -128,7 +137,7 @@ export default function SettingsPanel() {
           Jak często chcesz dostawać przypomnienie?
         </p>
         <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>
-          Aktualnie co <strong>{intervalMinutes} minut</strong>. Wybierz gotową opcję lub wpisz własną liczbę.
+          Aktualnie co <strong>{intervalMinutes} {minuty(intervalMinutes)}</strong>. Wybierz gotową opcję lub wpisz własną liczbę.
         </p>
 
         <div className="flex gap-2 mb-3">
@@ -183,7 +192,7 @@ export default function SettingsPanel() {
         </div>
         {!isPreset && (
           <p className="text-xs mt-2" style={{ color: 'var(--accent)' }}>
-            Ustawiono własny interwał: {intervalMinutes} minut
+            Ustawiono własny interwał: {intervalMinutes} {minuty(intervalMinutes)}
           </p>
         )}
       </div>
