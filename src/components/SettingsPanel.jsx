@@ -1,20 +1,47 @@
 import { useState } from 'react'
 import useAppStore from '../store/useAppStore'
 
-async function testNotification() {
-  if (Notification.permission !== 'granted') return
+async function testNotification(setToast) {
+  if (Notification.permission !== 'granted') {
+    setToast('Najpierw przyznaj zgodę na powiadomienia w przeglądarce.')
+    return
+  }
+
+  let sent = false
+
+  // Próba 1: przez Service Worker (działa gdy karta jest nieaktywna)
   try {
-    const reg = await navigator.serviceWorker?.ready
-    if (reg) {
-      reg.active?.postMessage({
+    const reg = await Promise.race([
+      navigator.serviceWorker?.ready,
+      new Promise((_, reject) => setTimeout(() => reject('timeout'), 2000)),
+    ])
+    if (reg?.active) {
+      reg.active.postMessage({
         type: 'SHOW_NOTIFICATION',
         title: 'Działa!',
         body: 'Powiadomienia na pulpicie są aktywne.',
       })
-      return
+      sent = true
     }
-  } catch { /* ignoruj */ }
-  new Notification('Działa!', { body: 'Powiadomienia na pulpicie są aktywne.', silent: true })
+  } catch { /* SW niedostępny, próbujemy fallback */ }
+
+  // Próba 2: bezpośrednio (fallback gdy SW nie jest gotowy)
+  if (!sent) {
+    try {
+      new Notification('Działa!', {
+        body: 'Powiadomienia na pulpicie są aktywne.',
+        silent: true,
+        tag: 'zapobiegawczo-test',
+      })
+      sent = true
+    } catch { /* ignoruj */ }
+  }
+
+  if (sent) {
+    setToast('Powiadomienie wysłane — sprawdź prawy dolny róg ekranu.')
+  } else {
+    setToast('Nie udało się wysłać. Sprawdź ustawienia powiadomień w przeglądarce.')
+  }
 }
 
 const PRESETS = [30, 45, 60, 90]
@@ -29,8 +56,14 @@ export default function SettingsPanel() {
 
   const [customValue, setCustomValue] = useState('')
   const [error, setError] = useState('')
+  const [toast, setToast] = useState('')
 
   if (!showSettings) return null
+
+  const showToast = (msg) => {
+    setToast(msg)
+    setTimeout(() => setToast(''), 4000)
+  }
 
   const handleCustom = (e) => {
     const val = e.target.value
@@ -139,7 +172,7 @@ export default function SettingsPanel() {
         />
         {notifEnabled && (
           <button
-            onClick={testNotification}
+            onClick={() => testNotification(showToast)}
             className="w-full py-2 text-xs rounded-lg transition-all"
             style={{
               background: 'var(--surface-alt)',
@@ -151,6 +184,16 @@ export default function SettingsPanel() {
           </button>
         )}
       </div>
+
+      {/* Toast potwierdzenie */}
+      {toast && (
+        <div
+          className="text-xs px-3 py-2.5 rounded-lg"
+          style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)', border: '1px solid var(--border)' }}
+        >
+          {toast}
+        </div>
+      )}
 
       {/* Popup w aplikacji */}
       <Toggle

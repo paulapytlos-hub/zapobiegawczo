@@ -1,24 +1,16 @@
-self.addEventListener('push', (event) => {
-  const data = event.data?.json() || {}
-  self.registration.showNotification(data.title || 'Czas na przerwę', {
-    body: data.body || 'Wstań i rozciągnij się.',
-    icon: '/favicon.svg',
-    badge: '/favicon.svg',
-    silent: true,
-    tag: 'zapobiegawczo-break',
-    requireInteraction: false,
-  })
-})
+self.addEventListener('install', () => self.skipWaiting())
+self.addEventListener('activate', (event) => event.waitUntil(clients.claim()))
 
 self.addEventListener('message', (event) => {
   if (event.data?.type === 'SHOW_NOTIFICATION') {
-    self.registration.showNotification(event.data.title || 'Czas na przerwę', {
-      body: event.data.body || 'Wstań i rozciągnij się — Twoje ciało Ci podziękuje.',
-      icon: '/favicon.svg',
-      silent: true,
-      tag: 'zapobiegawczo-break',
-      requireInteraction: false,
-    })
+    event.waitUntil(
+      self.registration.showNotification(event.data.title || 'Czas na przerwę', {
+        body: event.data.body || 'Wstań i rozciągnij się.',
+        icon: '/favicon.svg',
+        silent: true,
+        tag: 'zapobiegawczo-break',
+      })
+    )
   }
 })
 
