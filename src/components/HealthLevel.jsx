@@ -1,7 +1,15 @@
 import useAppStore from '../store/useAppStore'
 
 const WATER_GOAL = 8
-const HOUR_PRESETS = [4, 6, 8, 10]
+const MIN_H = 1
+const MAX_H = 12
+
+function formatHours(h) {
+  const whole = Math.floor(h)
+  const half = h % 1 !== 0
+  if (half) return `${whole}h 30`
+  return `${whole}h`
+}
 
 function Bar({ value, max }) {
   const pct = Math.min(value / max, 1) * 100
@@ -12,8 +20,8 @@ function Bar({ value, max }) {
         style={{
           height: '100%',
           width: `${pct}%`,
-          background: done ? 'var(--accent)' : 'var(--accent)',
-          opacity: done ? 1 : 0.7,
+          background: 'var(--accent)',
+          opacity: done ? 1 : 0.75,
           borderRadius: '99px',
           transition: 'width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
@@ -33,6 +41,10 @@ export default function HealthLevel() {
   const waterDone = waterGlasses >= WATER_GOAL
   const breaksDoneGoal = breaksDone >= breakGoal
 
+  // Dynamiczne tło toru slidera
+  const sliderPct = ((workHours - MIN_H) / (MAX_H - MIN_H)) * 100
+  const sliderBg = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${sliderPct}%, var(--border) ${sliderPct}%, var(--border) 100%)`
+
   return (
     <div
       className="rounded-xl p-3 space-y-3"
@@ -42,31 +54,29 @@ export default function HealthLevel() {
         Dzień
       </p>
 
-      {/* Czas pracy */}
+      {/* Czas pracy — slider */}
       <div>
-        <p style={{ fontSize: '0.6rem', color: 'var(--text-muted)', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-          Czas pracy
-        </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '3px' }}>
-          {HOUR_PRESETS.map(h => (
-            <button
-              key={h}
-              onClick={() => setWorkHours(h)}
-              style={{
-                padding: '3px 0',
-                fontSize: '0.6rem',
-                fontWeight: workHours === h ? '700' : '400',
-                borderRadius: '4px',
-                border: 'none',
-                cursor: 'pointer',
-                background: workHours === h ? 'var(--accent)' : 'var(--surface-alt)',
-                color: workHours === h ? '#fff' : 'var(--text-muted)',
-                transition: 'all 0.15s',
-              }}
-            >
-              {h}h
-            </button>
-          ))}
+        <div className="flex items-center justify-between mb-1.5">
+          <p style={{ fontSize: '0.6rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            Czas pracy
+          </p>
+          <span style={{ fontSize: '0.7rem', fontWeight: '700', color: 'var(--accent)' }}>
+            {formatHours(workHours)}
+          </span>
+        </div>
+        <input
+          type="range"
+          className="work-slider"
+          min={MIN_H}
+          max={MAX_H}
+          step={0.5}
+          value={workHours}
+          onChange={e => setWorkHours(parseFloat(e.target.value))}
+          style={{ background: sliderBg }}
+        />
+        <div className="flex justify-between mt-0.5">
+          <span style={{ fontSize: '0.5rem', color: 'var(--text-muted)' }}>1h</span>
+          <span style={{ fontSize: '0.5rem', color: 'var(--text-muted)' }}>12h</span>
         </div>
       </div>
 
@@ -81,7 +91,7 @@ export default function HealthLevel() {
         <Bar value={waterGlasses} max={WATER_GOAL} />
       </div>
 
-      {/* Ćwiczenia */}
+      {/* Przerwy */}
       <div className="space-y-1">
         <div className="flex items-center justify-between">
           <span style={{ fontSize: '0.65rem', color: 'var(--text)' }}>🧘 Przerwy</span>
@@ -91,7 +101,7 @@ export default function HealthLevel() {
         </div>
         <Bar value={breaksDone} max={breakGoal} />
         <p style={{ fontSize: '0.55rem', color: 'var(--text-muted)', lineHeight: 1.3 }}>
-          co {intervalMinutes} min · {workHours}h pracy
+          co {intervalMinutes} min · cel: {breakGoal} przerwy
         </p>
       </div>
     </div>
