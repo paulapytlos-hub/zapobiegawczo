@@ -83,20 +83,23 @@ export default function App() {
       <Header />
       <div className="max-w-xl mx-auto">
         <FactBanner />
-        <div className="flex items-start gap-3 px-2">
-          {/* Lewa kolumna — ogród + dzień */}
-          <div className="w-44 shrink-0 sticky top-4 pt-5 space-y-3">
-            <WaterTracker />
-            <HealthLevel />
-          </div>
-          {/* Główna zawartość — prawa kolumna */}
-          <main className="flex-1 min-w-0">
+        <div className="flex flex-col sm:flex-row items-start gap-3 px-2">
+          {/* Główna zawartość — na mobile pierwsza */}
+          <main className="flex-1 min-w-0 w-full order-1 sm:order-2">
             <SessionTimer />
             <SettingsPanel />
             <QuickHelp />
             <ExercisesSection />
             <SessionLog />
           </main>
+          {/* Panel boczny — na mobile po głównej treści, na desktop po lewej */}
+          <div className="w-full sm:w-44 sm:shrink-0 sm:sticky sm:top-4 sm:pt-5 order-2 sm:order-1">
+            {/* Mobile: dwa mini-panele obok siebie */}
+            <div className="grid grid-cols-2 sm:grid-cols-1 gap-3 pt-3 sm:pt-0">
+              <WaterTracker />
+              <HealthLevel />
+            </div>
+          </div>
         </div>
       </div>
       <BreakModal />
