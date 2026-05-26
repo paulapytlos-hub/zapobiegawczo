@@ -87,10 +87,10 @@ export default function FeedbackWidget() {
       >
         <div>
           <p className="font-semibold" style={{ color: 'var(--text)', fontSize: '0.95rem' }}>
-            Masz feedback?
+            Cześć! Masz feedback?
           </p>
           <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px', lineHeight: 1.5 }}>
-            Coś nie działa, czegoś brakuje, albo po prostu chcesz napisać — chętnie przeczytam.
+            Coś nie działa, czegoś brakuje, masz pomysł? Chętnie przeczytam i wdrożę.
           </p>
         </div>
 
