@@ -1,29 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
 import useAppStore from '../store/useAppStore'
 
-export const LEVELS = [
-  { min: 0,    max: 49,   level: 1, name: 'Kiełek',          icon: '🌱', color: '#6a9e7a' },
-  { min: 50,   max: 149,  level: 2, name: 'Roślinka',        icon: '🌿', color: '#5aaa5a' },
-  { min: 150,  max: 299,  level: 3, name: 'Aktywny/a',       icon: '⚡', color: '#4a8c8a' },
-  { min: 300,  max: 499,  level: 4, name: 'Zadbany/a',       icon: '💪', color: '#7a9a5a' },
-  { min: 500,  max: 749,  level: 5, name: 'Zdrowiec',        icon: '🌟', color: '#c8a840' },
-  { min: 750,  max: 999,  level: 6, name: 'Mistrz zdrowia',  icon: '🏆', color: '#c87840' },
-  { min: 1000, max: Infinity, level: 7, name: 'Guru zdrowia', icon: '👑', color: '#9a60c0' },
-]
+const XP_PER_LEVEL = 50
 
 export function getLevel(xp) {
-  return LEVELS.find(l => xp >= l.min && xp <= l.max) || LEVELS[LEVELS.length - 1]
+  return Math.floor(xp / XP_PER_LEVEL)
 }
 
-export function getNextLevel(xp) {
-  const cur = getLevel(xp)
-  return LEVELS.find(l => l.level === cur.level + 1) || null
+function getLevelProgress(xp) {
+  return (xp % XP_PER_LEVEL) / XP_PER_LEVEL
 }
 
 export default function HealthLevel() {
   const xp = useAppStore(s => s.xp)
+  const breaksDone = useAppStore(s => s.breaksDone)
   const level = getLevel(xp)
-  const next = getNextLevel(xp)
+  const progress = getLevelProgress(xp)
+  const xpInLevel = xp % XP_PER_LEVEL
 
   const prevXp = useRef(xp)
   const [flash, setFlash] = useState(null)
@@ -31,7 +24,7 @@ export default function HealthLevel() {
   useEffect(() => {
     if (xp > prevXp.current) {
       const gained = xp - prevXp.current
-      setFlash(`+${gained} XP`)
+      setFlash(`+${gained}`)
       const t = setTimeout(() => setFlash(null), 1800)
       prevXp.current = xp
       return () => clearTimeout(t)
@@ -39,69 +32,90 @@ export default function HealthLevel() {
     prevXp.current = xp
   }, [xp])
 
-  const pct = next
-    ? ((xp - level.min) / (level.max - level.min + 1)) * 100
-    : 100
+  const hearts = Math.min(breaksDone, 10)
+  const heartDisplay = Array.from({ length: 10 }).map((_, i) => i < hearts ? '♥' : '♡')
 
   return (
     <div
-      className="mx-4 mt-3 rounded-xl px-4 py-3 relative overflow-hidden"
-      style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+      className="mx-4 mt-3 relative"
+      style={{ fontFamily: '"Courier New", Courier, monospace' }}
     >
-      {/* Animacja +XP */}
+      {/* +XP float */}
       {flash && (
         <span
           key={flash + xp}
-          className="absolute right-4 top-2 text-sm font-bold"
+          className="absolute font-bold text-sm pointer-events-none"
           style={{
-            color: level.color,
+            color: '#7FEE10',
+            right: '12px',
+            top: '-2px',
             animation: 'xpFloat 1.8s ease-out forwards',
+            textShadow: '0 0 6px #7FEE1080',
+            zIndex: 10,
           }}
         >
-          {flash}
+          {flash} XP
         </span>
       )}
 
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
-          <span style={{ fontSize: '1.2rem' }}>{level.icon}</span>
-          <div>
-            <p className="text-xs font-bold" style={{ color: level.color }}>
-              Poziom {level.level} — {level.name}
-            </p>
-            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-              {xp} XP{next ? ` · do ${next.name}: ${next.min - xp} XP` : ' · Szczyt!'}
-            </p>
+      <div
+        style={{
+          background: '#1a1a1a',
+          border: '2px solid #3a3a3a',
+          borderRadius: '3px',
+          padding: '6px 10px 5px',
+          boxShadow: 'inset 0 2px 0 rgba(0,0,0,0.5), 0 1px 0 #4a4a4a',
+        }}
+      >
+        {/* Serduszka */}
+        <div className="flex items-center justify-between mb-1.5">
+          <div style={{ fontSize: '0.7rem', letterSpacing: '1px', color: '#ff4444', lineHeight: 1 }}>
+            {heartDisplay.map((h, i) => (
+              <span key={i} style={{ opacity: i < hearts ? 1 : 0.25 }}>{h}</span>
+            ))}
           </div>
+          <span style={{ fontSize: '0.6rem', color: '#888', letterSpacing: '0.5px' }}>
+            {xp} XP
+          </span>
         </div>
-        <span
-          className="text-xs font-semibold px-2 py-0.5 rounded-full"
-          style={{ background: level.color + '22', color: level.color }}
-        >
-          {Math.round(pct)}%
-        </span>
-      </div>
 
-      {/* Pasek XP */}
-      <div style={{ height: '6px', background: 'var(--border)', borderRadius: '3px', overflow: 'hidden' }}>
-        <div
-          style={{
-            height: '100%',
-            width: `${pct}%`,
-            background: `linear-gradient(90deg, ${level.color}99, ${level.color})`,
-            borderRadius: '3px',
-            transition: 'width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
-            boxShadow: `0 0 6px ${level.color}60`,
-          }}
-        />
-      </div>
+        {/* Pasek XP — Minecraft style */}
+        <div style={{ position: 'relative', height: '10px', background: '#373737', borderRadius: '2px', overflow: 'hidden', border: '1px solid #2a2a2a' }}>
+          {/* Ciemniejszy pas u góry */}
+          <div style={{
+            position: 'absolute', top: 0, left: 0, right: 0, height: '4px',
+            background: 'rgba(0,0,0,0.3)', zIndex: 2, pointerEvents: 'none',
+          }} />
+          <div
+            style={{
+              height: '100%',
+              width: `${progress * 100}%`,
+              background: 'linear-gradient(180deg, #9FFF40 0%, #7FEE10 40%, #5DC800 100%)',
+              borderRadius: '1px',
+              transition: 'width 0.4s steps(20, end)',
+              boxShadow: '2px 0 0 #3a7a00',
+              imageRendering: 'pixelated',
+            }}
+          />
+        </div>
 
-      {/* Kamienie milowe */}
-      {next && (
-        <p className="text-xs mt-1.5" style={{ color: 'var(--text-muted)' }}>
-          Następny poziom: <strong style={{ color: level.color }}>{next.icon} {next.name}</strong> za {next.min - xp} XP
-        </p>
-      )}
+        {/* Numer poziomu */}
+        <div className="flex items-center justify-center mt-1" style={{ gap: '6px' }}>
+          <span style={{
+            fontSize: '1rem',
+            fontWeight: 'bold',
+            color: '#7FEE10',
+            textShadow: '0 2px 0 #3a7a00, 0 0 8px #7FEE1060',
+            letterSpacing: '1px',
+            lineHeight: 1,
+          }}>
+            {level}
+          </span>
+          <span style={{ fontSize: '0.55rem', color: '#666', letterSpacing: '0.5px', paddingTop: '2px' }}>
+            {xpInLevel}/{XP_PER_LEVEL}
+          </span>
+        </div>
+      </div>
     </div>
   )
 }

@@ -32,9 +32,10 @@ const FLOWER_TYPES = ['tulip', 'daisy', 'sunflower', 'poppy']
 
 export default function WaterTracker() {
   const waterGlasses = useAppStore(s => s.waterGlasses)
+  const lastWaterAt = useAppStore(s => s.lastWaterAt)
   const addWaterGlass = useAppStore(s => s.addWaterGlass)
   const resetWater = useAppStore(s => s.resetWater)
-  const nudge = useAppStore(s => s.lastWaterAt) && (Date.now() - useAppStore(s => s.lastWaterAt)) > 60 * 60 * 1000
+  const nudge = lastWaterAt && (Date.now() - lastWaterAt) > 60 * 60 * 1000
 
   const slots = Math.min(Math.max(Math.ceil(waterGlasses / 3) * 3, 3), MAX_DISPLAY)
 
