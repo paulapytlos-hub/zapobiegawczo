@@ -26,9 +26,12 @@ export default function FeedbackWidget() {
       if (res.ok) {
         setStatus('done')
       } else {
+        const data = await res.json().catch(() => ({}))
+        console.error('Feedback error:', res.status, data)
         setStatus('error')
       }
-    } catch {
+    } catch (e) {
+      console.error('Feedback fetch error:', e)
       setStatus('error')
     }
   }

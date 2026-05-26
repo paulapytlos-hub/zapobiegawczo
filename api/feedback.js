@@ -36,8 +36,8 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       const err = await response.json()
-      console.error('Airtable error:', err)
-      return res.status(502).json({ error: 'Błąd zapisu do Airtable' })
+      console.error('Airtable error:', JSON.stringify(err))
+      return res.status(502).json({ error: 'Błąd Airtable', detail: err })
     }
 
     return res.status(200).json({ ok: true })
