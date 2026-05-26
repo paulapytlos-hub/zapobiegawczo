@@ -40,24 +40,25 @@ export default function FeedbackWidget() {
         onClick={() => { setOpen(o => !o); if (open) reset() }}
         style={{
           position: 'fixed',
-          right: open ? '280px' : '0',
+          right: open ? '296px' : '16px',
           top: '50%',
-          transform: 'translateY(-50%) rotate(90deg)',
-          transformOrigin: 'right center',
+          transform: 'translateY(-50%)',
           background: 'var(--accent)',
           color: '#fff',
           border: 'none',
-          padding: '6px 14px',
-          fontSize: '0.7rem',
+          padding: '10px 8px',
+          fontSize: '0.65rem',
           fontWeight: '700',
-          letterSpacing: '0.08em',
+          letterSpacing: '0.1em',
           textTransform: 'uppercase',
           cursor: 'pointer',
-          borderRadius: '6px 6px 0 0',
+          borderRadius: '8px',
           zIndex: 60,
           transition: 'right 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          boxShadow: '-2px 0 8px rgba(0,0,0,0.15)',
+          boxShadow: '0 2px 12px rgba(0,0,0,0.2)',
+          writingMode: 'vertical-rl',
           whiteSpace: 'nowrap',
+          lineHeight: 1,
         }}
         aria-label="Feedback"
       >
