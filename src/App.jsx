@@ -83,14 +83,14 @@ export default function App() {
       <div className="max-w-xl mx-auto">
         <FactBanner />
         <div className="flex items-start gap-3 px-2">
-          {/* Kwiatek — lewa kolumna */}
-          <div className="w-36 shrink-0 sticky top-4 pt-5">
+          {/* Lewa kolumna — ogród + dzień */}
+          <div className="w-44 shrink-0 sticky top-4 pt-5 space-y-3">
             <WaterTracker />
+            <HealthLevel />
           </div>
           {/* Główna zawartość — prawa kolumna */}
           <main className="flex-1 min-w-0">
             <SessionTimer />
-            <HealthLevel />
             <SettingsPanel />
             <QuickHelp />
             <ExercisesSection />

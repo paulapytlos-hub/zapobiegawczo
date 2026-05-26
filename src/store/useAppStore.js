@@ -74,6 +74,13 @@ const useAppStore = create((set, get) => ({
     set({ xp: next })
   },
 
+  // ── Czas pracy (dzienny) ──
+  workHours: (() => { try { return parseFloat(localStorage.getItem('zapobiegawczo_workhours') || '8') } catch { return 8 } })(),
+  setWorkHours: (h) => {
+    try { localStorage.setItem('zapobiegawczo_workhours', String(h)) } catch { /* ignoruj */ }
+    set({ workHours: h })
+  },
+
   // ── Tryb siedzący ──
   sittingMode: (() => { try { return localStorage.getItem('zapobiegawczo_sitting') === '1' } catch { return false } })(),
   setSittingMode: (val) => {
