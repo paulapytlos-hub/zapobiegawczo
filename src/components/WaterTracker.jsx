@@ -34,6 +34,7 @@ export default function WaterTracker() {
   const waterGlasses = useAppStore(s => s.waterGlasses)
   const lastWaterAt = useAppStore(s => s.lastWaterAt)
   const addWaterGlass = useAppStore(s => s.addWaterGlass)
+  const removeWaterGlass = useAppStore(s => s.removeWaterGlass)
   const resetWater = useAppStore(s => s.resetWater)
   const nudge = lastWaterAt && (Date.now() - lastWaterAt) > 60 * 60 * 1000
 
@@ -84,20 +85,36 @@ export default function WaterTracker() {
         {WATER_FACTS[Math.min(waterGlasses, WATER_FACTS.length - 1)]}
       </p>
 
-      <button
-        onClick={addWaterGlass}
-        className="w-full py-2.5 rounded-lg text-sm font-bold transition-all"
-        style={{ background: 'var(--accent)', color: '#fff' }}
-      >
-        💧 +1 szklanka
-      </button>
+      <div className="flex w-full gap-2">
+        <button
+          onClick={removeWaterGlass}
+          disabled={waterGlasses === 0}
+          className="py-2.5 rounded-lg text-sm font-bold transition-all"
+          style={{
+            flex: '0 0 38px',
+            background: waterGlasses === 0 ? 'var(--border)' : 'var(--surface-alt)',
+            color: waterGlasses === 0 ? 'var(--text-muted)' : 'var(--text)',
+            border: '1px solid var(--border)',
+            cursor: waterGlasses === 0 ? 'not-allowed' : 'pointer',
+          }}
+        >
+          −
+        </button>
+        <button
+          onClick={addWaterGlass}
+          className="flex-1 py-2.5 rounded-lg text-sm font-bold transition-all"
+          style={{ background: 'var(--accent)', color: '#fff' }}
+        >
+          💧 +1
+        </button>
+      </div>
 
       {waterGlasses > 0 && (
         <button
           onClick={resetWater}
           style={{ fontSize: '0.65rem', color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}
         >
-          reset
+          reset dnia
         </button>
       )}
     </div>

@@ -85,6 +85,17 @@ const useAppStore = create((set, get) => ({
     get().addLog(`Szklanka wody (${glasses + 1}) (+3 XP)`)
   },
 
+  removeWaterGlass: () => {
+    const glasses = get().waterGlasses
+    if (glasses <= 0) return
+    const next = glasses - 1
+    set({ waterGlasses: next, lastWaterAt: next > 0 ? get().lastWaterAt : null })
+    const newXp = Math.max(0, get().xp - 3)
+    try { localStorage.setItem('zapobiegawczo_xp', String(newXp)) } catch { /* ignoruj */ }
+    set({ xp: newXp })
+    get().addLog(`Cofnięto szklankę (${next}) (-3 XP)`)
+  },
+
   resetWater: () => {
     set({ waterGlasses: 0, lastWaterAt: null })
   },
