@@ -6,6 +6,7 @@ export const exercises = [
     name: 'Neck Tilt',
     namepl: 'Pochylanie głowy na boki',
     time: '1 min',
+    requiresStanding: false,
     steps: [
       'Usiądź prosto z nogami płasko na podłodze.',
       'Powoli pochyl głowę w stronę lewego ramienia, aż poczujesz rozciąganie po stronie szyi.',
@@ -13,7 +14,7 @@ export const exercises = [
       'Wróć do środka i powtórz po prawej stronie.',
       'Wykonaj 2 powtórzenia na każdą stronę.',
     ],
-    note: 'Badania wykazują 41% mniej bólu szyi przy regularnym wykonywaniu.',
+    note: 'Badania wykazują 41% mniej bólu szyi przy regularnym wykonywaniu — efekty widoczne już po 2 tygodniach.',
   },
   {
     id: 'shoulders',
@@ -22,6 +23,7 @@ export const exercises = [
     name: 'Shoulder Rolls',
     namepl: 'Obroty ramion',
     time: '1 min',
+    requiresStanding: false,
     steps: [
       'Usiądź prosto z rozluźnionymi ramionami.',
       'Powoli unieś ramiona ku uszom, następnie cofnij je do tyłu.',
@@ -29,7 +31,7 @@ export const exercises = [
       'Zmień kierunek i wykonaj 10 obrotów do przodu.',
       'Poczuj rozluźnienie mięśni karku i górnych pleców.',
     ],
-    note: 'Skuteczne w zapobieganiu bólom szyi i barków przy codziennym wykonywaniu.',
+    note: 'Każda minuta obrotów ramion zmniejsza napięcie powięzi szyjnej — skumulowane siedzenie napina ją jak ciasny gorset.',
   },
   {
     id: 'upper-back',
@@ -38,6 +40,7 @@ export const exercises = [
     name: 'Upper Back Stretch',
     namepl: 'Rozciąganie górnej części pleców',
     time: '1 min',
+    requiresStanding: false,
     steps: [
       'Usiądź prosto i spleć palce obu rąk przed sobą.',
       'Zaokrąglij plecy i popchnij splecione dłonie do przodu.',
@@ -45,7 +48,7 @@ export const exercises = [
       'Zatrzymaj pozycję na 20 sekund, oddychając spokojnie.',
       'Wróć do wyprostowanej pozycji. Powtórz 2 razy.',
     ],
-    note: 'Likwiduje napięcie górnych pleców wywołane długim siedzeniem przy klawiaturze.',
+    note: 'Likwiduje napięcie górnych pleców wywołane klawiaturą — po kilku godzinach pracy mięśnie między łopatkami są chronically rozciągnięte i osłabione.',
   },
   {
     id: 'spine',
@@ -54,6 +57,7 @@ export const exercises = [
     name: 'Seated Spinal Twist',
     namepl: 'Skręt kręgosłupa',
     time: '1 min',
+    requiresStanding: false,
     steps: [
       'Usiądź prosto z biodrami skierowanymi do przodu.',
       'Połóż lewą rękę na prawym kolanie, prawą oprzyj o oparcie krzesła.',
@@ -61,7 +65,7 @@ export const exercises = [
       'Utrzymuj biodra nieruchomo — skręt pochodzi z kręgosłupa.',
       'Zatrzymaj na 15 sekund. Powtórz po lewej stronie.',
     ],
-    note: 'Poprawia ruchomość kręgosłupa i łagodzi ból dolnych pleców.',
+    note: 'Kręgosłup w pozycji siedzącej jest obciążony o 40% bardziej niż w stojącej — rotacja przywraca mu mikroruch, który normalnie się nie pojawia.',
   },
   {
     id: 'wrists',
@@ -70,6 +74,7 @@ export const exercises = [
     name: 'Wrist Stretch',
     namepl: 'Rozciąganie nadgarstków',
     time: '1 min',
+    requiresStanding: false,
     steps: [
       'Wyciągnij jedną rękę przed siebie z dłonią w dół.',
       'Drugą ręką delikatnie pociągnij palce ku górze — poczujesz rozciąganie przedramienia.',
@@ -77,7 +82,7 @@ export const exercises = [
       'Odwróć kierunek — pochyl nadgarstek w dół, pociągając palce ku podłodze.',
       'Powtórz 3 razy w każdą stronę, następnie zmień rękę.',
     ],
-    note: 'Zapobiega zespołowi cieśni nadgarstka i urazom przeciążeniowym (RSI).',
+    note: 'Zapobiega zespołowi cieśni nadgarstka — schorzeniu, które dotyka 1 na 4 pracowników biurowych po 10 latach przy klawiaturze.',
   },
   {
     id: 'eyes',
@@ -86,6 +91,7 @@ export const exercises = [
     name: '20-20-20 Rule',
     namepl: 'Odpoczynek oczu 20-20-20',
     time: '20 sek',
+    requiresStanding: false,
     steps: [
       'Co 20 minut pracy przy ekranie zrób przerwę.',
       'Odwróć wzrok od monitora.',
@@ -93,7 +99,7 @@ export const exercises = [
       'Mrugaj powoli przez 20 sekund, pozwalając oczom na relaks.',
       'Wróć do pracy. Powtarzaj regularnie przez cały dzień.',
     ],
-    note: 'Reguła 20-20-20 znacząco redukuje zespół suchego oka i zmęczenie wzroku.',
+    note: 'Reguła 20-20-20 redukuje zmęczenie oczu o ponad 50% — mięsień rzęskowy odpowiedzialny za ostrość oka relaksuje się tylko przy patrzeniu w dal.',
   },
   {
     id: 'legs',
@@ -102,6 +108,7 @@ export const exercises = [
     name: 'Seated Calf Raises',
     namepl: 'Unoszenie łydek',
     time: '2 min',
+    requiresStanding: false,
     steps: [
       'Usiądź prosto z nogami rozstawionymi na szerokość bioder.',
       'Połóż ręce lekko na udach dla równowagi.',
@@ -109,7 +116,41 @@ export const exercises = [
       'Zatrzymaj się na górze przez 10 sekund, napinając łydki.',
       'Powoli opuść pięty. Powtórz 8 razy.',
     ],
-    note: 'Poprawia krążenie w nogach i zapobiega zastojowi krwi przy długim siedzeniu.',
+    note: 'Łydki to "drugie serce" — pompują krew z nóg z powrotem do serca. Przy długim siedzeniu ten mechanizm zamiera, co prowadzi do żylaków i obrzęków.',
+  },
+  {
+    id: 'hip-flexor',
+    area: 'Biodra',
+    areaColor: '#aa7a5a',
+    name: 'Hip Flexor Lunge',
+    namepl: 'Rozciąganie zginaczy bioder w wykroku',
+    time: '2 min',
+    requiresStanding: true,
+    steps: [
+      'Wstań i zrób duży krok prawą nogą do przodu.',
+      'Opuść lewe kolano w kierunku podłogi — możesz trzymać się biurka.',
+      'Poczujesz intensywne rozciąganie z przodu lewego biodra i uda.',
+      'Utrzymaj 25–30 sekund, oddychając spokojnie.',
+      'Zmień stronę. Powtórz 2 razy na każdą nogę.',
+    ],
+    note: 'Mięsień biodrowo-lędźwiowy skraca się o ok. 1 cm na każdą godzinę siedzenia — to on odpowiada za ból pleców i zgarbioną sylwetkę po całym dniu w biurze.',
+  },
+  {
+    id: 'standing-stretch',
+    area: 'Sylwetka',
+    areaColor: '#8a7aaa',
+    name: 'Standing Full Stretch',
+    namepl: 'Pełne rozciąganie w pozycji stojącej',
+    time: '1 min',
+    requiresStanding: true,
+    steps: [
+      'Wstań i stań prosto, stopy na szerokość bioder.',
+      'Spleć palce i wyciągnij ręce nad głową, dłońmi ku sufitowi.',
+      'Wdychając, wydłuż całe ciało w górę — poczuj rozciąganie od stóp do palców.',
+      'Przechyl się delikatnie w lewo, utrzymaj 10 sekund. Powtórz w prawo.',
+      'Rozluźnij ręce i potrząśnij całym ciałem przez 5 sekund.',
+    ],
+    note: 'Wstanie od biurka co godzinę na 2 minuty redukuje ryzyko chorób sercowo-naczyniowych o 33% — samo stanie aktywuje ponad 200 mięśni naraz.',
   },
 ]
 

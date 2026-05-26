@@ -12,6 +12,8 @@ export default function ExercisesSection() {
   const quickHelpId = useAppStore(s => s.quickHelpId)
   const setQuickHelp = useAppStore(s => s.setQuickHelp)
   const colorblindMode = useAppStore(s => s.colorblindMode)
+  const sittingMode = useAppStore(s => s.sittingMode)
+  const visibleExercises = sittingMode ? exercises.filter(ex => !ex.requiresStanding) : exercises
 
   useEffect(() => {
     if (!quickHelpId) return
@@ -38,7 +40,7 @@ export default function ExercisesSection() {
           Ćwiczenia
         </h2>
         <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
-          {exercises.length} ćwiczeń
+          {visibleExercises.length} ćwiczeń{sittingMode ? ' · tryb siedzący' : ''}
         </span>
       </div>
 
@@ -56,7 +58,7 @@ export default function ExercisesSection() {
             Zrób serię wszystkich ćwiczeń
           </p>
           <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-            Wszystkie 7 ćwiczeń po kolei · ~7 minut
+            {visibleExercises.length} ćwiczeń po kolei · ~{visibleExercises.length} minut
           </p>
         </div>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round">
@@ -71,7 +73,7 @@ export default function ExercisesSection() {
       )}
 
       <div className="space-y-2">
-        {exercises.map(ex => (
+        {visibleExercises.map(ex => (
           <div
             key={ex.id}
             className="overflow-hidden"

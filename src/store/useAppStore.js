@@ -74,6 +74,14 @@ const useAppStore = create((set, get) => ({
     set({ xp: next })
   },
 
+  // ── Tryb siedzący ──
+  sittingMode: (() => { try { return localStorage.getItem('zapobiegawczo_sitting') === '1' } catch { return false } })(),
+  setSittingMode: (val) => {
+    try { localStorage.setItem('zapobiegawczo_sitting', val ? '1' : '0') } catch { /* ignoruj */ }
+    set({ sittingMode: val })
+    get().addLog(val ? 'Tryb siedzący włączony' : 'Tryb siedzący wyłączony')
+  },
+
   // ── Nawodnienie ──
   waterGlasses: 0,
   lastWaterAt: null,

@@ -62,6 +62,7 @@ export default function SettingsPanel() {
     showSettings,
     openBreakPreview,
     theme, setTheme,
+    sittingMode, setSittingMode,
   } = useAppStore()
 
   const [customValue, setCustomValue] = useState('')
@@ -250,6 +251,16 @@ export default function SettingsPanel() {
         description="Przy każdej przerwie pojawi się na ekranie propozycja krótkiego ćwiczenia"
         checked={popupEnabled}
         onChange={togglePopup}
+      />
+
+      <Divider />
+
+      {/* Tryb siedzący */}
+      <Toggle
+        label="Tryb siedzący"
+        description="Włącz, jeśli nie możesz wstawać od biurka — ćwiczenia wymagające wstania zostaną zastąpione siedzącymi"
+        checked={sittingMode}
+        onChange={() => setSittingMode(!sittingMode)}
       />
 
       <Divider />

@@ -49,6 +49,7 @@ export const quickHelpData = [
       {
         name: 'Anioł przy ścianie',
         time: '2 min',
+        requiresStanding: true,
         steps: [
           'Stań plecami do ściany, stopy 10 cm od ściany.',
           'Dotknij ściany głową, łopatkami i kością krzyżową.',
@@ -61,6 +62,7 @@ export const quickHelpData = [
       {
         name: 'Rozciąganie klatki na krześle',
         time: '1 min',
+        requiresStanding: false,
         steps: [
           'Spleć palce za głową, łokcie szeroko rozłożone.',
           'Weź głęboki wdech i otwórz łokcie jak najszerzej, wyginając górne plecy w łuk do tyłu.',
@@ -72,6 +74,7 @@ export const quickHelpData = [
       {
         name: 'Ściąganie łopatek',
         time: '1 min',
+        requiresStanding: false,
         steps: [
           'Usiądź prosto, ramiona wzdłuż tułowia.',
           'Wyobraź sobie, że chcesz ścisnąć ołówek między łopatkami.',
@@ -143,6 +146,7 @@ export const quickHelpData = [
       {
         name: 'Rozciąganie zginacza biodrowego',
         time: '2 min',
+        requiresStanding: true,
         steps: [
           'Wstań i zrób duży krok do przodu prawą nogą (pozycja wykroku).',
           'Opuść lewe kolano w kierunku podłogi — możesz trzymać się biurka.',
@@ -252,6 +256,7 @@ export const quickHelpData = [
       {
         name: 'Rozciąganie zginacza biodrowego',
         time: '2 min',
+        requiresStanding: true,
         steps: [
           'Wstań od biurka. Zrób długi krok prawą nogą do przodu.',
           'Opuść lewe kolano ku podłodze, trzymając się biurka dla równowagi.',
@@ -263,6 +268,7 @@ export const quickHelpData = [
       {
         name: 'Naprzemienne unoszenie kolan',
         time: '2 min',
+        requiresStanding: false,
         steps: [
           'Usiądź prosto na krawędzi krzesła, stopy płasko na podłodze.',
           'Unieś prawe kolano jak najwyżej, utrzymaj 2 sekundy.',
@@ -274,6 +280,7 @@ export const quickHelpData = [
       {
         name: 'Rozciąganie łydek i ścięgna Achillesa',
         time: '1 min',
+        requiresStanding: true,
         steps: [
           'Stań twarzą do ściany, ręce oparte.',
           'Wysuń prawą nogę do tyłu, pięta płasko na podłodze.',

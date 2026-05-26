@@ -5,11 +5,14 @@ import { quickHelpData } from '../data/quickHelpData'
 import { areaColor } from '../utils/areaColor'
 
 export default function QuickHelpModal() {
-  const { quickHelpModalArea, closeQuickHelpModal, colorblindMode } = useAppStore()
+  const { quickHelpModalArea, closeQuickHelpModal, colorblindMode, sittingMode } = useAppStore()
   const [fasciaOpen, setFasciaOpen] = useState(false)
 
   const data = quickHelpData.find(d => d.id === quickHelpModalArea)
   const color = data ? areaColor(data.areaColor, colorblindMode) : null
+  const visibleExercises = data
+    ? (sittingMode ? data.exercises.filter(ex => !ex.requiresStanding) : data.exercises)
+    : []
 
   return (
     <AnimatePresence>
@@ -94,7 +97,12 @@ export default function QuickHelpModal() {
               </button>
 
               {/* Ćwiczenia */}
-              {data.exercises.map((ex, i) => (
+              {sittingMode && visibleExercises.length < data.exercises.length && (
+                <p className="text-xs px-3 py-2 rounded-lg" style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)' }}>
+                  Tryb siedzący — ćwiczenia wymagające wstania są ukryte.
+                </p>
+              )}
+              {visibleExercises.map((ex, i) => (
                 <div key={i} className="space-y-3">
                   <div className="flex items-baseline justify-between">
                     <h3 className="text-sm font-semibold" style={{ color: 'var(--text)' }}>
@@ -126,7 +134,7 @@ export default function QuickHelpModal() {
                     </p>
                   )}
 
-                  {i < data.exercises.length - 1 && (
+                  {i < visibleExercises.length - 1 && (
                     <div style={{ height: '1px', background: 'var(--border)' }} />
                   )}
                 </div>
