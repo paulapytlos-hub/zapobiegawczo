@@ -13,6 +13,7 @@ import QuickHelpModal from './components/QuickHelpModal'
 import AccessibilityWidget from './components/AccessibilityWidget'
 import WaterTracker from './components/WaterTracker'
 import HealthLevel from './components/HealthLevel'
+import FeedbackWidget from './components/FeedbackWidget'
 
 export default function App() {
   const { sessionActive, sessionPaused, tickSecond, theme, fontSize, highContrast, colorblindMode, reduceMotion, showBreakModal, breakIsPreview } = useAppStore()
@@ -102,6 +103,7 @@ export default function App() {
       <WelcomeModal />
       <QuickHelpModal />
       <AccessibilityWidget />
+      <FeedbackWidget />
     </div>
   )
 }
