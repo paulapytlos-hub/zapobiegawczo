@@ -5,6 +5,29 @@ const WATER_GOAL = 8
 const MIN_H = 1
 const MAX_H = 12
 
+// XP needed to reach each level (cumulative thresholds)
+const LEVEL_THRESHOLDS = [0, 100, 300, 600, 1000, 1500, 2200, 3100, 4200, 5500]
+
+function getLevelInfo(xp) {
+  let level = 1
+  for (let i = LEVEL_THRESHOLDS.length - 1; i >= 0; i--) {
+    if (xp >= LEVEL_THRESHOLDS[i]) { level = i + 1; break }
+  }
+  const isMax = level === LEVEL_THRESHOLDS.length
+  const levelStart = LEVEL_THRESHOLDS[level - 1]
+  const levelEnd = isMax ? null : LEVEL_THRESHOLDS[level]
+  const progress = isMax ? 1 : (xp - levelStart) / (levelEnd - levelStart)
+  return {
+    level,
+    isMax,
+    progress: Math.min(progress, 1),
+    xpInLevel: xp - levelStart,
+    xpForLevel: isMax ? null : levelEnd - levelStart,
+    xpToNext: isMax ? 0 : levelEnd - xp,
+    nextLevel: level + 1,
+  }
+}
+
 function formatHours(h) {
   const whole = Math.floor(h)
   const half = h % 1 !== 0
@@ -38,7 +61,10 @@ export default function HealthLevel() {
   const setWorkHours = useAppStore(s => s.setWorkHours)
   const intervalMinutes = useAppStore(s => s.intervalMinutes)
   const streakDays = useAppStore(s => s.streakDays)
+  const xp = useAppStore(s => s.xp)
   const t = useT()
+
+  const lvl = getLevelInfo(xp)
 
   const breakGoal = Math.max(1, Math.floor(workHours * 60 / intervalMinutes))
   const waterDone = waterGlasses >= WATER_GOAL
@@ -123,6 +149,52 @@ export default function HealthLevel() {
         <p style={{ fontSize: '0.55rem', color: 'var(--text-muted)', lineHeight: 1.3 }}>
           {t.breakBarInfo(intervalMinutes, breakGoal)}
         </p>
+      </div>
+
+      {/* XP */}
+      <div
+        className="space-y-1.5 pt-2"
+        style={{ borderTop: '1px solid var(--border)' }}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <span style={{
+              fontSize: '0.6rem',
+              fontWeight: '700',
+              color: '#fff',
+              background: 'linear-gradient(135deg, #f59e0b, #f97316)',
+              borderRadius: '5px',
+              padding: '1px 5px',
+              lineHeight: 1.6,
+              letterSpacing: '0.02em',
+            }}>
+              {t.xpLevel(lvl.level)}
+            </span>
+          </div>
+          <span style={{ fontSize: '0.6rem', color: 'var(--text-muted)', fontVariantNumeric: 'tabular-nums' }}>
+            {lvl.isMax ? t.xpMax : `${xp} XP`}
+          </span>
+        </div>
+
+        {/* Pasek XP */}
+        <div style={{ height: '6px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden' }}>
+          <div
+            style={{
+              height: '100%',
+              width: `${lvl.progress * 100}%`,
+              background: 'linear-gradient(90deg, #f59e0b, #fb923c)',
+              borderRadius: '99px',
+              transition: 'width 0.7s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              boxShadow: lvl.progress > 0 ? '0 0 6px rgba(245,158,11,0.4)' : 'none',
+            }}
+          />
+        </div>
+
+        {!lvl.isMax && (
+          <p style={{ fontSize: '0.55rem', color: 'var(--text-muted)', lineHeight: 1.3 }}>
+            {t.xpToNext(lvl.xpToNext, lvl.nextLevel)}
+          </p>
+        )}
       </div>
     </div>
   )

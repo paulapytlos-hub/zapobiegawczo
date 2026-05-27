@@ -104,6 +104,9 @@ export const translations = {
     waterBarLabel: '💧 Woda',
     breaksBarLabel: '🧘 Przerwy',
     breakBarInfo: (i, g) => `co ${i} min · cel: ${g} przerwy`,
+    xpLevel: (n) => `Poziom ${n}`,
+    xpToNext: (n, next) => `jeszcze ${n} XP do poz. ${next}`,
+    xpMax: 'Maksymalny poziom',
 
     // QuickHelp
     quickHelpTitle: 'Szybka pomoc',
@@ -297,6 +300,9 @@ export const translations = {
     waterBarLabel: '💧 Water',
     breaksBarLabel: '🧘 Breaks',
     breakBarInfo: (i, g) => `every ${i} min · goal: ${g} breaks`,
+    xpLevel: (n) => `Level ${n}`,
+    xpToNext: (n, next) => `${n} XP to level ${next}`,
+    xpMax: 'Max level',
 
     // QuickHelp
     quickHelpTitle: 'Quick help',
