@@ -163,7 +163,7 @@ export default function SessionTimer() {
         >
           <Stat label={t.statBreaks} value={breaksDone} />
           <Stat label={t.statSkipped} value={remindersIgnored} border />
-          <Stat label={t.statInterval} value={`${intervalMinutes}m`} border />
+          <Stat label={t.statInterval} value="60m" border />
         </div>
 
         {/* Przyciski główne */}
