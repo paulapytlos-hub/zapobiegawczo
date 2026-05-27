@@ -1,26 +1,49 @@
-import { useMemo, useEffect } from 'react'
+import { useMemo, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { exercises } from '../data/exercises'
 import useAppStore from '../store/useAppStore'
 import { useT } from '../hooks/useT'
 
-function pickTwo(allExercises, sittingMode) {
+function fisherYates(arr) {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+function pickTwo(allExercises, sittingMode, lastAreas) {
   const pool = allExercises.filter(ex => !sittingMode || !ex.requiresStanding)
   if (pool.length === 0) return []
-  const shuffled = [...pool].sort(() => Math.random() - 0.5)
-  const first = shuffled[0]
-  const second = shuffled.find(ex => ex.area !== first.area) || shuffled[1]
-  return second && second !== first ? [first, second] : [first]
+  const shuffled = fisherYates(pool)
+
+  // Preferuj ćwiczenia, które nie były w poprzedniej przerwie
+  const fresh = shuffled.filter(ex => !lastAreas.includes(ex.area))
+  const candidates = fresh.length >= 2 ? fresh : shuffled
+
+  const first = candidates[0]
+  // Drugi: inne area, preferuj świeże
+  const second = candidates.find(ex => ex.area !== first.area)
+    ?? shuffled.find(ex => ex.area !== first.area)
+
+  return second ? [first, second] : [first]
 }
 
 export default function BreakModal() {
   const { showBreakModal, breakIsPreview, completeBreak, snoozeBreak, sittingMode } = useAppStore()
   const t = useT()
   const lang = useAppStore(s => s.language)
+  const lastAreasRef = useRef([])
   const closePreview = () => useAppStore.setState({ showBreakModal: false, breakIsPreview: false })
 
   const pair = useMemo(
-    () => pickTwo(exercises, sittingMode),
+    () => {
+      if (!showBreakModal) return []
+      const result = pickTwo(exercises, sittingMode, lastAreasRef.current)
+      lastAreasRef.current = result.map(ex => ex.area)
+      return result
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [showBreakModal]
   )
