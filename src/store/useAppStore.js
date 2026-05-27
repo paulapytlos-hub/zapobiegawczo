@@ -32,7 +32,13 @@ const useAppStore = create((set, get) => ({
   currentExerciseId: null,
 
   // ── Statystyki ──
-  breaksDone: 0,
+  breaksDone: (() => {
+    try {
+      const today = new Date().toISOString().split('T')[0]
+      if (localStorage.getItem('zapobiegawczo_breaksdate') !== today) return 0
+      return parseInt(localStorage.getItem('zapobiegawczo_breaks') || '0')
+    } catch { return 0 }
+  })(),
   remindersIgnored: 0,
 
   // ── UI ──
@@ -250,7 +256,13 @@ const useAppStore = create((set, get) => ({
   // ── Akcje przerwy ──
   completeBreak: async () => {
     const { sessionId, currentExerciseId } = get()
-    set(state => ({ showBreakModal: false, breakIsPreview: false, breaksDone: state.breaksDone + 1 }))
+    const newBreaks = get().breaksDone + 1
+    try {
+      const today = new Date().toISOString().split('T')[0]
+      localStorage.setItem('zapobiegawczo_breaks', String(newBreaks))
+      localStorage.setItem('zapobiegawczo_breaksdate', today)
+    } catch {}
+    set({ showBreakModal: false, breakIsPreview: false, breaksDone: newBreaks })
     get().earnXP(15)
     get().addLog('Przerwa wykonana (+15 XP)')
     get().checkStreak()
