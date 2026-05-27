@@ -7,13 +7,13 @@ export const translations = {
 
     // Status pills
     statusAway: 'poza biurem',
-    statusActive: 'aktywna',
-    statusPaused: 'wstrzymana',
-    statusInactive: 'nieaktywna',
+    statusActive: 'aktywne',
+    statusPaused: 'wstrzymane',
+    statusInactive: 'nieaktywne',
 
     // SessionTimer
     nextBreak: 'Następna przerwa za',
-    timerPaused: 'Timer wstrzymany — wróć, gdy będziesz gotowy/a',
+    timerPaused: 'Timer wstrzymany — wznów sesję, kiedy chcesz',
     statBreaks: 'Przerwy',
     statSkipped: 'Pominięte',
     statInterval: 'Interwał',
@@ -95,7 +95,7 @@ export const translations = {
       'Cel osiągnięty! 🌸 Możesz sadzić dalej — ogród rośnie!',
       'Bonusowa szklanka — Twoje stawy i nerki Ci dziękują.',
       'Wyjątkowo nawodniony dzień. Skóra i umysł widocznie korzystają.',
-      'Mistrzyni nawodnienia! Rzadko ktoś pije tyle wody przy pracy.',
+      'Perfekcyjne nawodnienie! Rzadko ktoś pije tyle wody przy pracy.',
     ],
 
     // HealthLevel
@@ -150,7 +150,7 @@ export const translations = {
 
     // WelcomeModal
     welcomeTagline: 'Twój asystent zdrowia przy pracy',
-    welcomeHello: 'Cześć, dobrze że tu jesteś',
+    welcomeHello: 'Cześć, dobrze, że tu jesteś',
     welcomeDesc: 'Pomagam zadbać o zdrowie podczas długich godzin przy komputerze — przerwy, ćwiczenia, przypomnienia.',
     welcomeFacts: [
       { label: 'Kręgosłup', text: 'Krążki kręgosłupa są o 40% bardziej obciążone podczas siedzenia niż stania.' },
@@ -359,7 +359,7 @@ export const translations = {
     welcomeHowSteps: [
       'Click "Start session" on the main page',
       'Work normally — keep this tab open in the browser',
-      'Every hour a break reminder will appear',
+      'A break reminder will appear every hour',
       'Do a short exercise and return to work feeling better',
     ],
     welcomeNotifTitle: 'Desktop notifications',
