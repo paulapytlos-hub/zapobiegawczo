@@ -5,7 +5,7 @@ async function sendNotification(title, body) {
   // Direct API — pewniejsze gdy zakładka jest otwarta w tle
   if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
     try {
-      new Notification(title, { body, icon: '/favicon.svg', tag: 'zapobiegawczo-break' })
+      new Notification(title, { body, icon: '/favicon.svg', tag: 'zapobiegawczo-break', renotify: true })
     } catch { /* ignoruj */ }
   }
   // SW — dla notyfikacji gdy strona jest całkowicie zamknięta (dodatkowe)

@@ -7,8 +7,8 @@ self.addEventListener('message', (event) => {
       self.registration.showNotification(event.data.title || 'Czas na przerwę', {
         body: event.data.body || 'Wstań i rozciągnij się.',
         icon: '/favicon.svg',
-        silent: true,
         tag: 'zapobiegawczo-break',
+        renotify: true,
       })
     )
   }
