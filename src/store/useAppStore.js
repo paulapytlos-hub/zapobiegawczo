@@ -80,6 +80,18 @@ const useAppStore = create((set, get) => ({
     set({ xp: next })
   },
 
+  resetDay: () => {
+    try {
+      const today = new Date().toISOString().split('T')[0]
+      localStorage.setItem('zapobiegawczo_xp', '0')
+      localStorage.setItem('zapobiegawczo_water', '0')
+      localStorage.setItem('zapobiegawczo_waterdate', today)
+      localStorage.setItem('zapobiegawczo_breaks', '0')
+      localStorage.setItem('zapobiegawczo_breaksdate', today)
+    } catch {}
+    set({ xp: 0, waterGlasses: 0, breaksDone: 0, lastWaterAt: null })
+  },
+
   // ── Czas pracy (dzienny) ──
   workHours: (() => { try { return parseFloat(localStorage.getItem('zapobiegawczo_workhours') || '8') } catch { return 8 } })(),
   setWorkHours: (h) => {

@@ -62,6 +62,7 @@ export default function HealthLevel() {
   const intervalMinutes = useAppStore(s => s.intervalMinutes)
   const streakDays = useAppStore(s => s.streakDays)
   const xp = useAppStore(s => s.xp)
+  const resetDay = useAppStore(s => s.resetDay)
   const t = useT()
 
   const lvl = getLevelInfo(xp)
@@ -190,11 +191,30 @@ export default function HealthLevel() {
           />
         </div>
 
-        {!lvl.isMax && (
-          <p style={{ fontSize: '0.55rem', color: 'var(--text-muted)', lineHeight: 1.3 }}>
-            {t.xpToNext(lvl.xpToNext, lvl.nextLevel)}
-          </p>
-        )}
+        <div className="flex items-center justify-between">
+          {!lvl.isMax && (
+            <p style={{ fontSize: '0.55rem', color: 'var(--text-muted)', lineHeight: 1.3 }}>
+              {t.xpToNext(lvl.xpToNext, lvl.nextLevel)}
+            </p>
+          )}
+          <button
+            onClick={resetDay}
+            style={{
+              marginLeft: 'auto',
+              fontSize: '0.5rem',
+              color: 'var(--text-muted)',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              opacity: 0.45,
+              padding: '0',
+              lineHeight: 1,
+            }}
+            title="Reset dnia"
+          >
+            reset
+          </button>
+        </div>
       </div>
     </div>
   )
