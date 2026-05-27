@@ -1,4 +1,5 @@
 import useAppStore from '../store/useAppStore'
+import { useT } from '../hooks/useT'
 
 function formatTime(seconds) {
   const h = Math.floor(seconds / 3600)
@@ -16,6 +17,7 @@ export default function SessionTimer() {
     goAway, comeBack,
     notifPermission, notifEnabled, requestNotifPermission,
   } = useAppStore()
+  const t = useT()
 
   const intervalSeconds = intervalMinutes * 60
   const progress = sessionActive ? (elapsed % intervalSeconds) / intervalSeconds : 0
@@ -23,6 +25,11 @@ export default function SessionTimer() {
   const circumference = 2 * Math.PI * 54
 
   const showNotifBanner = sessionActive && notifPermission !== 'granted' && !notifEnabled
+
+  const statusText = awayMode ? t.statusAway
+    : sessionActive && !sessionPaused ? t.statusActive
+    : sessionPaused ? t.statusPaused
+    : t.statusInactive
 
   return (
     <div className="mx-4 mt-5 space-y-3">
@@ -35,10 +42,10 @@ export default function SessionTimer() {
         >
           <div>
             <p className="font-medium" style={{ color: 'var(--text)' }}>
-              Włącz powiadomienia na pulpicie
+              {t.enableNotifTitle}
             </p>
             <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-              Dostaniesz cichą notyfikację nawet, gdy jesteś na innej karcie
+              {t.enableNotifDesc}
             </p>
           </div>
           <button
@@ -46,7 +53,7 @@ export default function SessionTimer() {
             className="shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium text-white"
             style={{ background: 'var(--accent)' }}
           >
-            Włącz
+            {t.enableBtn}
           </button>
         </div>
       )}
@@ -79,7 +86,7 @@ export default function SessionTimer() {
                   : 'var(--text-muted)',
             }}
           >
-            {awayMode ? 'poza biurem' : sessionActive && !sessionPaused ? 'aktywna' : sessionPaused ? 'wstrzymana' : 'nieaktywna'}
+            {statusText}
           </span>
         </div>
 
@@ -93,9 +100,7 @@ export default function SessionTimer() {
                   <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
                 </filter>
               </defs>
-              {/* Tło pierścienia */}
               <circle cx="60" cy="60" r="54" fill="none" stroke="var(--surface-alt)" strokeWidth="6" />
-              {/* Blask (subttelny, za głównym) */}
               {sessionActive && !sessionPaused && !awayMode && (
                 <circle
                   cx="60" cy="60" r="54" fill="none"
@@ -108,7 +113,6 @@ export default function SessionTimer() {
                   style={{ transition: 'stroke-dashoffset 1s linear, stroke 1s ease' }}
                 />
               )}
-              {/* Główny pasek */}
               <circle
                 cx="60" cy="60" r="54" fill="none"
                 stroke={awayMode ? 'var(--border)' : progress > 0.8 && sessionActive ? '#e06040' : 'var(--accent)'}
@@ -139,7 +143,7 @@ export default function SessionTimer() {
         {/* Info do przerwy */}
         {sessionActive && !awayMode && (
           <p className="text-center text-sm mb-5" style={{ color: 'var(--text-muted)' }}>
-            Następna przerwa za{' '}
+            {t.nextBreak}{' '}
             <span className="font-semibold" style={{ color: 'var(--accent)' }}>
               {formatTime(timeToBreak)}
             </span>
@@ -148,7 +152,7 @@ export default function SessionTimer() {
 
         {awayMode && (
           <p className="text-center text-sm mb-5" style={{ color: 'var(--text-muted)' }}>
-            Timer wstrzymany — wróć, gdy będziesz gotowy/a
+            {t.timerPaused}
           </p>
         )}
 
@@ -157,9 +161,9 @@ export default function SessionTimer() {
           className="flex justify-center mb-5 overflow-hidden"
           style={{ border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}
         >
-          <Stat label="Przerwy" value={breaksDone} />
-          <Stat label="Pominięte" value={remindersIgnored} border />
-          <Stat label="Interwał" value={`${intervalMinutes}m`} border />
+          <Stat label={t.statBreaks} value={breaksDone} />
+          <Stat label={t.statSkipped} value={remindersIgnored} border />
+          <Stat label={t.statInterval} value={`${intervalMinutes}m`} border />
         </div>
 
         {/* Przyciski główne */}
@@ -170,7 +174,7 @@ export default function SessionTimer() {
               className="flex-1 py-3 font-medium text-white transition-all"
               style={{ background: 'var(--accent)', borderRadius: 'var(--radius-sm)' }}
             >
-              Jestem z powrotem
+              {t.backFromAway}
             </button>
           ) : !sessionActive ? (
             <button
@@ -178,7 +182,7 @@ export default function SessionTimer() {
               className="flex-1 py-3 font-medium text-white transition-all"
               style={{ background: 'var(--accent)', borderRadius: 'var(--radius-sm)' }}
             >
-              Rozpocznij sesję
+              {t.startSession}
             </button>
           ) : sessionPaused ? (
             <button
@@ -186,7 +190,7 @@ export default function SessionTimer() {
               className="flex-1 py-3 font-medium text-white transition-all"
               style={{ background: 'var(--accent)', borderRadius: 'var(--radius-sm)' }}
             >
-              Wznów
+              {t.resume}
             </button>
           ) : (
             <button
@@ -197,14 +201,14 @@ export default function SessionTimer() {
                 border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)',
               }}
             >
-              Pauza
+              {t.pause}
             </button>
           )}
 
           {sessionActive && !awayMode && (
             <button
               onClick={resetSession}
-              title="Zakończ sesję"
+              title={t.endSessionTitle}
               className="px-4 py-3 transition-all"
               style={{
                 background: 'var(--surface-alt)', color: 'var(--text-muted)',
@@ -224,7 +228,7 @@ export default function SessionTimer() {
             }}
           >
             <SettingsIcon />
-            <span className="text-sm">Ustawienia</span>
+            <span className="text-sm">{t.settings}</span>
           </button>
         </div>
 
@@ -240,7 +244,7 @@ export default function SessionTimer() {
               borderRadius: 'var(--radius-sm)',
             }}
           >
-            Wychodzę z biura
+            {t.leaveOffice}
           </button>
         )}
       </div>

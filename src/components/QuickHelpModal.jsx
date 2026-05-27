@@ -3,9 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 import useAppStore from '../store/useAppStore'
 import { quickHelpData } from '../data/quickHelpData'
 import { areaColor } from '../utils/areaColor'
+import { useT } from '../hooks/useT'
 
 export default function QuickHelpModal() {
   const { quickHelpModalArea, closeQuickHelpModal, colorblindMode, sittingMode } = useAppStore()
+  const lang = useAppStore(s => s.language)
+  const t = useT()
   const [fasciaOpen, setFasciaOpen] = useState(false)
 
   const data = quickHelpData.find(d => d.id === quickHelpModalArea)
@@ -44,15 +47,12 @@ export default function QuickHelpModal() {
               style={{ borderBottom: '1px solid var(--border)' }}
             >
               <div className="flex items-center gap-2.5">
-                <span
-                  className="w-3 h-3 rounded-full"
-                  style={{ background: color }}
-                />
+                <span className="w-3 h-3 rounded-full" style={{ background: color }} />
                 <span className="font-semibold" style={{ color: 'var(--text)' }}>
-                  {data.area}
+                  {lang === 'en' ? data.areaEn : data.area}
                 </span>
                 <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)' }}>
-                  Szybka pomoc
+                  {t.quickHelpTag}
                 </span>
               </div>
               <button
@@ -60,7 +60,7 @@ export default function QuickHelpModal() {
                 className="text-xs px-3 py-1.5 rounded-lg transition-all"
                 style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)', border: '1px solid var(--border)' }}
               >
-                Zamknij
+                {t.closeBtn}
               </button>
             </div>
 
@@ -75,7 +75,7 @@ export default function QuickHelpModal() {
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: data.areaColor }}>
-                    Dlaczego to boli? — Powięź
+                    {t.fasciaTitle}
                   </span>
                   <svg
                     width="12" height="12" viewBox="0 0 12 12" fill="none"
@@ -91,7 +91,7 @@ export default function QuickHelpModal() {
                 </div>
                 {fasciaOpen && (
                   <p className="text-xs mt-2 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-                    {data.fasciaNote}
+                    {lang === 'en' ? (data.fasciaNote_en || data.fasciaNote) : data.fasciaNote}
                   </p>
                 )}
               </button>
@@ -99,46 +99,52 @@ export default function QuickHelpModal() {
               {/* Ćwiczenia */}
               {sittingMode && visibleExercises.length < data.exercises.length && (
                 <p className="text-xs px-3 py-2 rounded-lg" style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)' }}>
-                  Tryb siedzący — ćwiczenia wymagające wstania są ukryte.
+                  {t.sittingHidden}
                 </p>
               )}
-              {visibleExercises.map((ex, i) => (
-                <div key={i} className="space-y-3">
-                  <div className="flex items-baseline justify-between">
-                    <h3 className="text-sm font-semibold" style={{ color: 'var(--text)' }}>
-                      {i + 1}. {ex.name}
-                    </h3>
-                    <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{ex.time}</span>
+              {visibleExercises.map((ex, i) => {
+                const displayName = lang === 'en' ? (ex.name_en || ex.name) : ex.name
+                const displaySteps = lang === 'en' ? (ex.stepsEn || ex.steps) : ex.steps
+                const displayNote = lang === 'en' ? (ex.note_en || ex.note) : ex.note
+
+                return (
+                  <div key={i} className="space-y-3">
+                    <div className="flex items-baseline justify-between">
+                      <h3 className="text-sm font-semibold" style={{ color: 'var(--text)' }}>
+                        {i + 1}. {displayName}
+                      </h3>
+                      <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{ex.time}</span>
+                    </div>
+
+                    <ol className="space-y-2">
+                      {displaySteps.map((step, j) => (
+                        <li key={j} className="flex items-start gap-2.5 text-sm">
+                          <span
+                            className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5"
+                            style={{ background: data.areaColor, color: '#fff' }}
+                          >
+                            {j + 1}
+                          </span>
+                          <span style={{ color: 'var(--text)', lineHeight: 1.5 }}>{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+
+                    {displayNote && (
+                      <p
+                        className="text-xs px-3 py-2 rounded-lg italic leading-relaxed"
+                        style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)' }}
+                      >
+                        {displayNote}
+                      </p>
+                    )}
+
+                    {i < visibleExercises.length - 1 && (
+                      <div style={{ height: '1px', background: 'var(--border)' }} />
+                    )}
                   </div>
-
-                  <ol className="space-y-2">
-                    {ex.steps.map((step, j) => (
-                      <li key={j} className="flex items-start gap-2.5 text-sm">
-                        <span
-                          className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5"
-                          style={{ background: data.areaColor, color: '#fff' }}
-                        >
-                          {j + 1}
-                        </span>
-                        <span style={{ color: 'var(--text)', lineHeight: 1.5 }}>{step}</span>
-                      </li>
-                    ))}
-                  </ol>
-
-                  {ex.note && (
-                    <p
-                      className="text-xs px-3 py-2 rounded-lg italic leading-relaxed"
-                      style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)' }}
-                    >
-                      {ex.note}
-                    </p>
-                  )}
-
-                  {i < visibleExercises.length - 1 && (
-                    <div style={{ height: '1px', background: 'var(--border)' }} />
-                  )}
-                </div>
-              ))}
+                )
+              })}
 
               <div className="pb-2" />
             </div>

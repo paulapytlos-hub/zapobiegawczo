@@ -1,22 +1,8 @@
 import useAppStore from '../store/useAppStore'
+import { useT } from '../hooks/useT'
 
 const MAX_DISPLAY = 12
 const GOAL = 8
-
-const WATER_FACTS = [
-  'Wypij pierwszą szklankę — nawodniony mózg działa o 14% szybciej.',
-  '1–2% odwodnienia obniża koncentrację jak nieprzespana noc.',
-  'Mózg składa się w 75% z wody. Każda szklanka ma znaczenie.',
-  'Woda wspomaga produkcję mazi stawowej — chroni kręgosłup.',
-  'Odwodnienie zwiększa kortyzol — woda obniża stres.',
-  'Połowa celu! Regularne nawodnienie redukuje bóle głowy o 40%.',
-  'Prawie — krążenie i energia na najwyższym poziomie.',
-  'Ostatnia szklanka do celu — ogródek prawie gotowy!',
-  'Cel osiągnięty! 🌸 Możesz sadzić dalej — ogród rośnie!',
-  'Bonusowa szklanka — Twoje stawy i nerki Ci dziękują.',
-  'Wyjątkowo nawodniony dzień. Skóra i umysł widocznie korzystają.',
-  'Mistrzyni nawodnienia! Rzadko ktoś pije tyle wody przy pracy.',
-]
 
 function flowerStage(index, total) {
   if (index >= total) return 0
@@ -27,7 +13,6 @@ function flowerStage(index, total) {
   return 1
 }
 
-// Typy kwiatów przypisane do pozycji (cyklicznie)
 const FLOWER_TYPES = ['tulip', 'daisy', 'sunflower', 'poppy']
 
 export default function WaterTracker() {
@@ -36,9 +21,14 @@ export default function WaterTracker() {
   const addWaterGlass = useAppStore(s => s.addWaterGlass)
   const removeWaterGlass = useAppStore(s => s.removeWaterGlass)
   const resetWater = useAppStore(s => s.resetWater)
+  const t = useT()
   const nudge = lastWaterAt && (Date.now() - lastWaterAt) > 60 * 60 * 1000
 
   const slots = Math.min(Math.max(Math.ceil(waterGlasses / 3) * 3, 3), MAX_DISPLAY)
+
+  const glassLabel = waterGlasses === 1 ? t.waterGlass1
+    : waterGlasses < 5 ? t.waterGlass24
+    : t.waterGlass5
 
   return (
     <div
@@ -50,16 +40,16 @@ export default function WaterTracker() {
       }}
     >
       <p className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
-        Ogród 💧
+        {t.waterTitle}
       </p>
 
       <div className="text-center">
         <span className="text-2xl font-bold" style={{ color: 'var(--text)' }}>{waterGlasses}</span>
         <span className="text-xs ml-1" style={{ color: 'var(--text-muted)' }}>
-          {waterGlasses === 1 ? 'szklanka' : waterGlasses < 5 ? 'szklanki' : 'szklanek'}
+          {glassLabel}
         </span>
         {waterGlasses >= GOAL && (
-          <p className="text-xs font-medium" style={{ color: 'var(--accent)' }}>cel {GOAL} ✓</p>
+          <p className="text-xs font-medium" style={{ color: 'var(--accent)' }}>{t.waterGoal(GOAL)}</p>
         )}
       </div>
 
@@ -77,12 +67,12 @@ export default function WaterTracker() {
 
       {waterGlasses > MAX_DISPLAY && (
         <p className="text-xs font-medium" style={{ color: 'var(--accent)' }}>
-          +{waterGlasses - MAX_DISPLAY} więcej 🌸
+          {t.waterMore(waterGlasses - MAX_DISPLAY)}
         </p>
       )}
 
       <p style={{ fontSize: '0.63rem', color: 'var(--text-muted)', textAlign: 'center', lineHeight: 1.45, fontStyle: 'italic' }}>
-        {WATER_FACTS[Math.min(waterGlasses, WATER_FACTS.length - 1)]}
+        {t.waterFacts[Math.min(waterGlasses, t.waterFacts.length - 1)]}
       </p>
 
       <div className="flex w-full gap-2">
@@ -114,7 +104,7 @@ export default function WaterTracker() {
           onClick={resetWater}
           style={{ fontSize: '0.65rem', color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}
         >
-          reset dnia
+          {t.waterReset}
         </button>
       )}
     </div>
@@ -142,7 +132,6 @@ function MiniFlower({ stage, type }) {
   }
 }
 
-// ── Tulipan ──────────────────────────────────────
 function Tulip({ stage, W, H, ground, groundY }) {
   const stemTop = groundY - [0, 20, 30, 38, 42][stage]
   return (
@@ -155,7 +144,6 @@ function Tulip({ stage, W, H, ground, groundY }) {
       </>}
       {stage === 2 && <ellipse cx="21" cy={stemTop + 4} rx="5" ry="7" fill="#e06070" />}
       {stage === 3 && <>
-        <path d="M21 0" />
         <ellipse cx="17" cy={stemTop + 5} rx="4.5" ry="8" transform={`rotate(-15,17,${stemTop + 5})`} fill="#e06070" />
         <ellipse cx="21" cy={stemTop + 3} rx="4" ry="9" fill="#e8405a" />
         <ellipse cx="25" cy={stemTop + 5} rx="4.5" ry="8" transform={`rotate(15,25,${stemTop + 5})`} fill="#e06070" />
@@ -171,7 +159,6 @@ function Tulip({ stage, W, H, ground, groundY }) {
   )
 }
 
-// ── Stokrotka ─────────────────────────────────────
 function Daisy({ stage, W, H, ground, groundY }) {
   const stemTop = groundY - [0, 18, 28, 36, 40][stage]
   const cx = 21, cy = stemTop
@@ -200,7 +187,6 @@ function Daisy({ stage, W, H, ground, groundY }) {
   )
 }
 
-// ── Słonecznik ────────────────────────────────────
 function Sunflower({ stage, W, H, ground, groundY }) {
   const stemTop = groundY - [0, 22, 32, 40, 44][stage]
   const cx = 21, cy = stemTop
@@ -233,14 +219,12 @@ function Sunflower({ stage, W, H, ground, groundY }) {
   )
 }
 
-// ── Mak ───────────────────────────────────────────
 function Poppy({ stage, W, H, ground, groundY }) {
   const stemTop = groundY - [0, 19, 29, 37, 41][stage]
   const cx = 21, cy = stemTop
   return (
     <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H}>
       {ground}
-      {/* Cienka falująca łodyga */}
       <path d={`M21 ${groundY - 2} Q18 ${groundY - 12} 21 ${stemTop + 8} Q24 ${stemTop + 4} 21 ${stemTop}`}
         fill="none" stroke="#5a9a3a" strokeWidth="1.8" strokeLinecap="round" />
       {stage >= 2 && <>

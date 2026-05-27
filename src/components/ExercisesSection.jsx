@@ -4,6 +4,7 @@ import { exercises } from '../data/exercises'
 import useAppStore from '../store/useAppStore'
 import { areaColor } from '../utils/areaColor'
 import ExerciseCircuit from './ExerciseCircuit'
+import { useT } from '../hooks/useT'
 
 export default function ExercisesSection() {
   const [openId, setOpenId] = useState(null)
@@ -13,6 +14,8 @@ export default function ExercisesSection() {
   const setQuickHelp = useAppStore(s => s.setQuickHelp)
   const colorblindMode = useAppStore(s => s.colorblindMode)
   const sittingMode = useAppStore(s => s.sittingMode)
+  const lang = useAppStore(s => s.language)
+  const t = useT()
   const visibleExercises = sittingMode ? exercises.filter(ex => !ex.requiresStanding) : exercises
 
   useEffect(() => {
@@ -37,10 +40,10 @@ export default function ExercisesSection() {
             color: 'var(--text)',
           }}
         >
-          Ćwiczenia
+          {t.exercisesTitle}
         </h2>
         <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
-          {visibleExercises.length} ćwiczeń{sittingMode ? ' · tryb siedzący' : ''}
+          {t.exerciseCount(visibleExercises.length, sittingMode)}
         </span>
       </div>
 
@@ -55,10 +58,10 @@ export default function ExercisesSection() {
       >
         <div className="text-left">
           <p className="text-sm font-semibold" style={{ color: 'var(--accent)' }}>
-            Zrób serię wszystkich ćwiczeń
+            {t.circuitBtn}
           </p>
           <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-            {visibleExercises.length} ćwiczeń po kolei · ~{visibleExercises.length} minut
+            {t.circuitDesc(visibleExercises.length)}
           </p>
         </div>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round">
@@ -73,91 +76,96 @@ export default function ExercisesSection() {
       )}
 
       <div className="space-y-2">
-        {visibleExercises.map(ex => (
-          <div
-            key={ex.id}
-            className="overflow-hidden"
-            style={{
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius)',
-              background: 'var(--surface)',
-            }}
-          >
-            <button
-              onClick={() => toggle(ex.id)}
-              className="w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors"
-              style={{ background: openId === ex.id ? 'var(--surface-alt)' : 'transparent' }}
+        {visibleExercises.map(ex => {
+          const displayName = lang === 'en' ? ex.name : ex.namepl
+          const displayArea = lang === 'en' ? ex.areaEn : ex.area
+          const displaySteps = lang === 'en' ? (ex.stepsEn || ex.steps) : ex.steps
+          const displayNote = lang === 'en' ? (ex.noteEn || ex.note) : ex.note
+
+          return (
+            <div
+              key={ex.id}
+              className="overflow-hidden"
+              style={{
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius)',
+                background: 'var(--surface)',
+              }}
             >
-              {/* Kolorowy znacznik obszaru */}
-              <span
-                className="w-2 h-2 rounded-full shrink-0"
-                style={{ background: areaColor(ex.areaColor, colorblindMode) }}
-              />
-
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-sm" style={{ color: 'var(--text)' }}>
-                  {ex.namepl}
-                </p>
-                <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                  {ex.area} · {ex.time}
-                </p>
-              </div>
-
-              {/* Strzałka */}
-              <svg
-                width="14" height="14" viewBox="0 0 14 14"
-                fill="none" stroke="var(--text-muted)" strokeWidth="1.5" strokeLinecap="round"
-                style={{
-                  transform: openId === ex.id ? 'rotate(90deg)' : 'rotate(0deg)',
-                  transition: 'transform 0.2s',
-                  shrink: 0,
-                }}
+              <button
+                onClick={() => toggle(ex.id)}
+                className="w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors"
+                style={{ background: openId === ex.id ? 'var(--surface-alt)' : 'transparent' }}
               >
-                <path d="M5 3l4 4-4 4" />
-              </svg>
-            </button>
+                <span
+                  className="w-2 h-2 rounded-full shrink-0"
+                  style={{ background: areaColor(ex.areaColor, colorblindMode) }}
+                />
 
-            <AnimatePresence initial={false}>
-              {openId === ex.id && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  style={{ overflow: 'hidden' }}
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-sm" style={{ color: 'var(--text)' }}>
+                    {displayName}
+                  </p>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                    {displayArea} · {ex.time}
+                  </p>
+                </div>
+
+                <svg
+                  width="14" height="14" viewBox="0 0 14 14"
+                  fill="none" stroke="var(--text-muted)" strokeWidth="1.5" strokeLinecap="round"
+                  style={{
+                    transform: openId === ex.id ? 'rotate(90deg)' : 'rotate(0deg)',
+                    transition: 'transform 0.2s',
+                    shrink: 0,
+                  }}
                 >
-                  <div
-                    className="px-4 pb-4 pt-3 space-y-4"
-                    style={{ borderTop: '1px solid var(--border)' }}
-                  >
-                    <ol className="space-y-2.5">
-                      {ex.steps.map((step, i) => (
-                        <li key={i} className="flex items-start gap-3 text-sm">
-                          <span
-                            className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 mt-0.5 text-white"
-                            style={{ background: areaColor(ex.areaColor, colorblindMode) }}
-                          >
-                            {i + 1}
-                          </span>
-                          <span style={{ color: 'var(--text)', lineHeight: 1.5 }}>{step}</span>
-                        </li>
-                      ))}
-                    </ol>
+                  <path d="M5 3l4 4-4 4" />
+                </svg>
+              </button>
 
-                    {ex.note && (
-                      <p
-                        className="text-xs px-3 py-2 rounded-lg italic"
-                        style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)' }}
-                      >
-                        {ex.note}
-                      </p>
-                    )}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        ))}
+              <AnimatePresence initial={false}>
+                {openId === ex.id && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <div
+                      className="px-4 pb-4 pt-3 space-y-4"
+                      style={{ borderTop: '1px solid var(--border)' }}
+                    >
+                      <ol className="space-y-2.5">
+                        {displaySteps.map((step, i) => (
+                          <li key={i} className="flex items-start gap-3 text-sm">
+                            <span
+                              className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 mt-0.5 text-white"
+                              style={{ background: areaColor(ex.areaColor, colorblindMode) }}
+                            >
+                              {i + 1}
+                            </span>
+                            <span style={{ color: 'var(--text)', lineHeight: 1.5 }}>{step}</span>
+                          </li>
+                        ))}
+                      </ol>
+
+                      {displayNote && (
+                        <p
+                          className="text-xs px-3 py-2 rounded-lg italic"
+                          style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)' }}
+                        >
+                          {displayNote}
+                        </p>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )
+        })}
       </div>
     </div>
   )

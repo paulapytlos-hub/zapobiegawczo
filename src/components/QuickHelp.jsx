@@ -1,10 +1,13 @@
 import useAppStore from '../store/useAppStore'
 import { quickHelpData } from '../data/quickHelpData'
 import { areaColor } from '../utils/areaColor'
+import { useT } from '../hooks/useT'
 
 export default function QuickHelp() {
   const openQuickHelpModal = useAppStore(s => s.openQuickHelpModal)
   const colorblindMode = useAppStore(s => s.colorblindMode)
+  const lang = useAppStore(s => s.language)
+  const t = useT()
 
   return (
     <div className="mx-4 mt-4">
@@ -17,10 +20,10 @@ export default function QuickHelp() {
             color: 'var(--text)',
           }}
         >
-          Szybka pomoc
+          {t.quickHelpTitle}
         </h2>
         <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
-          Co Cię boli?
+          {t.quickHelpSub}
         </span>
       </div>
 
@@ -49,7 +52,7 @@ export default function QuickHelp() {
               style={{ background: areaColor(item.areaColor, colorblindMode) }}
             />
             <span className="text-xs leading-tight" style={{ color: 'var(--text-muted)' }}>
-              {item.area}
+              {lang === 'en' ? item.areaEn : item.area}
             </span>
           </button>
         ))}

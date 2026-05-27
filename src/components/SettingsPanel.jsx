@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import useAppStore from '../store/useAppStore'
+import { useT } from '../hooks/useT'
 
-async function testNotification(setToast) {
+async function testNotification(t, setToast) {
   if (Notification.permission !== 'granted') {
-    setToast('Najpierw włącz powiadomienia — kliknij przełącznik powyżej.')
+    setToast(t.notifFirst)
     return
   }
 
@@ -22,7 +23,7 @@ async function testNotification(setToast) {
       })
       sent = true
     }
-  } catch { /* SW niedostępny, próbujemy fallback */ }
+  } catch { /* SW niedostępny */ }
 
   if (!sent) {
     try {
@@ -36,22 +37,13 @@ async function testNotification(setToast) {
   }
 
   if (sent) {
-    setToast('Powiadomienie wysłane — sprawdź prawy dolny róg ekranu.')
+    setToast(t.testNotifSuccess)
   } else {
-    setToast('Nie udało się wysłać. Sprawdź ustawienia powiadomień w przeglądarce.')
+    setToast(t.testNotifFail)
   }
 }
 
 const PRESETS = [30, 45, 60, 90]
-
-function minuty(n) {
-  if (n === 1) return 'minutę'
-  const t = n % 100
-  const u = n % 10
-  if (t >= 12 && t <= 14) return 'minut'
-  if (u >= 2 && u <= 4) return 'minuty'
-  return 'minut'
-}
 
 export default function SettingsPanel() {
   const {
@@ -64,6 +56,7 @@ export default function SettingsPanel() {
     theme, setTheme,
     sittingMode, setSittingMode,
   } = useAppStore()
+  const t = useT()
 
   const [customValue, setCustomValue] = useState('')
   const [error, setError] = useState('')
@@ -82,7 +75,7 @@ export default function SettingsPanel() {
     setError('')
     const num = parseInt(val)
     if (val && (isNaN(num) || num < 1 || num > 480)) {
-      setError('Wpisz liczbę od 1 do 480')
+      setError(t.intervalError)
     }
   }
 
@@ -94,25 +87,25 @@ export default function SettingsPanel() {
     }
   }
 
-
   const isPreset = PRESETS.includes(intervalMinutes)
+  const minLabel = t.minutes(intervalMinutes)
 
   return (
     <div
       className="mx-4 mt-4 rounded-xl p-5 space-y-5"
       style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
     >
-      <h3 className="font-semibold text-base" style={{ color: 'var(--text)' }}>Ustawienia</h3>
+      <h3 className="font-semibold text-base" style={{ color: 'var(--text)' }}>{t.settingsTitle}</h3>
 
       {/* Wygląd */}
       <div>
-        <p className="text-sm font-medium mb-0.5" style={{ color: 'var(--text)' }}>Motyw kolorystyczny</p>
-        <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>Nocny eliminuje niebieskie światło — dobry na wieczorne godziny pracy</p>
+        <p className="text-sm font-medium mb-0.5" style={{ color: 'var(--text)' }}>{t.themeTitle}</p>
+        <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>{t.themeDesc}</p>
         <div className="grid grid-cols-3 gap-2">
           {[
-            { value: 'dark', label: 'Ciemny', desc: 'Domyślny' },
-            { value: 'night', label: 'Nocny', desc: 'Bez niebieskiego' },
-            { value: 'light', label: 'Jasny', desc: 'Wellness' },
+            { value: 'dark', label: t.themeDark, desc: t.themeDarkDesc },
+            { value: 'night', label: t.themeNight, desc: t.themeNightDesc },
+            { value: 'light', label: t.themeLight, desc: t.themeLightDesc },
           ].map(({ value, label, desc }) => (
             <button
               key={value}
@@ -135,10 +128,10 @@ export default function SettingsPanel() {
       {/* Interwał */}
       <div>
         <p className="text-sm font-medium mb-0.5" style={{ color: 'var(--text)' }}>
-          Jak często chcesz dostawać przypomnienie?
+          {t.intervalTitle}
         </p>
         <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>
-          Aktualnie co <strong>{intervalMinutes} {minuty(intervalMinutes)}</strong>. Wybierz gotową opcję lub wpisz własną liczbę.
+          {t.intervalDesc(intervalMinutes, minLabel)}
         </p>
 
         <div className="flex gap-2 mb-3">
@@ -164,7 +157,7 @@ export default function SettingsPanel() {
               type="number"
               min="1"
               max="480"
-              placeholder="Własna liczba minut (1–480)..."
+              placeholder={t.intervalPlaceholder}
               value={customValue}
               onChange={handleCustom}
               onKeyDown={e => e.key === 'Enter' && applyCustom()}
@@ -188,12 +181,12 @@ export default function SettingsPanel() {
               opacity: customValue && !error ? 1 : 0.5,
             }}
           >
-            Ustaw
+            {t.intervalSet}
           </button>
         </div>
         {!isPreset && (
           <p className="text-xs mt-2" style={{ color: 'var(--accent)' }}>
-            Ustawiono własny interwał: {intervalMinutes} {minuty(intervalMinutes)}
+            {t.intervalCustomSet(intervalMinutes, minLabel)}
           </p>
         )}
       </div>
@@ -204,8 +197,8 @@ export default function SettingsPanel() {
       <div className="space-y-3">
         <div>
           <Toggle
-            label="Powiadomienia na pulpicie"
-            description="Ciche — pojawią się nawet, gdy pracujesz w innej aplikacji lub zakładce"
+            label={t.desktopNotifLabel}
+            description={t.desktopNotifDesc}
             checked={notifEnabled}
             onChange={toggleNotif}
           />
@@ -214,13 +207,13 @@ export default function SettingsPanel() {
               className="mt-2 text-xs p-3 rounded-lg leading-relaxed"
               style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)', border: '1px solid var(--border)' }}
             >
-              Przeglądarka zablokowała powiadomienia. Aby odblokować: kliknij kłódkę w pasku adresu przeglądarki → "Powiadomienia" → wybierz "Zezwól".
+              {t.notifBlocked}
             </div>
           )}
         </div>
         {notifEnabled && (
           <button
-            onClick={() => testNotification(showToast)}
+            onClick={() => testNotification(t, showToast)}
             className="w-full py-2 text-xs rounded-lg transition-all"
             style={{
               background: 'var(--surface-alt)',
@@ -228,7 +221,7 @@ export default function SettingsPanel() {
               border: '1px solid var(--border)',
             }}
           >
-            Wyślij testowe powiadomienie — sprawdź, czy działa
+            {t.testNotif}
           </button>
         )}
       </div>
@@ -247,8 +240,8 @@ export default function SettingsPanel() {
 
       {/* Popup w aplikacji */}
       <Toggle
-        label="Okienko z ćwiczeniem"
-        description="Przy każdej przerwie pojawi się na ekranie propozycja krótkiego ćwiczenia"
+        label={t.popupLabel}
+        description={t.popupDesc}
         checked={popupEnabled}
         onChange={togglePopup}
       />
@@ -257,8 +250,8 @@ export default function SettingsPanel() {
 
       {/* Tryb siedzący */}
       <Toggle
-        label="Tryb siedzący"
-        description="Włącz, jeśli nie możesz wstawać od biurka — ćwiczenia wymagające wstania zostaną zastąpione siedzącymi"
+        label={t.sittingLabel}
+        description={t.sittingDesc}
         checked={sittingMode}
         onChange={() => setSittingMode(!sittingMode)}
       />
@@ -267,10 +260,8 @@ export default function SettingsPanel() {
 
       {/* Podgląd przerwy */}
       <div>
-        <p className="text-sm font-medium mb-0.5" style={{ color: 'var(--text)' }}>Podgląd przerwy</p>
-        <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>
-          Kliknij, żeby zobaczyć, jak wygląda okienko, które pojawi się przy każdym przypomnieniu
-        </p>
+        <p className="text-sm font-medium mb-0.5" style={{ color: 'var(--text)' }}>{t.previewTitle}</p>
+        <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>{t.previewDesc}</p>
         <button
           onClick={openBreakPreview}
           className="w-full py-2.5 text-sm font-medium transition-all"
@@ -281,7 +272,7 @@ export default function SettingsPanel() {
             borderRadius: 'var(--radius-sm)',
           }}
         >
-          Pokaż przykładowe ćwiczenie
+          {t.showPreview}
         </button>
       </div>
     </div>
@@ -303,7 +294,6 @@ function Toggle({ label, description, checked, onChange }) {
         onClick={onChange}
         className="relative w-11 h-6 rounded-full transition-all shrink-0"
         style={{ background: checked ? 'var(--accent)' : 'var(--border)' }}
-        aria-label={checked ? 'Wyłącz' : 'Włącz'}
       >
         <span
           className="absolute top-1 w-4 h-4 rounded-full bg-white transition-all"

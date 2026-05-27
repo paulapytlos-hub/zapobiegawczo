@@ -2,6 +2,7 @@ import { useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { exercises } from '../data/exercises'
 import useAppStore from '../store/useAppStore'
+import { useT } from '../hooks/useT'
 
 function pickTwo(allExercises, sittingMode) {
   const pool = allExercises.filter(ex => !sittingMode || !ex.requiresStanding)
@@ -14,6 +15,8 @@ function pickTwo(allExercises, sittingMode) {
 
 export default function BreakModal() {
   const { showBreakModal, breakIsPreview, completeBreak, snoozeBreak, sittingMode } = useAppStore()
+  const t = useT()
+  const lang = useAppStore(s => s.language)
   const closePreview = () => useAppStore.setState({ showBreakModal: false, breakIsPreview: false })
 
   const pair = useMemo(
@@ -57,58 +60,64 @@ export default function BreakModal() {
                 className="text-xs font-semibold px-2.5 py-1 rounded-full"
                 style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}
               >
-                Czas na przerwę
+                {t.breakTime}
               </span>
             </div>
 
             {/* Scrollowalna zawartość */}
             <div className="overflow-y-auto px-6 pb-3 space-y-5">
-              {pair.map((ex, idx) => (
-                <div key={ex.id}>
-                  {idx > 0 && (
-                    <div style={{ height: '1px', background: 'var(--border)', marginBottom: '20px' }} />
-                  )}
+              {pair.map((ex, idx) => {
+                const displayName = lang === 'en' ? ex.name : ex.namepl
+                const displayArea = lang === 'en' ? ex.areaEn : ex.area
+                const displaySteps = lang === 'en' ? (ex.stepsEn || ex.steps) : ex.steps
+                const displayNote = lang === 'en' ? (ex.noteEn || ex.note) : ex.note
 
-                  {/* Fakt motywacyjny PRZED krokami */}
-                  {ex.note && (
-                    <div
-                      className="mb-3 px-3 py-2.5 rounded-lg"
-                      style={{
-                        background: 'var(--accent-soft)',
-                        borderLeft: '3px solid var(--accent)',
-                      }}
-                    >
-                      <p className="text-xs italic leading-relaxed" style={{ color: 'var(--text)' }}>
-                        {ex.note}
-                      </p>
-                    </div>
-                  )}
-
-                  <h2 className="text-base font-semibold mb-0.5" style={{ color: 'var(--text)' }}>
-                    {ex.namepl}
-                  </h2>
-                  <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>
-                    {ex.area} · {ex.time}
-                    {ex.requiresStanding && (
-                      <span style={{ marginLeft: '6px', color: 'var(--warning)' }}>· wstań</span>
+                return (
+                  <div key={ex.id}>
+                    {idx > 0 && (
+                      <div style={{ height: '1px', background: 'var(--border)', marginBottom: '20px' }} />
                     )}
-                  </p>
 
-                  <ol className="space-y-2.5">
-                    {ex.steps.map((step, i) => (
-                      <li key={i} className="flex items-start gap-3 text-sm">
-                        <span
-                          className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 mt-0.5 text-white"
-                          style={{ background: 'var(--accent)' }}
-                        >
-                          {i + 1}
-                        </span>
-                        <span style={{ color: 'var(--text)', lineHeight: 1.5 }}>{step}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              ))}
+                    {displayNote && (
+                      <div
+                        className="mb-3 px-3 py-2.5 rounded-lg"
+                        style={{
+                          background: 'var(--accent-soft)',
+                          borderLeft: '3px solid var(--accent)',
+                        }}
+                      >
+                        <p className="text-xs italic leading-relaxed" style={{ color: 'var(--text)' }}>
+                          {displayNote}
+                        </p>
+                      </div>
+                    )}
+
+                    <h2 className="text-base font-semibold mb-0.5" style={{ color: 'var(--text)' }}>
+                      {displayName}
+                    </h2>
+                    <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>
+                      {displayArea} · {ex.time}
+                      {ex.requiresStanding && (
+                        <span style={{ marginLeft: '6px', color: 'var(--warning)' }}>· {t.standUp}</span>
+                      )}
+                    </p>
+
+                    <ol className="space-y-2.5">
+                      {displaySteps.map((step, i) => (
+                        <li key={i} className="flex items-start gap-3 text-sm">
+                          <span
+                            className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 mt-0.5 text-white"
+                            style={{ background: 'var(--accent)' }}
+                          >
+                            {i + 1}
+                          </span>
+                          <span style={{ color: 'var(--text)', lineHeight: 1.5 }}>{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                )
+              })}
 
               {/* Przypomnienie o wodzie */}
               <div
@@ -117,7 +126,7 @@ export default function BreakModal() {
               >
                 <span style={{ fontSize: '1.1rem' }}>💧</span>
                 <p className="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-                  Przy okazji — wypij szklankę wody. Odwodnienie o 2% spowalnia myślenie.
+                  {t.drinkWaterNudge}
                 </p>
               </div>
             </div>
@@ -127,14 +136,14 @@ export default function BreakModal() {
               {breakIsPreview ? (
                 <>
                   <p className="text-xs text-center pb-1" style={{ color: 'var(--text-muted)' }}>
-                    Podgląd — tak wygląda okienko przy każdej przerwie
+                    {t.previewNote}
                   </p>
                   <button
                     onClick={closePreview}
                     className="w-full py-3 font-medium text-white transition-all"
                     style={{ background: 'var(--accent)', borderRadius: 'var(--radius-sm)' }}
                   >
-                    Zamknij podgląd
+                    {t.closePreview}
                   </button>
                 </>
               ) : (
@@ -144,7 +153,7 @@ export default function BreakModal() {
                     className="w-full py-3 font-medium text-white transition-all"
                     style={{ background: 'var(--accent)', borderRadius: 'var(--radius-sm)' }}
                   >
-                    Gotowe
+                    {t.done}
                   </button>
                   <button
                     onClick={snoozeBreak}
@@ -156,7 +165,7 @@ export default function BreakModal() {
                       borderRadius: 'var(--radius-sm)',
                     }}
                   >
-                    Przypomnij za 5 minut
+                    {t.remind5}
                   </button>
                 </>
               )}

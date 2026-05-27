@@ -1,11 +1,13 @@
 import { useState } from 'react'
+import { useT } from '../hooks/useT'
 
 export default function FeedbackWidget() {
   const [open, setOpen] = useState(false)
   const [message, setMessage] = useState('')
   const [rating, setRating] = useState(0)
   const [hovered, setHovered] = useState(0)
-  const [status, setStatus] = useState('idle') // idle | sending | done | error
+  const [status, setStatus] = useState('idle')
+  const t = useT()
 
   const reset = () => {
     setMessage('')
@@ -65,7 +67,7 @@ export default function FeedbackWidget() {
         }}
         aria-label="Feedback"
       >
-        Feedback
+        {t.feedbackTab}
       </button>
 
       {/* Panel */}
@@ -90,19 +92,19 @@ export default function FeedbackWidget() {
       >
         <div>
           <p className="font-semibold" style={{ color: 'var(--text)', fontSize: '0.95rem' }}>
-            Cześć! Masz feedback?
+            {t.feedbackTitle}
           </p>
           <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px', lineHeight: 1.5 }}>
-            Coś nie działa, czegoś brakuje, masz pomysł? Chętnie przeczytam i wdrożę.
+            {t.feedbackDesc}
           </p>
         </div>
 
         {status === 'done' ? (
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', textAlign: 'center' }}>
             <span style={{ fontSize: '2rem' }}>🌱</span>
-            <p className="font-medium" style={{ color: 'var(--accent)' }}>Dziękuję!</p>
+            <p className="font-medium" style={{ color: 'var(--accent)' }}>{t.feedbackThanks}</p>
             <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-              Twoja wiadomość dotarła. Bardzo mi to pomaga rozwijać aplikację.
+              {t.feedbackThanksDesc}
             </p>
             <button
               onClick={reset}
@@ -116,7 +118,7 @@ export default function FeedbackWidget() {
                 textDecoration: 'underline',
               }}
             >
-              Wyślij kolejny
+              {t.feedbackSendAnother}
             </button>
           </div>
         ) : (
@@ -124,7 +126,7 @@ export default function FeedbackWidget() {
             {/* Gwiazdki */}
             <div>
               <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
-                Ogólna ocena (opcjonalnie)
+                {t.feedbackRatingLabel}
               </p>
               <div style={{ display: 'flex', gap: '6px' }}>
                 {[1, 2, 3, 4, 5].map(star => (
@@ -143,7 +145,7 @@ export default function FeedbackWidget() {
                       transform: star <= (hovered || rating) ? 'scale(1.15)' : 'scale(1)',
                       padding: 0,
                     }}
-                    aria-label={`${star} gwiazdka`}
+                    aria-label={t.feedbackStarLabel(star)}
                   >
                     ★
                   </button>
@@ -154,12 +156,12 @@ export default function FeedbackWidget() {
             {/* Wiadomość */}
             <div style={{ flex: 1 }}>
               <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
-                Wiadomość
+                {t.feedbackMessageLabel}
               </p>
               <textarea
                 value={message}
                 onChange={e => setMessage(e.target.value)}
-                placeholder="Co myślisz o aplikacji? Co warto poprawić lub dodać?"
+                placeholder={t.feedbackPlaceholder}
                 rows={6}
                 style={{
                   width: '100%',
@@ -181,7 +183,7 @@ export default function FeedbackWidget() {
 
             {status === 'error' && (
               <p style={{ fontSize: '0.72rem', color: 'var(--danger)' }}>
-                Coś poszło nie tak — spróbuj ponownie.
+                {t.feedbackError}
               </p>
             )}
 
@@ -200,7 +202,7 @@ export default function FeedbackWidget() {
                 transition: 'all 0.2s',
               }}
             >
-              {status === 'sending' ? 'Wysyłam...' : 'Wyślij'}
+              {status === 'sending' ? t.feedbackSending : t.feedbackSend}
             </button>
           </>
         )}

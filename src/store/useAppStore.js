@@ -81,6 +81,13 @@ const useAppStore = create((set, get) => ({
     set({ workHours: h })
   },
 
+  // ── Język ──
+  language: (() => { try { return localStorage.getItem('zapobiegawczo_language') || 'pl' } catch { return 'pl' } })(),
+  setLanguage: (lang) => {
+    try { localStorage.setItem('zapobiegawczo_language', lang) } catch { /* ignoruj */ }
+    set({ language: lang })
+  },
+
   // ── Tryb siedzący ──
   sittingMode: (() => { try { return localStorage.getItem('zapobiegawczo_sitting') === '1' } catch { return false } })(),
   setSittingMode: (val) => {
@@ -89,21 +96,68 @@ const useAppStore = create((set, get) => ({
     get().addLog(val ? 'Tryb siedzący włączony' : 'Tryb siedzący wyłączony')
   },
 
+  // ── Seria (streak) ──
+  streakDays: (() => {
+    try {
+      const lastDate = localStorage.getItem('zapobiegawczo_laststreakdate')
+      const streak = parseInt(localStorage.getItem('zapobiegawczo_streak') || '0')
+      if (!lastDate || streak === 0) return 0
+      const today = new Date().toISOString().split('T')[0]
+      const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0]
+      return (lastDate === today || lastDate === yesterday) ? streak : 0
+    } catch { return 0 }
+  })(),
+  lastStreakDate: (() => { try { return localStorage.getItem('zapobiegawczo_laststreakdate') || null } catch { return null } })(),
+
+  checkStreak: () => {
+    const { waterGlasses, breaksDone, workHours, intervalMinutes } = get()
+    const breakGoal = Math.max(1, Math.floor(workHours * 60 / intervalMinutes))
+    if (waterGlasses < 8 || breaksDone < breakGoal) return
+    const today = new Date().toISOString().split('T')[0]
+    const lastDate = get().lastStreakDate
+    if (lastDate === today) return
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0]
+    const newStreak = lastDate === yesterday ? get().streakDays + 1 : 1
+    try {
+      localStorage.setItem('zapobiegawczo_streak', String(newStreak))
+      localStorage.setItem('zapobiegawczo_laststreakdate', today)
+    } catch { /* ignoruj */ }
+    set({ streakDays: newStreak, lastStreakDate: today })
+    get().addLog(`Seria: ${newStreak} ${newStreak === 1 ? 'dzień' : 'dni'} z rzędu! 🔥`)
+  },
+
   // ── Nawodnienie ──
-  waterGlasses: 0,
+  waterGlasses: (() => {
+    try {
+      const today = new Date().toISOString().split('T')[0]
+      const saved = localStorage.getItem('zapobiegawczo_waterdate')
+      if (saved !== today) return 0
+      return parseInt(localStorage.getItem('zapobiegawczo_water') || '0')
+    } catch { return 0 }
+  })(),
   lastWaterAt: null,
 
   addWaterGlass: () => {
     const glasses = get().waterGlasses
-    set({ waterGlasses: glasses + 1, lastWaterAt: Date.now() })
+    const next = glasses + 1
+    try {
+      localStorage.setItem('zapobiegawczo_water', String(next))
+      localStorage.setItem('zapobiegawczo_waterdate', new Date().toISOString().split('T')[0])
+    } catch { /* ignoruj */ }
+    set({ waterGlasses: next, lastWaterAt: Date.now() })
     get().earnXP(3)
-    get().addLog(`Szklanka wody (${glasses + 1}) (+3 XP)`)
+    get().addLog(`Szklanka wody (${next}) (+3 XP)`)
+    get().checkStreak()
   },
 
   removeWaterGlass: () => {
     const glasses = get().waterGlasses
     if (glasses <= 0) return
     const next = glasses - 1
+    try {
+      localStorage.setItem('zapobiegawczo_water', String(next))
+      localStorage.setItem('zapobiegawczo_waterdate', new Date().toISOString().split('T')[0])
+    } catch { /* ignoruj */ }
     set({ waterGlasses: next, lastWaterAt: next > 0 ? get().lastWaterAt : null })
     const newXp = Math.max(0, get().xp - 3)
     try { localStorage.setItem('zapobiegawczo_xp', String(newXp)) } catch { /* ignoruj */ }
@@ -112,6 +166,10 @@ const useAppStore = create((set, get) => ({
   },
 
   resetWater: () => {
+    try {
+      localStorage.setItem('zapobiegawczo_water', '0')
+      localStorage.setItem('zapobiegawczo_waterdate', new Date().toISOString().split('T')[0])
+    } catch { /* ignoruj */ }
     set({ waterGlasses: 0, lastWaterAt: null })
   },
 
@@ -195,6 +253,7 @@ const useAppStore = create((set, get) => ({
     set(state => ({ showBreakModal: false, breakIsPreview: false, breaksDone: state.breaksDone + 1 }))
     get().earnXP(15)
     get().addLog('Przerwa wykonana (+15 XP)')
+    get().checkStreak()
     if (sessionId && currentExerciseId) {
       try { await api.logBreak(sessionId, currentExerciseId, false) } catch { /* ignoruj */ }
     }

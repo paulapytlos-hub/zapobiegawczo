@@ -1,19 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import useAppStore from '../store/useAppStore'
-
-const FONT_OPTIONS = [
-  { value: 'small',  label: 'A−', title: 'Mały tekst' },
-  { value: 'normal', label: 'A',  title: 'Normalny tekst' },
-  { value: 'large',  label: 'A+', title: 'Duży tekst' },
-  { value: 'xlarge', label: 'A++', title: 'Bardzo duży tekst' },
-]
-
-const THEME_OPTIONS = [
-  { value: 'dark',  label: 'Ciemny',  desc: 'Domyślny' },
-  { value: 'night', label: 'Nocny',   desc: 'Bez niebieskiego światła' },
-  { value: 'light', label: 'Jasny',   desc: 'Wellness' },
-]
+import { useT } from '../hooks/useT'
 
 export default function AccessibilityWidget() {
   const [open, setOpen] = useState(false)
@@ -24,13 +12,27 @@ export default function AccessibilityWidget() {
     colorblindMode, setColorblind,
     reduceMotion, setReduceMotion,
   } = useAppStore()
+  const t = useT()
+
+  const FONT_OPTIONS = [
+    { value: 'small',  label: 'A−', title: t.fontSmall },
+    { value: 'normal', label: 'A',  title: t.fontNormal },
+    { value: 'large',  label: 'A+', title: t.fontLarge },
+    { value: 'xlarge', label: 'A++', title: t.fontXLarge },
+  ]
+
+  const THEME_OPTIONS = [
+    { value: 'dark',  label: t.themeDark,  desc: t.themeDarkDesc },
+    { value: 'night', label: t.themeNight, desc: t.themeNightDesc },
+    { value: 'light', label: t.themeLight, desc: t.themeLightDesc },
+  ]
 
   return (
     <>
       {/* Pływający przycisk */}
       <button
         onClick={() => setOpen(true)}
-        aria-label="Otwórz opcje dostępności"
+        aria-label={t.accessibilityTitle}
         className="fixed bottom-6 right-6 z-40 flex flex-col items-center justify-center gap-1 transition-all"
         style={{
           width: '68px',
@@ -44,7 +46,7 @@ export default function AccessibilityWidget() {
       >
         <AccessIcon />
         <span style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.05em', lineHeight: 1 }}>
-          DOSTĘPNOŚĆ
+          {t.accessibilityBtn}
         </span>
       </button>
 
@@ -81,12 +83,12 @@ export default function AccessibilityWidget() {
                 <div className="flex items-center gap-3">
                   <AccessIcon size={22} />
                   <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text)' }}>
-                    Dostępność
+                    {t.accessibilityTitle}
                   </span>
                 </div>
                 <button
                   onClick={() => setOpen(false)}
-                  aria-label="Zamknij"
+                  aria-label={t.closeBtn}
                   style={{
                     fontSize: '1.4rem',
                     color: 'var(--text-muted)',
@@ -105,9 +107,9 @@ export default function AccessibilityWidget() {
               <div className="px-6 py-5 space-y-7">
 
                 {/* ROZMIAR TEKSTU */}
-                <Section title="Rozmiar tekstu">
+                <Section title={t.fontSizeTitle}>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
-                    Zmień rozmiar czcionki w całej aplikacji
+                    {t.fontSizeDesc}
                   </p>
                   <div className="flex gap-2">
                     {FONT_OPTIONS.map(opt => (
@@ -133,7 +135,7 @@ export default function AccessibilityWidget() {
                 </Section>
 
                 {/* MOTYW */}
-                <Section title="Motyw kolorystyczny">
+                <Section title={t.themeSection}>
                   <div className="space-y-2">
                     {THEME_OPTIONS.map(opt => (
                       <button
@@ -163,69 +165,47 @@ export default function AccessibilityWidget() {
                 </Section>
 
                 {/* WYSOKI KONTRAST */}
-                <Section title="Kontrast">
+                <Section title={t.contrastTitle}>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
-                    Zwiększa kontrast tekstu do poziomu WCAG AAA (7:1)
+                    {t.contrastDesc}
                   </p>
                   <div className="flex gap-2">
-                    <ModeButton
-                      active={!highContrast}
-                      onClick={() => setHighContrast(false)}
-                      label="Normalny"
-                    />
-                    <ModeButton
-                      active={highContrast}
-                      onClick={() => setHighContrast(true)}
-                      label="Wysoki kontrast"
-                    />
+                    <ModeButton active={!highContrast} onClick={() => setHighContrast(false)} label={t.contrastNormal} />
+                    <ModeButton active={highContrast} onClick={() => setHighContrast(true)} label={t.contrastHigh} />
                   </div>
                 </Section>
 
                 {/* DALTONIZM */}
-                <Section title="Daltonizm">
+                <Section title={t.colorblindTitle}>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
-                    Zastępuje kolory paletą bezpieczną dla deuteranopii i protanopii (8% mężczyzn). Wszystkie etykiety są też opisane tekstem.
+                    {t.colorblindDesc}
                   </p>
                   <div className="flex gap-2">
-                    <ModeButton
-                      active={!colorblindMode}
-                      onClick={() => setColorblind(false)}
-                      label="Standardowe"
-                    />
-                    <ModeButton
-                      active={colorblindMode}
-                      onClick={() => setColorblind(true)}
-                      label="Bezpieczna paleta"
-                    />
+                    <ModeButton active={!colorblindMode} onClick={() => setColorblind(false)} label={t.colorblindStandard} />
+                    <ModeButton active={colorblindMode} onClick={() => setColorblind(true)} label={t.colorblindSafe} />
                   </div>
                 </Section>
 
                 {/* ANIMACJE */}
-                <Section title="Animacje">
+                <Section title={t.motionTitle}>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
-                    Wyłącza animacje przejść — ważne przy epilepsji i nadwrażliwości na ruch (WCAG 2.3.3)
+                    {t.motionDesc}
                   </p>
                   <div className="flex gap-2">
-                    <ModeButton
-                      active={!reduceMotion}
-                      onClick={() => setReduceMotion(false)}
-                      label="Włączone"
-                    />
-                    <ModeButton
-                      active={reduceMotion}
-                      onClick={() => setReduceMotion(true)}
-                      label="Zredukowane"
-                    />
+                    <ModeButton active={!reduceMotion} onClick={() => setReduceMotion(false)} label={t.motionOn} />
+                    <ModeButton active={reduceMotion} onClick={() => setReduceMotion(true)} label={t.motionReduced} />
                   </div>
                 </Section>
 
-                {/* Informacja o prawie */}
+                {/* WCAG */}
                 <div
                   className="rounded-xl px-4 py-3"
                   style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)' }}
                 >
                   <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                    Aplikacja dąży do zgodności z <strong style={{ color: 'var(--text)' }}>WCAG 2.1 poziom AA</strong> oraz Europejskim Aktem o Dostępności (EAA, Dyrektywa 2019/882). Wszystkie tryby można łączyć dowolnie.
+                    {t.wcagNote.split('WCAG 2.1 poziom AA').map((part, i) =>
+                      i === 0 ? part : <span key={i}><strong style={{ color: 'var(--text)' }}>WCAG 2.1 AA</strong>{part}</span>
+                    )}
                   </p>
                 </div>
 

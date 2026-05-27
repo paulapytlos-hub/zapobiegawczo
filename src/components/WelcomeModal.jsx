@@ -1,21 +1,11 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import useAppStore from '../store/useAppStore'
-
-const FACTS = [
-  { label: 'Kręgosłup', text: 'Krążki kręgosłupa są o 40% bardziej obciążone podczas siedzenia niż stania.' },
-  { label: 'Energia', text: 'Krótka 2-minutowa przerwa co godzinę zmniejsza zmęczenie o 30%.' },
-]
-
-const HOW_TO_USE = [
-  'Kliknij "Rozpocznij sesję" na stronie głównej',
-  'Pracuj normalnie — zostaw tę kartę otwartą w przeglądarce',
-  'Co godzinę pojawi się przypomnienie o przerwie',
-  'Wykonaj krótkie ćwiczenie i wróć do pracy w lepszej formie',
-]
+import { useT } from '../hooks/useT'
 
 export default function WelcomeModal() {
   const { showWelcome, closeWelcome, requestNotifPermission, notifPermission, setUserName, userName } = useAppStore()
+  const t = useT()
   const [step, setStep] = useState(0)
   const [nameInput, setNameInput] = useState(userName || '')
 
@@ -84,17 +74,17 @@ export default function WelcomeModal() {
                     className="inline-block text-xs font-medium px-2.5 py-1 rounded-full mb-1"
                     style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}
                   >
-                    Twój asystent zdrowia przy pracy
+                    {t.welcomeTagline}
                   </span>
                   <h1 className="text-xl font-semibold" style={{ color: 'var(--text)' }}>
-                    Cześć, dobrze że tu jesteś
+                    {t.welcomeHello}
                   </h1>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-                    Pomagam zadbać o zdrowie podczas długich godzin przy komputerze — przerwy, ćwiczenia, przypomnienia.
+                    {t.welcomeDesc}
                   </p>
                 </div>
                 <div className="space-y-2">
-                  {FACTS.map((fact, i) => (
+                  {t.welcomeFacts.map((fact, i) => (
                     <div
                       key={i}
                       className="flex items-start gap-3 p-3 rounded-xl text-sm"
@@ -112,11 +102,11 @@ export default function WelcomeModal() {
                 </div>
                 <div>
                   <label className="text-xs block mb-1.5" style={{ color: 'var(--text-muted)' }}>
-                    Jak masz na imię? <span style={{ opacity: 0.6 }}>(opcjonalnie)</span>
+                    {t.welcomeNameLabel} <span style={{ opacity: 0.6 }}>{t.welcomeNameOptional}</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="Twoje imię..."
+                    placeholder={t.welcomeNamePlaceholder}
                     value={nameInput}
                     onChange={e => setNameInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && handleNext()}
@@ -136,11 +126,11 @@ export default function WelcomeModal() {
             {step === 1 && (
               <div className="space-y-4">
                 <div>
-                  <h2 className="text-xl font-semibold" style={{ color: 'var(--text)' }}>Jak to działa?</h2>
-                  <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Proste — wystarczą 4 kroki</p>
+                  <h2 className="text-xl font-semibold" style={{ color: 'var(--text)' }}>{t.welcomeHowTitle}</h2>
+                  <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>{t.welcomeHowSub}</p>
                 </div>
                 <ol className="space-y-3">
-                  {HOW_TO_USE.map((text, i) => (
+                  {t.welcomeHowSteps.map((text, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm">
                       <span
                         className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold shrink-0 text-white"
@@ -159,20 +149,14 @@ export default function WelcomeModal() {
             {step === 2 && (
               <div className="space-y-4">
                 <div>
-                  <h2 className="text-xl font-semibold" style={{ color: 'var(--text)' }}>Powiadomienia na pulpicie</h2>
+                  <h2 className="text-xl font-semibold" style={{ color: 'var(--text)' }}>{t.welcomeNotifTitle}</h2>
                   <p className="text-sm mt-1 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-                    {notifPermission === 'granted'
-                      ? 'Świetnie — powiadomienia są już włączone. Dostaniesz cichą notyfikację przy każdej przerwie, nawet, gdy pracujesz w innej aplikacji.'
-                      : 'Żebyś dostała przypomnienie nawet, gdy ta karta jest w tle — włącz powiadomienia. Są ciche, nie przeszkadzają w pracy.'}
+                    {notifPermission === 'granted' ? t.welcomeNotifGranted : t.welcomeNotifDesc}
                   </p>
                 </div>
                 {notifPermission !== 'granted' && (
                   <ol className="space-y-2">
-                    {[
-                      'Kliknij "Włącz powiadomienia" poniżej',
-                      'W okienku przeglądarki kliknij "Zezwól"',
-                      'Gotowe — ciche przypomnienie przy każdej przerwie',
-                    ].map((text, i) => (
+                    {t.welcomeNotifSteps.map((text, i) => (
                       <li
                         key={i}
                         className="flex items-start gap-3 p-3 rounded-xl text-sm"
@@ -194,7 +178,7 @@ export default function WelcomeModal() {
                     className="text-xs p-3 rounded-xl leading-relaxed"
                     style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)' }}
                   >
-                    Przeglądarka zablokowała powiadomienia. Aby odblokować: kliknij kłódkę w pasku adresu → Powiadomienia → Zezwól.
+                    {t.welcomeNotifBlocked}
                   </div>
                 )}
               </div>
@@ -208,7 +192,7 @@ export default function WelcomeModal() {
                   className="w-full py-3 font-medium text-white transition-all"
                   style={{ background: 'var(--accent)', borderRadius: 'var(--radius-sm)' }}
                 >
-                  Dalej
+                  {t.welcomeNext}
                 </button>
               ) : notifPermission === 'granted' ? (
                 <button
@@ -216,7 +200,7 @@ export default function WelcomeModal() {
                   className="w-full py-3 font-medium text-white transition-all"
                   style={{ background: 'var(--accent)', borderRadius: 'var(--radius-sm)' }}
                 >
-                  Zaczynamy
+                  {t.welcomeStart}
                 </button>
               ) : (
                 <>
@@ -226,7 +210,7 @@ export default function WelcomeModal() {
                       className="w-full py-3 font-medium text-white transition-all"
                       style={{ background: 'var(--accent)', borderRadius: 'var(--radius-sm)' }}
                     >
-                      Włącz powiadomienia
+                      {t.welcomeEnableNotif}
                     </button>
                   )}
                   <button
@@ -239,7 +223,7 @@ export default function WelcomeModal() {
                       borderRadius: 'var(--radius-sm)',
                     }}
                   >
-                    Pomiń na razie
+                    {t.welcomeSkip}
                   </button>
                 </>
               )}
@@ -249,7 +233,7 @@ export default function WelcomeModal() {
                   className="w-full text-xs text-center pt-1"
                   style={{ color: 'var(--text-muted)' }}
                 >
-                  Wróć
+                  {t.welcomeBack}
                 </button>
               )}
             </div>

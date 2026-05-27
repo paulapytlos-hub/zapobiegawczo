@@ -1,7 +1,9 @@
 import useAppStore from '../store/useAppStore'
+import { useT } from '../hooks/useT'
 
 export default function SessionLog() {
   const logItems = useAppStore(s => s.logItems)
+  const t = useT()
 
   if (logItems.length === 0) return null
 
@@ -14,7 +16,7 @@ export default function SessionLog() {
         className="px-4 py-2 text-xs font-semibold uppercase tracking-wide"
         style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)' }}
       >
-        Log sesji
+        {t.sessionLogTitle}
       </div>
       <ul
         className="divide-y max-h-48 overflow-y-auto"

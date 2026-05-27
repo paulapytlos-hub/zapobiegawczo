@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import useAppStore from './store/useAppStore'
+import { useT } from './hooks/useT'
 import Header from './components/Header'
 import SessionTimer from './components/SessionTimer'
 import BreakModal from './components/BreakModal'
@@ -17,6 +18,7 @@ import FeedbackWidget from './components/FeedbackWidget'
 
 export default function App() {
   const { sessionActive, sessionPaused, tickSecond, theme, fontSize, highContrast, colorblindMode, reduceMotion, showBreakModal, breakIsPreview } = useAppStore()
+  const t = useT()
   const titleFlashRef = useRef(null)
 
   // Główna pętla timera — pauzuje gdy modal przerwy jest otwarty (nie w trybie podglądu)
@@ -59,20 +61,22 @@ export default function App() {
   }, [])
 
   // Migający tytuł zakładki gdy break modal jest aktywny
-  // Działa nawet gdy przeglądarka jest zminimalizowana lub karta nieaktywna
   useEffect(() => {
+    const appName = t.appName
+    const breakAlert = t.appName === 'Prevently' ? '⏸ Time for a break!' : '⏸ Czas na przerwę!'
+    const idleTitle = t.appName === 'Prevently' ? 'Prevently — stay healthy at work' : 'Zapobiegawczo — zadbaj o siebie'
     if (showBreakModal) {
       let blink = false
       titleFlashRef.current = setInterval(() => {
-        document.title = blink ? 'Zapobiegawczo' : '⏸ Czas na przerwę!'
+        document.title = blink ? appName : breakAlert
         blink = !blink
       }, 1000)
     } else {
       clearInterval(titleFlashRef.current)
-      document.title = 'Zapobiegawczo — zadbaj o siebie'
+      document.title = idleTitle
     }
     return () => clearInterval(titleFlashRef.current)
-  }, [showBreakModal])
+  }, [showBreakModal, t.appName])
 
   const bgGradient = theme === 'light' ? {} : {
     backgroundImage: 'radial-gradient(ellipse 90% 50% at 15% -5%, rgba(45, 184, 112, 0.05) 0%, transparent 55%), radial-gradient(ellipse 60% 40% at 85% 90%, rgba(0, 100, 50, 0.04) 0%, transparent 50%)',

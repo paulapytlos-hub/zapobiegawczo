@@ -2,11 +2,14 @@ export const quickHelpData = [
   {
     id: 'neck',
     area: 'Szyja',
+    areaEn: 'Neck',
     areaColor: '#6a9e7a',
     fasciaNote: 'Powięź głęboka szyi otacza mięśnie karku i skraca się po kilku godzinach z głową wysuniętą do przodu. Ćwiczenia cofające głowę i rozciągające boczne partie szyi stopniowo ją uwalniają — efekty czujesz już po 2 minutach.',
+    fasciaNote_en: 'The deep cervical fascia surrounds the neck muscles and shortens after hours with your head pushed forward. Exercises that retract the head and stretch the sides of the neck gradually release it — you feel the effects within 2 minutes.',
     exercises: [
       {
         name: 'Cofanie podbródka',
+        name_en: 'Chin Tuck',
         time: '1 min',
         steps: [
           'Usiądź prosto, wzrok skierowany do przodu.',
@@ -14,10 +17,18 @@ export const quickHelpData = [
           'Utrzymaj 5 sekund — poczujesz rozciąganie z tyłu szyi.',
           'Rozluźnij i powtórz 10 razy.',
         ],
+        stepsEn: [
+          'Sit up straight, eyes facing forward.',
+          'Slowly pull your chin back to create a "double chin".',
+          'Hold for 5 seconds — you\'ll feel a stretch at the back of your neck.',
+          'Relax and repeat 10 times.',
+        ],
         note: 'Badania kliniczne: redukuje napięcie głębokiej powięzi szyjnej i koryguje postawę "text neck".',
+        note_en: 'Clinical studies: reduces tension in the deep cervical fascia and corrects "text neck" posture.',
       },
       {
         name: 'Rozciąganie boczne szyi',
+        name_en: 'Lateral Neck Stretch',
         time: '1 min',
         steps: [
           'Połóż prawą rękę na lewej skroni (nie ciągnij — sama waga ręki wystarczy).',
@@ -25,10 +36,18 @@ export const quickHelpData = [
           'Zrób 3 powolne wdechy i wydechy w tej pozycji.',
           'Wróć do środka, powtórz na drugą stronę.',
         ],
+        stepsEn: [
+          'Place your right hand on your left temple (don\'t pull — the weight of your hand is enough).',
+          'Slowly tilt your head to the right until you feel a stretch along the left side of your neck.',
+          'Take 3 slow breaths in and out in this position.',
+          'Return to center, repeat on the other side.',
+        ],
         note: 'Rozciąga mięsień mostkowo-obojczykowo-sutkowy i powięź boczną szyi — odpowiedzialne za bóle głowy z napięcia.',
+        note_en: 'Stretches the sternocleidomastoid and lateral cervical fascia — responsible for tension headaches.',
       },
       {
         name: 'Masaż podstawy czaszki',
+        name_en: 'Skull Base Massage',
         time: '1 min',
         steps: [
           'Spleć palce obu rąk za głową.',
@@ -36,18 +55,28 @@ export const quickHelpData = [
           'Delikatnie naciskaj kciukami i wykonuj małe kółka przez 30 sekund.',
           'Poczujesz stopniowe rozluźnianie napięcia.',
         ],
+        stepsEn: [
+          'Interlace your fingers behind your head.',
+          'Place your thumbs in the hollow at the base of your skull (on either side of the spine).',
+          'Gently press with your thumbs and make small circles for 30 seconds.',
+          'You\'ll feel gradual tension release.',
+        ],
         note: 'Uwalnia punkty spustowe w mięśniach podpotylicznych — najczęstsze źródło bólu głowy u pracowników biurowych.',
+        note_en: 'Releases trigger points in the suboccipital muscles — the most common source of headaches in office workers.',
       },
     ],
   },
   {
     id: 'shoulders',
     area: 'Ramiona',
+    areaEn: 'Shoulders',
     areaColor: '#7a8e9e',
     fasciaNote: 'Powięź powierzchowna klatki piersiowej skraca się przy garbatej postawie, ciągnąc ramiona do przodu. Otwarcie klatki i odciągnięcie łopatek ku kręgosłupowi rozluźnia ją i przywraca naturalną rotację ramion.',
+    fasciaNote_en: 'The superficial chest fascia shortens with a hunched posture, pulling the shoulders forward. Opening the chest and drawing the shoulder blades toward the spine releases it and restores the natural rotation of the shoulders.',
     exercises: [
       {
         name: 'Anioł przy ścianie',
+        name_en: 'Wall Angel',
         time: '2 min',
         requiresStanding: true,
         steps: [
@@ -57,10 +86,19 @@ export const quickHelpData = [
           'Powoli wysuwaj ręce w górę do pozycji "Y", nie odrywając pleców.',
           'Powtórz 10 razy wolnym tempem.',
         ],
+        stepsEn: [
+          'Stand with your back against the wall, feet 10 cm from the wall.',
+          'Touch the wall with your head, shoulder blades, and sacrum.',
+          'Raise your arms to a "W" position (elbows bent, palms up) — everything against the wall.',
+          'Slowly slide your arms up to a "Y" position without lifting your back.',
+          'Repeat 10 times slowly.',
+        ],
         note: 'Aktywuje dolne stabilizatory łopatek i rozciąga powięź piersiową — jedno z najlepiej udokumentowanych ćwiczeń korekcyjnych.',
+        note_en: 'Activates lower scapular stabilizers and stretches the pectoral fascia — one of the best-documented corrective exercises.',
       },
       {
         name: 'Rozciąganie klatki na krześle',
+        name_en: 'Chair Chest Stretch',
         time: '1 min',
         requiresStanding: false,
         steps: [
@@ -69,10 +107,18 @@ export const quickHelpData = [
           'Utrzymaj 5 sekund, poczujesz rozciąganie w klatce piersiowej.',
           'Na wydechu wróć do pozycji wyjściowej. Powtórz 8 razy.',
         ],
+        stepsEn: [
+          'Interlace your fingers behind your head, elbows wide.',
+          'Take a deep breath and open your elbows as wide as possible, arching your upper back backward.',
+          'Hold for 5 seconds, you\'ll feel the stretch in your chest.',
+          'Exhale and return to the starting position. Repeat 8 times.',
+        ],
         note: 'Rozciąga mięsień piersiowy mniejszy i powięź mostkowo-żebrową — skrócone przy 8 h pracy przy biurku.',
+        note_en: 'Stretches the pectoralis minor and sternal-costal fascia — shortened after 8 hours at a desk.',
       },
       {
         name: 'Ściąganie łopatek',
+        name_en: 'Scapular Squeeze',
         time: '1 min',
         requiresStanding: false,
         steps: [
@@ -81,18 +127,28 @@ export const quickHelpData = [
           'Ściągnij łopatki do siebie i w dół — utrzymaj 5 sekund.',
           'Rozluźnij całkowicie. Powtórz 15 razy.',
         ],
+        stepsEn: [
+          'Sit up straight, arms along your sides.',
+          'Imagine trying to squeeze a pencil between your shoulder blades.',
+          'Pull your shoulder blades together and down — hold for 5 seconds.',
+          'Completely relax. Repeat 15 times.',
+        ],
         note: 'Aktywuje mięsień romboidalny, który u pracowników biurowych jest chronicznie rozciągnięty i osłabiony.',
+        note_en: 'Activates the rhomboid muscle, which is chronically overstretched and weakened in office workers.',
       },
     ],
   },
   {
     id: 'upper-back',
     area: 'Plecy',
+    areaEn: 'Upper Back',
     areaColor: '#9e7a6a',
     fasciaNote: 'Powięź piersiowo-grzbietowa łączy górne plecy, barki i szyję w jedną sieć. Siedzenie z okrągłymi plecami powoduje jej przeciążenie i sklejenia. Rotacje i wyciągnięcia przywracają jej elastyczność i zmniejszają ból między łopatkami.',
+    fasciaNote_en: 'The thoracolumbar fascia connects the upper back, shoulders, and neck in one network. Sitting with rounded shoulders overloads and creates adhesions in it. Rotations and extensions restore its elasticity and reduce pain between the shoulder blades.',
     exercises: [
       {
         name: 'Kot-krowa na krześle',
+        name_en: 'Chair Cat-Cow',
         time: '2 min',
         steps: [
           'Usiądź na krawędzi krzesła, ręce na kolanach.',
@@ -100,10 +156,18 @@ export const quickHelpData = [
           'Na wydechu zaokrąglij plecy (brzuch do środka, głowa lekko opuszczona).',
           'Wykonaj 10 powolnych powtórzeń, synchronizując ruch z oddechem.',
         ],
+        stepsEn: [
+          'Sit on the edge of your chair, hands on your knees.',
+          'On the inhale, arch your spine (chest forward, head slightly up).',
+          'On the exhale, round your back (belly in, head slightly down).',
+          'Do 10 slow repetitions, synchronizing movement with breathing.',
+        ],
         note: 'Mobilizuje każdy segment kręgosłupa piersiowego i masuje powięź przykręgosłupową — potwierdzone w fizjoterapii.',
+        note_en: 'Mobilizes each segment of the thoracic spine and massages the paraspinal fascia — confirmed by physiotherapy.',
       },
       {
         name: 'Rotacja piersiowa',
+        name_en: 'Thoracic Rotation',
         time: '1 min',
         steps: [
           'Skrzyżuj ramiona na klatce piersiowej.',
@@ -111,10 +175,18 @@ export const quickHelpData = [
           'Zatrzymaj na 3 sekundy, wróć do środka.',
           'Powtórz w lewo. Wykonaj 10 powtórzeń na każdą stronę.',
         ],
+        stepsEn: [
+          'Cross your arms over your chest.',
+          'Keeping your hips still, slowly rotate your torso to the right as far as you can.',
+          'Hold for 3 seconds, return to center.',
+          'Repeat to the left. Do 10 reps on each side.',
+        ],
         note: 'Uwalnia rotacyjne ograniczenia powięzi piersiowej, które są główną przyczyną "chrupiących" pleców.',
+        note_en: 'Releases rotational restrictions in the thoracic fascia, the main cause of "crackling" backs.',
       },
       {
         name: 'Rozciąganie w łuk nad oparciem',
+        name_en: 'Chair Back Arch',
         time: '1 min',
         steps: [
           'Przesuń się na krawędź krzesła, oprzyj górne plecy o górną krawędź oparcia.',
@@ -122,18 +194,28 @@ export const quickHelpData = [
           'Utrzymaj 15–20 sekund, oddychając spokojnie.',
           'Wróć powoli. Możesz powtórzyć 2–3 razy na różnych poziomach kręgosłupa.',
         ],
+        stepsEn: [
+          'Slide to the edge of your chair, rest your upper back on the top edge of the backrest.',
+          'Interlace your hands behind your head and gently arch backward over the backrest.',
+          'Hold for 15–20 seconds, breathing calmly.',
+          'Return slowly. You can repeat 2–3 times at different spine levels.',
+        ],
         note: 'Rozciąga powięź piersiową w kierunku wyprostnym — odwrotność tego, co robimy siedząc cały dzień.',
+        note_en: 'Stretches the thoracic fascia in the extension direction — the opposite of what we do sitting all day.',
       },
     ],
   },
   {
     id: 'spine',
     area: 'Kręgosłup',
+    areaEn: 'Spine',
     areaColor: '#9e8a6a',
     fasciaNote: 'Powięź lędźwiowo-krzyżowa to największa powięź w ciele — łączy dolne plecy, miednicę i nogi. Wielogodzinne siedzenie napina ją asymetrycznie. Naprzemienne zginanie, prostowanie i skręty przywracają jej równomierny naciąg.',
+    fasciaNote_en: 'The lumbosacral fascia is the largest fascia in the body — it connects the lower back, pelvis, and legs. Hours of sitting tightens it asymmetrically. Alternating flexion, extension, and twists restore an even tension throughout.',
     exercises: [
       {
         name: 'Pochylenie miednicy',
+        name_en: 'Pelvic Tilt',
         time: '2 min',
         steps: [
           'Usiądź prosto, ręce na biodrach.',
@@ -141,10 +223,18 @@ export const quickHelpData = [
           'Następnie odwrotnie — wypchnij pośladki do tyłu i pogłęb lordozę.',
           'Wykonuj powoli 15 powtórzeń, czując ruch w dolnej części pleców.',
         ],
+        stepsEn: [
+          'Sit up straight, hands on hips.',
+          'Slowly "tuck your tail" — direct the pubic bone upward, flattening the lumbar curve.',
+          'Then reverse — push your glutes back and deepen the lordosis.',
+          'Do slowly 15 repetitions, feeling the movement in your lower back.',
+        ],
         note: 'Aktywuje mięśnie stabilizujące i mobilizuje stawy krzyżowo-biodrowe — najczęstsze źródło bólu pleców.',
+        note_en: 'Activates stabilizing muscles and mobilizes the sacroiliac joints — the most common source of back pain.',
       },
       {
         name: 'Rozciąganie zginacza biodrowego',
+        name_en: 'Standing Hip Flexor Stretch',
         time: '2 min',
         requiresStanding: true,
         steps: [
@@ -153,10 +243,18 @@ export const quickHelpData = [
           'Poczujesz rozciąganie z przodu lewego biodra. Utrzymaj 20–30 sekund.',
           'Zmień stronę. Powtórz 2 razy na każdą nogę.',
         ],
+        stepsEn: [
+          'Stand up and take a big step forward with your right foot (lunge position).',
+          'Lower your left knee toward the floor — you can hold the desk for support.',
+          'You\'ll feel a stretch at the front of your left hip. Hold for 20–30 seconds.',
+          'Switch sides. Repeat 2 times on each leg.',
+        ],
         note: 'Mięsień biodrowo-lędźwiowy to "mięsień duszy" — skrócony przez siedzenie powoduje ból pleców i napięcie emocjonalne.',
+        note_en: 'The hip flexor is the "muscle of the soul" — shortened by sitting, it causes back pain and emotional tension.',
       },
       {
         name: 'Zgięcie ku klatce',
+        name_en: 'Seated Forward Fold',
         time: '1 min',
         steps: [
           'Usiądź na krawędzi krzesła, nogi rozstawione.',
@@ -164,18 +262,28 @@ export const quickHelpData = [
           'Wyobraź sobie, że każdy kręg kręgosłupa "toczy się" jeden po drugim.',
           'Pozostań w zgięciu 15 sekund, oddychając. Wróć powoli.',
         ],
+        stepsEn: [
+          'Sit on the edge of your chair, legs spread.',
+          'Slowly fold forward, letting your arms hang toward the floor.',
+          'Imagine each vertebra "rolling" one by one.',
+          'Stay in the fold for 15 seconds, breathing. Return slowly.',
+        ],
         note: 'Rozciąga powięź lędźwiowo-krzyżową od podstawy czaszki po pięty — ulgę czuć od razu.',
+        note_en: 'Stretches the lumbosacral fascia from the base of the skull to the heels — relief is immediate.',
       },
     ],
   },
   {
     id: 'wrists',
     area: 'Nadgarstki',
+    areaEn: 'Wrists',
     areaColor: '#7a9e8a',
     fasciaNote: 'Powięź przedramienia otacza wszystkie ścięgna zginaczy palców jak rękaw. Wielogodzinne pisanie powoduje mikrourazy i sklejenia tej powięzi. Rolowanie i rozciąganie przywraca swobodne ślizganie ścięgien, zapobiegając zespołowi cieśni nadgarstka.',
+    fasciaNote_en: 'The forearm fascia surrounds all the finger flexor tendons like a sleeve. Hours of typing cause micro-injuries and adhesions in this fascia. Rolling and stretching restores free tendon gliding, preventing carpal tunnel syndrome.',
     exercises: [
       {
         name: 'Rolowanie przedramienia',
+        name_en: 'Forearm Rolling',
         time: '1 min',
         steps: [
           'Połóż lewe przedramię na biurku dłonią do góry.',
@@ -183,10 +291,18 @@ export const quickHelpData = [
           'Zatrzymaj się na tkliwych miejscach i utrzymaj nacisk przez 5–10 sekund.',
           'Zmień rękę.',
         ],
+        stepsEn: [
+          'Place your left forearm on the desk, palm up.',
+          'Use your right palm (or a pen) to roll the muscle from the wrist upward for 30 seconds.',
+          'Pause at tender spots and hold pressure for 5–10 seconds.',
+          'Switch hands.',
+        ],
         note: 'Technika manualna na powięź przedramienia — stosowana przez fizjoterapeutów w terapii RSI i cieśni nadgarstka.',
+        note_en: 'Manual technique on the forearm fascia — used by physiotherapists in RSI and carpal tunnel therapy.',
       },
       {
         name: 'Rozciąganie zginaczy nadgarstka',
+        name_en: 'Wrist Flexor Stretch',
         time: '1 min',
         steps: [
           'Wyciągnij prawą rękę przed siebie, dłoń skierowana do góry.',
@@ -194,28 +310,45 @@ export const quickHelpData = [
           'Utrzymaj 20 sekund, poczujesz rozciąganie wzdłuż całego przedramienia.',
           'Zmień rękę. Powtórz 3 razy.',
         ],
+        stepsEn: [
+          'Extend your right arm in front of you, palm facing up.',
+          'With your left hand, gently bend the fingers down and back.',
+          'Hold for 20 seconds, you\'ll feel the stretch along the entire forearm.',
+          'Switch hands. Repeat 3 times.',
+        ],
         note: 'Rozciąga zginacze powierzchowne i głębokie palców — najskuteczniejsza profilaktyka cieśni nadgarstka.',
+        note_en: 'Stretches the superficial and deep finger flexors — the most effective prevention of carpal tunnel syndrome.',
       },
       {
         name: 'Krążenia i trzęsienie rąk',
+        name_en: 'Wrist Circles & Shake',
         time: '1 min',
         steps: [
           'Zaciśnij dłonie w pięści, następnie gwałtownie rozluźnij — powtórz 10 razy.',
           'Wykonaj 10 powolnych krążeń nadgarstkami w każdą stronę.',
           'Na koniec potrząśnij dłońmi rozluźnionymi jak "strząsanie wody" przez 15 sekund.',
         ],
+        stepsEn: [
+          'Clench your fists, then quickly release — repeat 10 times.',
+          'Do 10 slow wrist circles in each direction.',
+          'Finally, shake your hands loosely as if "shaking off water" for 15 seconds.',
+        ],
         note: 'Pobudza krążenie limfatyczne w dłoniach i rozluźnia napięcie statyczne nagromadzone podczas pisania.',
+        note_en: 'Stimulates lymphatic circulation in the hands and releases static tension accumulated during typing.',
       },
     ],
   },
   {
     id: 'eyes',
     area: 'Oczy',
+    areaEn: 'Eyes',
     areaColor: '#6a7a9e',
     fasciaNote: 'Mięśnie zewnętrzne gałki ocznej i ich powięź reagują na stres i skupienie wzroku skurczem — jak każdy inny mięsień w ciele. Ćwiczenia relaksacyjne i ruchowe zmniejszają zmęczenie, suchość oczu i bóle głowy z przepracowania wzroku.',
+    fasciaNote_en: 'The external eye muscles and their fascia react to stress and focused vision with contraction — like any other muscle in the body. Relaxation and movement exercises reduce fatigue, dry eyes, and headaches from visual overwork.',
     exercises: [
       {
         name: 'Palmowanie',
+        name_en: 'Palming',
         time: '2 min',
         steps: [
           'Rozgrzej dłonie, pocierając je o siebie przez 10 sekund.',
@@ -223,38 +356,62 @@ export const quickHelpData = [
           'W ciemności i cieple relaksuj mięśnie oczu przez 60 sekund.',
           'Oddychaj głęboko. Wizualizuj czarną, spokojną przestrzeń.',
         ],
+        stepsEn: [
+          'Warm your hands by rubbing them together for 10 seconds.',
+          'Cover your closed eyes with your warm palms (don\'t press on the eyeballs).',
+          'In the darkness and warmth, relax your eye muscles for 60 seconds.',
+          'Breathe deeply. Visualize a dark, peaceful space.',
+        ],
         note: 'Technika z jogi oczu (palming) — ciepło i ciemność aktywują przywspółczulny układ nerwowy, redukując napięcie mięśni okoruchowych.',
+        note_en: 'Eye yoga technique (palming) — warmth and darkness activate the parasympathetic nervous system, reducing tension in the eye muscles.',
       },
       {
         name: 'Ogniskowanie bliski-daleki',
+        name_en: 'Near-Far Focus',
         time: '1 min',
         steps: [
           'Trzymaj palec 30 cm od oczu i skup na nim wzrok przez 3 sekundy.',
           'Przenieś wzrok na obiekt za oknem lub na końcu pokoju — skup przez 3 sekundy.',
           'Naprzemiennie zmieniaj fokus 10 razy, powoli.',
         ],
+        stepsEn: [
+          'Hold a finger 30 cm from your eyes and focus on it for 3 seconds.',
+          'Shift your gaze to an object outside the window or at the far end of the room — focus for 3 seconds.',
+          'Alternate focus 10 times, slowly.',
+        ],
         note: 'Ćwiczy mięsień rzęskowy odpowiedzialny za akomodację — atrofuje przy wielogodzinnym wpatrywaniu się w monitor z tej samej odległości.',
+        note_en: 'Exercises the ciliary muscle responsible for accommodation — it atrophies from staring at a monitor at the same distance for hours.',
       },
       {
         name: 'Ósemka oczna',
+        name_en: 'Eye Figure Eight',
         time: '1 min',
         steps: [
           'Wyobraź sobie przed sobą wielką poziomą ósemkę (∞) o szerokości ok. 1 metra.',
           'Nie ruszając głową, wodzisz oczami po konturze tej ósemki — powoli.',
           'Wykonaj 5 pełnych okrążeń zgodnie z ruchem wskazówek, 5 w przeciwnym.',
         ],
+        stepsEn: [
+          'Imagine a large horizontal figure eight (∞) about 1 meter wide in front of you.',
+          'Without moving your head, trace the outline of the eight with your eyes — slowly.',
+          'Do 5 full clockwise loops, 5 counterclockwise.',
+        ],
         note: 'Angażuje wszystkie 6 mięśni zewnętrznych oka naprzemiennie — zapobiega napięciowym ograniczeniom ich powięzi.',
+        note_en: 'Engages all 6 external eye muscles alternately — prevents tension restrictions in their fascia.',
       },
     ],
   },
   {
     id: 'legs',
     area: 'Nogi',
+    areaEn: 'Legs',
     areaColor: '#7a6a9e',
     fasciaNote: 'Powięź biodrowo-lędźwiowa i taśma IT (pasmo biodrowo-piszczelowe) skracają się dramatycznie przy wielogodzinnym siedzeniu. To najczęstsza przyczyna bólu kolan, bioder i dolnych pleców. Kilka minut dziennie wystarczy, by odwrócić skutki siedzenia.',
+    fasciaNote_en: 'The iliopsoas fascia and IT band (iliotibial band) shorten dramatically with prolonged sitting. This is the most common cause of knee, hip, and lower back pain. A few minutes a day is enough to reverse the effects of sitting.',
     exercises: [
       {
         name: 'Rozciąganie zginacza biodrowego',
+        name_en: 'Hip Flexor Stretch',
         time: '2 min',
         requiresStanding: true,
         steps: [
@@ -263,10 +420,18 @@ export const quickHelpData = [
           'Poczujesz intensywne rozciąganie z przodu lewego uda i biodra.',
           'Utrzymaj 30 sekund. Zmień stronę. To ćwiczenie priorytetowe.',
         ],
+        stepsEn: [
+          'Get up from your desk. Take a long step forward with your right foot.',
+          'Lower your left knee toward the floor, holding the desk for balance.',
+          'You\'ll feel an intense stretch at the front of your left thigh and hip.',
+          'Hold for 30 seconds. Switch sides. This is a priority exercise.',
+        ],
         note: 'Mięsień biodrowo-lędźwiowy to "mięsień duszy" wg teorii powięzi — jego skrócenie wpływa na postawę, ból pleców i poziom energii.',
+        note_en: 'The iliopsoas is the "muscle of the soul" in fascia theory — its shortening affects posture, back pain, and energy levels.',
       },
       {
         name: 'Naprzemienne unoszenie kolan',
+        name_en: 'Seated Knee Raises',
         time: '2 min',
         requiresStanding: false,
         steps: [
@@ -275,10 +440,18 @@ export const quickHelpData = [
           'Opuść i unieś lewe. Wykonaj 20 powtórzeń na każdą stronę.',
           'Możesz przyspieszyć — "marsz" w miejscu na krześle.',
         ],
+        stepsEn: [
+          'Sit up straight on the edge of your chair, feet flat on the floor.',
+          'Raise your right knee as high as possible, hold for 2 seconds.',
+          'Lower and raise the left. Do 20 reps on each side.',
+          'You can speed up — "march in place" while seated.',
+        ],
         note: 'Pobudza krążenie w żyłach głębokich nóg — zapobiega zakrzepicy i obrzękom typowym dla pracy biurowej.',
+        note_en: 'Stimulates circulation in the deep leg veins — prevents blood clots and swelling typical of office work.',
       },
       {
         name: 'Rozciąganie łydek i ścięgna Achillesa',
+        name_en: 'Calf & Achilles Stretch',
         time: '1 min',
         requiresStanding: true,
         steps: [
@@ -287,7 +460,14 @@ export const quickHelpData = [
           'Pochyl się do przodu, aż poczujesz silne rozciąganie w łydce.',
           'Utrzymaj 20 sekund. Zmień nogę.',
         ],
+        stepsEn: [
+          'Stand facing a wall, hands resting on it.',
+          'Extend your right leg back, heel flat on the floor.',
+          'Lean forward until you feel a strong stretch in your calf.',
+          'Hold for 20 seconds. Switch legs.',
+        ],
         note: 'Rozciąga powięź podeszwową i taśmę tylną ciała — połączoną sieć od pięty aż po czoło.',
+        note_en: 'Stretches the plantar fascia and the posterior body chain — a connected network from heel to forehead.',
       },
     ],
   },
