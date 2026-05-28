@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import useAppStore from './store/useAppStore'
 import { useT } from './hooks/useT'
 import Header from './components/Header'
@@ -111,6 +112,7 @@ export default function App() {
       <QuickHelpModal />
       <AccessibilityWidget />
       <FeedbackWidget />
+      <Analytics />
     </div>
   )
 }
